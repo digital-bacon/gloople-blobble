@@ -23,10 +23,12 @@ class Circle {
 		this.radius = configObject.radius;
 		this.color = configObject.fillColor;
 		this.stroke = configObject.strokeColor;
+		this.xStep = configObject.xStep;
+		this.yStep = configObject.yStep;
 
 		this.update = function () {
-			const xStep = 5;
-			this.position.x += xStep;
+			this.position.x += this.xStep;
+			this.position.y += this.yStep;
 			this.render(this);
 		};
 
@@ -54,6 +56,8 @@ const configCircle1 = {
 	radius: 50,
 	fillColor: "red",
 	strokeColor: "blue",
+	xStep: 0,
+	yStep: 0,
 };
 
 arrShapes.push(new Circle(configCircle1));
@@ -65,6 +69,8 @@ const configCircle2 = {
 	radius: 100,
 	fillColor: randomColor(),
 	strokeColor: randomColor(),
+	xStep: 3,
+	yStep: -1,
 };
 
 arrShapes.push(new Circle(configCircle2));
