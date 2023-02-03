@@ -1,6 +1,11 @@
 const gameCanvas = document.getElementById("gameCanvas");
 const ctx = gameCanvas.getContext("2d");
 
+const canvas = {
+	width: gameCanvas.width,
+	height: gameCanvas.height,
+};
+
 const randomHex = () => (Math.random() * 0xfffff * 1000000).toString(16);
 
 const colorFromHexString = (hexadecimalString) => {
@@ -18,6 +23,22 @@ class Circle {
 		this.radius = configObject.radius;
 		this.color = configObject.fillColor;
 		this.stroke = configObject.strokeColor;
+		this.waypoint = { x: configObject.xMoveTo, y: configObject.yMoveTo };
+		this.speed = configObject.speed;
+
+		this.update = function () {
+			let xMoveTo = this.waypoint.x;
+			let yMoveTo = this.waypoint.y;
+			let xDelta = xMoveTo - this.position.x;
+			let yDelta = yMoveTo - this.position.y;
+			const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
+			const moves = Math.floor(distance / this.speed);
+			let xTravelDistance = (xMoveTo - this.position.x) / moves || 0;
+			let yTravelDistance = (yMoveTo - this.position.y) / moves || 0;
+			this.position.x += xTravelDistance;
+			this.position.y += yTravelDistance;
+			this.render(this);
+		};
 
 		this.render = function () {
 			if (this.radius > 0) {
@@ -43,28 +64,35 @@ const configCircle1 = {
 	radius: 50,
 	fillColor: "red",
 	strokeColor: "blue",
+	xMoveTo: 301,
+	yMoveTo: 50,
+	speed: 6,
 };
 
 arrShapes.push(new Circle(configCircle1));
 
 const configCircle2 = {
 	ctx,
-	x: 150,
+	x: 250,
 	y: 250,
-	radius: 100,
+	radius: 25,
 	fillColor: randomColor(),
 	strokeColor: randomColor(),
+	xMoveTo: 500,
+	yMoveTo: 0,
+	speed: 3,
 };
 
 arrShapes.push(new Circle(configCircle2));
 
-arrShapes.forEach((shape) => shape.render());
+const loop = () => {
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	arrShapes.forEach((shape) => {
+		if (canvas.width > shape.position.x + shape.radius) {
+			shape.update();
+		}
+	});
+	requestAnimationFrame(loop);
+};
 
-console.log(arrShapes[0]);
-arrShapes[1].render();
-arrShapes[0].color = randomColor();
-arrShapes[0].render();
-arrShapes[0].position.x = 275;
-ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-arrShapes[0].render();
-arrShapes[1].render();
+loop();
