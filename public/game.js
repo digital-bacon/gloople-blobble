@@ -87,19 +87,18 @@ const configCircle1 = {
 
 arrShapes.push(new Circle(configCircle1));
 
-// const configCircle2 = {
-// 	ctx,
-// 	x: 250,
-// 	y: 250,
-// 	radius: 25,
-// 	fillColor: randomColor(),
-// 	strokeColor: randomColor(),
-// 	xMoveTo: 500,
-// 	yMoveTo: 0,
-// 	speed: 3,
-// };
+const configCircle2 = {
+	ctx,
+	x: 250,
+	y: 250,
+	radius: 25,
+	fillColor: randomColor(),
+	strokeColor: randomColor(),
+	waypointIndex: 0,
+	speed: 1,
+};
 
-// arrShapes.push(new Circle(configCircle2));
+arrShapes.push(new Circle(configCircle2));
 
 const loop = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
