@@ -1,6 +1,14 @@
 const gameCanvas = document.getElementById("gameCanvas");
 const ctx = gameCanvas.getContext("2d");
 
+const randomHex = () => (Math.random() * 0xfffff * 1000000).toString(16);
+
+const colorFromHexString = (hexadecimalString) => {
+	return "#" + hexadecimalString.slice(0, 6).toUpperCase();
+};
+
+const randomColor = () => colorFromHexString(randomHex());
+
 class Circle {
 	constructor(configObject) {
 		this.position = {
@@ -44,8 +52,8 @@ const configCircle2 = {
 	x: 150,
 	y: 250,
 	radius: 100,
-	fillColor: "pink",
-	strokeColor: "blue",
+	fillColor: randomColor(),
+	strokeColor: randomColor(),
 };
 
 arrShapes.push(new Circle(configCircle2));
@@ -53,7 +61,10 @@ arrShapes.push(new Circle(configCircle2));
 arrShapes.forEach((shape) => shape.render());
 
 console.log(arrShapes[0]);
-arrShapes[0].color = "orange";
+arrShapes[1].render();
+arrShapes[0].color = randomColor();
 arrShapes[0].render();
 arrShapes[0].position.x = 275;
+ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 arrShapes[0].render();
+arrShapes[1].render();
