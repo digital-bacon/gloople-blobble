@@ -25,10 +25,20 @@ class Circle {
 		this.stroke = configObject.strokeColor;
 		this.xStep = configObject.xStep;
 		this.yStep = configObject.yStep;
+		this.waypoint = { x: configObject.xMoveTo, y: configObject.yMoveTo };
+		this.speed = configObject.speed;
 
 		this.update = function () {
-			this.position.x += this.xStep;
-			this.position.y += this.yStep;
+			let xMoveTo = this.waypoint.x;
+			let yMoveTo = this.waypoint.y;
+			let xDelta = xMoveTo - this.position.x;
+			let yDelta = yMoveTo - this.position.y;
+			const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
+			const moves = Math.floor(distance / this.speed);
+			let xTravelDistance = (xMoveTo - this.position.x) / moves || 0;
+			let yTravelDistance = (yMoveTo - this.position.y) / moves || 0;
+			this.position.x += xTravelDistance;
+			this.position.y += yTravelDistance;
 			this.render(this);
 		};
 
@@ -56,24 +66,27 @@ const configCircle1 = {
 	radius: 50,
 	fillColor: "red",
 	strokeColor: "blue",
-	xStep: 0,
-	yStep: 0,
+	xStep: 4,
+	yStep: 2,
+	xMoveTo: 301,
+	yMoveTo: 50,
+	speed: 6,
 };
 
 arrShapes.push(new Circle(configCircle1));
 
-const configCircle2 = {
-	ctx,
-	x: 150,
-	y: 250,
-	radius: 100,
-	fillColor: randomColor(),
-	strokeColor: randomColor(),
-	xStep: 3,
-	yStep: -1,
-};
+// const configCircle2 = {
+// 	ctx,
+// 	x: 150,
+// 	y: 250,
+// 	radius: 100,
+// 	fillColor: randomColor(),
+// 	strokeColor: randomColor(),
+// 	xStep: 3,
+// 	yStep: -1,
+// };
 
-arrShapes.push(new Circle(configCircle2));
+// arrShapes.push(new Circle(configCircle2));
 
 const loop = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
