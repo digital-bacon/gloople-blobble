@@ -3,7 +3,7 @@ import "./App.scss";
 function App() {
 	return (
 		<div className="App">
-			<canvas id="myCanvas" width="480" height="320"></canvas>
+			<canvas id="gameCanvas" width="600" height="400"></canvas>
 		</div>
 	);
 }
