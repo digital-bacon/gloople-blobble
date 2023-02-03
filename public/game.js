@@ -19,6 +19,10 @@ class Circle {
 		this.color = configObject.fillColor;
 		this.stroke = configObject.strokeColor;
 
+		this.update = function () {
+			this.render(this);
+		};
+
 		this.render = function () {
 			if (this.radius > 0) {
 				ctx.beginPath();
@@ -47,24 +51,21 @@ const configCircle1 = {
 
 arrShapes.push(new Circle(configCircle1));
 
-const configCircle2 = {
-	ctx,
-	x: 150,
-	y: 250,
-	radius: 100,
-	fillColor: randomColor(),
-	strokeColor: randomColor(),
+// const configCircle2 = {
+// 	ctx,
+// 	x: 150,
+// 	y: 250,
+// 	radius: 100,
+// 	fillColor: randomColor(),
+// 	strokeColor: randomColor(),
+// };
+
+// arrShapes.push(new Circle(configCircle2));
+
+const loop = () => {
+	arrShapes[0].position.x += 25;
+	arrShapes.forEach((shape) => shape.update());
+	loop();
 };
 
-arrShapes.push(new Circle(configCircle2));
-
-arrShapes.forEach((shape) => shape.render());
-
-console.log(arrShapes[0]);
-arrShapes[1].render();
-arrShapes[0].color = randomColor();
-arrShapes[0].render();
-arrShapes[0].position.x = 275;
-ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-arrShapes[0].render();
-arrShapes[1].render();
+loop();
