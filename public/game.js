@@ -25,6 +25,8 @@ class Circle {
 		this.stroke = configObject.strokeColor;
 
 		this.update = function () {
+			const xStep = 5;
+			this.position.x += xStep;
 			this.render(this);
 		};
 
@@ -56,26 +58,25 @@ const configCircle1 = {
 
 arrShapes.push(new Circle(configCircle1));
 
-// const configCircle2 = {
-// 	ctx,
-// 	x: 150,
-// 	y: 250,
-// 	radius: 100,
-// 	fillColor: randomColor(),
-// 	strokeColor: randomColor(),
-// };
+const configCircle2 = {
+	ctx,
+	x: 150,
+	y: 250,
+	radius: 100,
+	fillColor: randomColor(),
+	strokeColor: randomColor(),
+};
 
-// arrShapes.push(new Circle(configCircle2));
+arrShapes.push(new Circle(configCircle2));
 
 const loop = () => {
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	arrShapes.forEach((shape) => {
-		const xStep = 5;
-		if (canvas.width < shape.position.x) {
-			shape.position.x += xStep;
+		if (canvas.width > shape.position.x + shape.radius) {
 			shape.update();
-			loop();
 		}
 	});
+	requestAnimationFrame(loop);
 };
 
 loop();
