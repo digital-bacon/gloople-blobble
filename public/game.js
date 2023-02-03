@@ -51,3 +51,9 @@ const configCircle2 = {
 arrShapes.push(new Circle(configCircle2));
 
 arrShapes.forEach((shape) => shape.render());
+
+console.log(arrShapes[0]);
+arrShapes[0].color = "orange";
+arrShapes[0].render();
+arrShapes[0].position.x = 275;
+arrShapes[0].render();
