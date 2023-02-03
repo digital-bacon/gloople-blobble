@@ -6,6 +6,32 @@ const canvas = {
 	height: gameCanvas.height,
 };
 
+const canvasCenter = {
+	x: gameCanvas.width / 2,
+	y: gameCanvas.height / 2,
+};
+
+const screenCenter = {
+	x: window.innerWidth / 2,
+	y: window.innerHeight / 2,
+};
+
+const xOffset = Math.round(screenCenter.x - canvasCenter.x); // because the canvas is centered
+const yOffset = 0; // because the canvas is at the top of the page
+
+// Uncomment this block to enable waypoint building in the console.
+const trackedArray = [];
+document.onclick = (event) => {
+	trackedArray.push(getMousePosition(event));
+	console.log(JSON.stringify(trackedArray));
+};
+
+const getMousePosition = (event) => {
+	const x = event.clientX - xOffset;
+	const y = event.clientY;
+	return { x, y };
+};
+
 const randomHex = () => (Math.random() * 0xfffff * 1000000).toString(16);
 
 const colorFromHexString = (hexadecimalString) => {
@@ -66,10 +92,14 @@ class Circle {
 }
 
 const waypoints = [
-	{ x: 50, y: 21 },
-	{ x: 125, y: 52 },
-	{ x: 325, y: 102 },
-	{ x: 225, y: 75 },
+	{ x: 3, y: 217 },
+	{ x: 95, y: 215 },
+	{ x: 98, y: 97 },
+	{ x: 224, y: 103 },
+	{ x: 219, y: 254 },
+	{ x: 381, y: 254 },
+	{ x: 382, y: 181 },
+	{ x: 601, y: 176 },
 ];
 
 const arrShapes = [];
@@ -78,11 +108,11 @@ const configCircle1 = {
 	ctx,
 	x: 150,
 	y: 150,
-	radius: 50,
-	fillColor: "red",
-	strokeColor: "blue",
+	radius: 15,
+	fillColor: "black",
+	strokeColor: "yellow",
 	waypointIndex: 0,
-	speed: 1,
+	speed: 3,
 };
 
 arrShapes.push(new Circle(configCircle1));
