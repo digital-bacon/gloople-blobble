@@ -1,6 +1,11 @@
 const gameCanvas = document.getElementById("gameCanvas");
 const ctx = gameCanvas.getContext("2d");
 
+const canvas = {
+	width: gameCanvas.width,
+	height: gameCanvas.height,
+};
+
 const randomHex = () => (Math.random() * 0xfffff * 1000000).toString(16);
 
 const colorFromHexString = (hexadecimalString) => {
@@ -63,9 +68,14 @@ arrShapes.push(new Circle(configCircle1));
 // arrShapes.push(new Circle(configCircle2));
 
 const loop = () => {
-	arrShapes[0].position.x += 25;
-	arrShapes.forEach((shape) => shape.update());
-	loop();
+	arrShapes.forEach((shape) => {
+		const xStep = 5;
+		if (canvas.width < shape.position.x) {
+			shape.position.x += xStep;
+			shape.update();
+			loop();
+		}
+	});
 };
 
 loop();
