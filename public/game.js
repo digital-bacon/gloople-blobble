@@ -65,17 +65,18 @@ const summonTower = (configTower) => {
 }
 
 const summonTowers = (configSummon) => {
-	const { totalTowers, configTower, xOffset } = configSummon
+	const { configTower, towerLocations } = configSummon
 	const newTowers = []
-	for (let i = 0; i < totalTowers; i++) {
-		newTowers.push({ ...configTower })
-	}
-	let totalOffset = 0
+	for (let i = 0; i < towerLocations.length; i++) {
+		const tower = { ...configTower }
+		tower.x = towerLocations[i].x;
+		tower.y = towerLocations[i].y;
+		newTowers.push(tower)
+	};
 	newTowers.forEach(tower => {
-		tower.x = tower.x - totalOffset
+		
 		summonTower(tower)
-		totalOffset += xOffset
-	})
+	});
 }
 
 class Tower {
@@ -89,6 +90,7 @@ class Tower {
 		this.color = configObject.fillColor;
 		this.stroke = configObject.strokeColor;
 		this.towersIndex = configObject.towersIndex;
+		this.attackRadius = configObject.attackRadius;
 
 		this.detectGloop = function () {
 			if (gloops.length === 0) {
@@ -102,6 +104,39 @@ class Tower {
 		};
 
 		this.update = function () {
+			const rangeConfig = { ...configGloop };
+			rangeConfig.fillColor = "rgba(0,0,0,0)";
+			rangeConfig.radius = this.attackRadius / 2;
+			const towerCenter = {
+				x: this.position.x + this.width / 2,
+				y: this.position.y + this.height / 2,
+			};
+
+			rangeConfig.x = (towerCenter.x);
+			rangeConfig.y = (towerCenter.y);
+			const range = new Gloop(rangeConfig);
+			range.render();
+			if (gloops.length > 0) {
+				const xGloop = gloops[0].position.x;
+				const yGloop = gloops[0].position.y;
+
+				let xDelta = Math.abs(towerCenter.x - xGloop);
+
+				let yDelta = Math.abs(towerCenter.y - yGloop);
+
+				const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloops[0].radius;
+
+
+				if (distance <= this.attackRadius / 2) {
+					gloops[0].loseHP(1);
+					// console.log("👿 🧱 a little🤕")
+					// gloops[0].color = "red";
+					// console.log("I 👀 you 😈")
+				}
+				// else {
+				// 	gloops[0].color = "black";
+				// }
+			};
 			this.render()
 		};
 
@@ -133,20 +168,32 @@ class Gloop {
 		this.speed = configObject.speed;
 		this.gloopsIndex = configObject.gloopsIndex;
 		this.hp = configObject.hp;
+		this.isUnderAttack = false;
 
 		this.destroy = function () {
 			gloops.splice(this.gloopsIndex, 1);
 		}
 
 		this.loseHP = function (total) {
-			this.hp -= total
-		}
+			this.hp -= total;
+			this.isUnderAttack = true;
+		};
+
+		this.underAttack = function () {
+			if (this.isUnderAttack) {
+				return this.color = "red";
+			}
+			return this.color = "black";
+		};
 
 		this.update = function () {
+			this.underAttack();
+			this.isUnderAttack = false;
 			if (this.hp <= 0) {
 				this.destroy()
 				return
-			}
+			};
+			
 			if (this.waypointIndex < waypoints.length) {
 				let xMoveTo = waypoints[this.waypointIndex].x;
 				let yMoveTo = waypoints[this.waypointIndex].y;
@@ -169,7 +216,6 @@ class Gloop {
 
 				if (reachedWaypoint()) {
 					this.waypointIndex++
-					this.loseHP(1)
 				}
 			}
 			else {
@@ -204,6 +250,11 @@ const waypoints = [
 	{ x: 667, y: 176 },
 ];
 
+const towerLocations = [
+	{ x: 135, y: 135 },
+	{ x: 410, y: 210 }
+];
+
 const gloops = [];
 const towers = [];
 
@@ -215,20 +266,21 @@ const configGloop = {
 	fillColor: "black",
 	strokeColor: "yellow",
 	waypointIndex: 0,
-	speed: 3,
+	speed: 1,
 	gloopsIndex: gloops.length,
-	hp: 10,
+	hp: 500,
 };
 
 const configTower = {
 	ctx,
 	x: 135,
-	y: 113,
+	y: 135,
 	width: 50,
 	height: 50,
-	fillColor: "cyan",
-	strokeColor: "green",
+	fillColor: "transparent",
+	strokeColor: "cyan",
 	towersIndex: towers.length,
+	attackRadius: 125,
 };
 
 const loop = () => {
@@ -236,23 +288,21 @@ const loop = () => {
 	if (towers.length === 0) {
 		const configSummon = {
 			configTower,
-			totalTowers: 1,
-			xOffset: 0,
+			towerLocations,
 		}
-		console.log(configSummon)
 		summonTowers(configSummon)
 	}
 
 	if (gloops.length === 0) {
 		const configSummon = {
 			configGloop,
-			totalGloops: 4,
+			totalGloops: 1,
 			xOffset: 45,
 		}
 		summonGloops(configSummon)
 	}
 	requestAnimationFrame(loop)
-	
+
 	gloops.forEach((shape) => {
 		shape.update();
 	});
