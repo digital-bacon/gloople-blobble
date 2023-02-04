@@ -20,17 +20,17 @@ const xOffset = Math.round(screenCenter.x - canvasCenter.x); // because the canv
 const yOffset = 0; // because the canvas is at the top of the page
 
 // Uncomment this block to enable waypoint building in the console.
-const trackedArray = [];
-document.onclick = (event) => {
-	trackedArray.push(getMousePosition(event));
-	console.log(JSON.stringify(trackedArray));
-};
+// const trackedArray = [];
+// document.onclick = (event) => {
+// 	trackedArray.push(getMousePosition(event));
+// 	console.log(JSON.stringify(trackedArray));
+// };
 
-const getMousePosition = (event) => {
-	const x = event.clientX - xOffset;
-	const y = event.clientY;
-	return { x, y };
-};
+// const getMousePosition = (event) => {
+// 	const x = event.clientX - xOffset;
+// 	const y = event.clientY;
+// 	return { x, y };
+// };
 
 const randomHex = () => (Math.random() * 0xfffff * 1000000).toString(16);
 
@@ -42,6 +42,21 @@ const randomColor = () => colorFromHexString(randomHex());
 
 const summonGloop = (configGloop) => {
 	gloops.push(new Circle(configGloop));
+}
+
+const summonGloops = (totalGloops, configGloop, xOffset) => {
+	const newGloops = []
+	for(let i = 0; i < totalGloops; i++){
+		newGloops.push({...configGloop})
+	}
+	let totalOffset = 0
+	newGloops.forEach (gloop => {
+		gloop.x = gloop.x - totalOffset
+		summonGloop(gloop)
+		totalOffset += xOffset
+		console.log(gloop)
+	})  	
+
 }
 
 class Circle {
@@ -104,7 +119,7 @@ class Circle {
 }
 
 const waypoints = [
-	{ x: -52, y: 217 },
+	{ x: 0, y: 217 },
 	{ x: 95, y: 215 },
 	{ x: 98, y: 97 },
 	{ x: 224, y: 103 },
@@ -116,7 +131,7 @@ const waypoints = [
 
 const gloops = [];
 
-const gloop = {
+const configGloop = {
 	ctx,
 	x: waypoints[0].x,
 	y: waypoints[0].y,
@@ -128,38 +143,14 @@ const gloop = {
 	gloopsIndex: gloops.length
 };
 
-gloops.push(new Circle(gloop));
-
-// const configCircle2 = {
-// 	ctx,
-// 	x: waypoints[0].x,
-// 	y: waypoints[0].y,
-// 	radius: 25,
-// 	fillColor: randomColor(),
-// 	strokeColor: randomColor(),
-// 	waypointIndex: 1,
-// 	speed: 3,
-// 	gloopsIndex: gloops.length
-// };
-
-// gloops.push(new Circle(configCircle2));
-
 const loop = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	if (gloops.length === 0) {
-		const gloop1 = {...gloop}
-		const gloop2 = gloop
-		gloop1.x = gloop1.x - 50
-		summonGloop(gloop1)
-		summonGloop(gloop2)
-
+		summonGloops(2, configGloop, 50)
 	}
 	requestAnimationFrame(loop)
 	gloops.forEach((shape) => {
-		// if (canvas.width > shape.position.x + shape.radius) {
 			shape.update();
-			
-		// }
 	});
 };
 
