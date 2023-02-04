@@ -117,25 +117,21 @@ class Tower {
 			const range = new Gloop(rangeConfig);
 			range.render();
 			if (gloops.length > 0) {
-				const xGloop = gloops[0].position.x;
-				const yGloop = gloops[0].position.y;
+				gloops.forEach(gloop => {
+					const xGloop = gloop.position.x;
+					const yGloop = gloop.position.y;
+					const xDelta = Math.abs(towerCenter.x - xGloop);
+					const yDelta = Math.abs(towerCenter.y - yGloop);
 
-				let xDelta = Math.abs(towerCenter.x - xGloop);
+					const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloop.radius;
 
-				let yDelta = Math.abs(towerCenter.y - yGloop);
-
-				const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloops[0].radius;
-
-
-				if (distance <= this.attackRadius / 2) {
-					gloops[0].loseHP(1);
-					// console.log("👿 🧱 a little🤕")
-					// gloops[0].color = "red";
-					// console.log("I 👀 you 😈")
-				}
-				// else {
-				// 	gloops[0].color = "black";
-				// }
+					if (distance <= this.attackRadius / 2) {
+						gloop.loseHP(1);
+						// console.log("👿 🧱 a little🤕")
+						// gloops[0].color = "red";
+						// console.log("I 👀 you 😈")
+					}
+				})
 			};
 			this.render()
 		};
@@ -268,7 +264,7 @@ const configGloop = {
 	waypointIndex: 0,
 	speed: 1,
 	gloopsIndex: gloops.length,
-	hp: 500,
+	hp: 300,
 };
 
 const configTower = {
@@ -296,8 +292,8 @@ const loop = () => {
 	if (gloops.length === 0) {
 		const configSummon = {
 			configGloop,
-			totalGloops: 1,
-			xOffset: 45,
+			totalGloops: 100,
+			xOffset: 20,
 		}
 		summonGloops(configSummon)
 	}
