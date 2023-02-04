@@ -41,7 +41,8 @@ const colorFromHexString = (hexadecimalString) => {
 const randomColor = () => colorFromHexString(randomHex());
 
 const summonGloop = (configGloop) => {
-	gloops.push(new Circle(configGloop));
+	const newGloop = new Gloop(configGloop)
+	gloops.push(newGloop);
 }
 
 const summonGloops = (totalGloops, configGloop, xOffset) => {
@@ -54,12 +55,10 @@ const summonGloops = (totalGloops, configGloop, xOffset) => {
 		gloop.x = gloop.x - totalOffset
 		summonGloop(gloop)
 		totalOffset += xOffset
-		console.log(gloop)
 	})  	
-
 }
 
-class Circle {
+class Gloop {
 	constructor(configObject) {
 		this.position = {
 			x: configObject.x,
@@ -71,9 +70,12 @@ class Circle {
 		this.waypointIndex = configObject.waypointIndex;
 		this.speed = configObject.speed;
 		this.gloopsIndex = configObject.gloopsIndex;
+		this.hp = configObject.hp;
+
 		this.destroy = function () {
 			gloops.splice(this.gloopsIndex, 1);
 		}
+	
 
 		this.update = function () {
 			if (this.waypointIndex < waypoints.length) {
@@ -140,7 +142,8 @@ const configGloop = {
 	strokeColor: "yellow",
 	waypointIndex: 0,
 	speed: 3,
-	gloopsIndex: gloops.length
+	gloopsIndex: gloops.length,
+	hp: 10,
 };
 
 const loop = () => {
