@@ -40,8 +40,8 @@ const colorFromHexString = (hexadecimalString) => {
 
 const randomColor = () => colorFromHexString(randomHex());
 
-const summonGloop = () => {
-	console.log("I am a gloop!")
+const summonGloop = (configGloop) => {
+	gloops.push(new Circle(configGloop));
 }
 
 class Circle {
@@ -116,38 +116,43 @@ const waypoints = [
 
 const gloops = [];
 
-// const configCircle1 = {
-// 	ctx,
-// 	x: 150,
-// 	y: 150,
-// 	radius: 15,
-// 	fillColor: "black",
-// 	strokeColor: "yellow",
-// 	waypointIndex: 0,
-// 	speed: 3,
-// 	gloopsIndex: gloops.length
-// };
-
-// gloops.push(new Circle(configCircle1));
-
-const configCircle2 = {
+const gloop = {
 	ctx,
 	x: waypoints[0].x,
 	y: waypoints[0].y,
-	radius: 25,
-	fillColor: randomColor(),
-	strokeColor: randomColor(),
-	waypointIndex: 1,
+	radius: 15,
+	fillColor: "black",
+	strokeColor: "yellow",
+	waypointIndex: 0,
 	speed: 3,
 	gloopsIndex: gloops.length
 };
 
-gloops.push(new Circle(configCircle2));
+gloops.push(new Circle(gloop));
+
+// const configCircle2 = {
+// 	ctx,
+// 	x: waypoints[0].x,
+// 	y: waypoints[0].y,
+// 	radius: 25,
+// 	fillColor: randomColor(),
+// 	strokeColor: randomColor(),
+// 	waypointIndex: 1,
+// 	speed: 3,
+// 	gloopsIndex: gloops.length
+// };
+
+// gloops.push(new Circle(configCircle2));
 
 const loop = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	if (gloops.length === 0) {
-		summonGloop()
+		const gloop1 = {...gloop}
+		const gloop2 = gloop
+		gloop1.x = gloop1.x - 50
+		summonGloop(gloop1)
+		summonGloop(gloop2)
+
 	}
 	requestAnimationFrame(loop)
 	gloops.forEach((shape) => {
