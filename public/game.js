@@ -129,6 +129,10 @@ class Tower {
 		};
 
 		this.attack = function (gloop) {
+				gloop.loseHP(1);
+		}
+
+		this.canAttack = function (gloop) {
 			const xGloop = gloop.position.x;
 			const yGloop = gloop.position.y;
 			const xDelta = Math.abs(this.position.center.x - xGloop);
@@ -137,22 +141,26 @@ class Tower {
 			const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloop.radius;
 
 			if (distance <= this.attackRadius / 2) {
-				//console.log(index, " ", gloop.gloopsIndex)
-				gloop.loseHP(1);
-				// console.log("👿 🧱 a little🤕")
-				// gloops[0].color = "red";
-				// console.log("I 👀 you 😈")
+				return true;
 			}
+			return false;
 		}
 
 		this.update = function () {
 			if (this.showRange) this.visualizeRange()
 			if (gloops.length > 0) {
 				if (this.attacksMultiple) {
-					gloops.forEach((gloop, index) => {
-						this.attack(gloop)
+					gloops.forEach((gloop) => {
+						if(this.canAttack(gloop)) this.attack(gloop)
 					})
-				} 
+				} else {
+					for (const gloop of gloops) {
+						if(this.canAttack(gloop)) {
+							this.attack(gloop)
+							break; 
+						}
+					}
+				}
 				
 			};
 			this.render()
@@ -318,9 +326,8 @@ const configGloop = {
 	fillColor: "black",
 	strokeColor: "yellow",
 	waypointIndex: 0,
-	speed: 3,
-	//gloopsIndex: gloops.length,
-	hp: 400,
+	speed: 2,
+	hp: 300,
 };
 
 const configTower = {
@@ -333,7 +340,7 @@ const configTower = {
 	strokeColor: "cyan",
 	towersIndex: towers.length,
 	attackRadius: 125,
-	attacksMultiple: true,
+	attacksMultiple: false,
 	showRange: true,
 };
 
