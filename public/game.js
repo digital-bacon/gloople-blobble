@@ -20,17 +20,17 @@ const xOffset = Math.round(screenCenter.x - canvasCenter.x); // because the canv
 const yOffset = 0; // because the canvas is at the top of the page
 
 // Uncomment this block to enable waypoint building in the console.
-// const trackedArray = [];
-// document.onclick = (event) => {
-// 	trackedArray.push(getMousePosition(event));
-// 	console.log(JSON.stringify(trackedArray));
-// };
+const trackedArray = [];
+document.onclick = (event) => {
+	trackedArray.push(getMousePosition(event));
+	console.log(JSON.stringify(trackedArray));
+};
 
-// const getMousePosition = (event) => {
-// 	const x = event.clientX - xOffset;
-// 	const y = event.clientY;
-// 	return { x, y };
-// };
+const getMousePosition = (event) => {
+	const x = event.clientX - xOffset;
+	const y = event.clientY;
+	return { x, y };
+};
 
 const randomHex = () => (Math.random() * 0xfffff * 1000000).toString(16);
 
@@ -45,17 +45,72 @@ const summonGloop = (configGloop) => {
 	gloops.push(newGloop);
 }
 
-const summonGloops = (totalGloops, configGloop, xOffset) => {
+const summonGloops = (configSummon) => {
+	const { totalGloops, configGloop, xOffset } = configSummon
 	const newGloops = []
-	for(let i = 0; i < totalGloops; i++){
-		newGloops.push({...configGloop})
+	for (let i = 0; i < totalGloops; i++) {
+		newGloops.push({ ...configGloop })
 	}
 	let totalOffset = 0
-	newGloops.forEach (gloop => {
+	newGloops.forEach(gloop => {
 		gloop.x = gloop.x - totalOffset
 		summonGloop(gloop)
 		totalOffset += xOffset
-	})  	
+	})
+}
+
+const summonTower = (configTower) => {
+	const newTower = new Tower(configTower)
+	towers.push(newTower);
+}
+
+const summonTowers = (configSummon) => {
+	const { totalTowers, configTower, xOffset } = configSummon
+	const newTowers = []
+	for (let i = 0; i < totalTowers; i++) {
+		newTowers.push({ ...configTower })
+	}
+	let totalOffset = 0
+	newTowers.forEach(tower => {
+		tower.x = tower.x - totalOffset
+		summonTower(tower)
+		totalOffset += xOffset
+	})
+}
+
+class Tower {
+	constructor(configObject) {
+		this.position = {
+			x: configObject.x,
+			y: configObject.y,
+		};
+		this.width = configObject.width;
+		this.height = configObject.height;
+		this.color = configObject.fillColor;
+		this.stroke = configObject.strokeColor;
+		this.towersIndex = configObject.towersIndex;
+
+		this.destroy = function () {
+			towers.splice(this.towersIndex, 1);
+		}
+
+		this.update = function () {
+			this.render()
+		};
+
+		this.render = function () {
+			if (this.width > 0 && this.height > 0) {
+				ctx.beginPath();
+				ctx.rect(this.position.x, this.position.y, this.width, this.height);
+				ctx.fillStyle = this.color;
+				ctx.fill();
+				ctx.strokeStyle = this.stroke;
+				ctx.stroke();
+				ctx.closePath();
+			}
+		};
+		return this;
+	}
 }
 
 class Gloop {
@@ -75,10 +130,10 @@ class Gloop {
 		this.destroy = function () {
 			gloops.splice(this.gloopsIndex, 1);
 		}
-	
+
 		this.loseHP = function (total) {
 			this.hp -= total
-		} 
+		}
 
 		this.update = function () {
 			if (this.hp <= 0) {
@@ -101,14 +156,13 @@ class Gloop {
 				const reachedWaypoint = () => {
 					const xReached = Math.round(this.position.x) === xMoveTo;
 					const yReached = Math.round(this.position.y) === yMoveTo;
-					
+
 					return xReached && yReached;
 				};
 
 				if (reachedWaypoint()) {
-					this.waypointIndex++	
+					this.waypointIndex++
 					this.loseHP(1)
-					console.log(this.hp)
 				}
 			}
 			else {
@@ -131,6 +185,7 @@ class Gloop {
 	}
 }
 
+
 const waypoints = [
 	{ x: 0, y: 217 },
 	{ x: 95, y: 215 },
@@ -143,6 +198,7 @@ const waypoints = [
 ];
 
 const gloops = [];
+const towers = [];
 
 const configGloop = {
 	ctx,
@@ -157,17 +213,47 @@ const configGloop = {
 	hp: 10,
 };
 
+const configTower = {
+	ctx,
+	x: 135,
+	y: 113,
+	width: 50,
+	height: 50,
+	fillColor: "cyan",
+	strokeColor: "green",
+	towersIndex: towers.length,
+};
+
 const loop = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	if (towers.length === 0) {
+		const configSummon = {
+			configTower,
+			totalTowers: 1,
+			xOffset: 0,
+		}
+		console.log(configSummon)
+		summonTowers(configSummon)
+	}
+
 	if (gloops.length === 0) {
-		summonGloops(1, configGloop, 50)
+		const configSummon = {
+			configGloop,
+			totalGloops: 4,
+			xOffset: 45,
+		}
+		summonGloops(configSummon)
 	}
 	requestAnimationFrame(loop)
+	towers.forEach((shape) => {
+		shape.update();
+	});
 	gloops.forEach((shape) => {
-			shape.update();
+		shape.update();
 	});
 };
 
 loop();
+
 
 
