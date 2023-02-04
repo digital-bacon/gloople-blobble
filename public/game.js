@@ -84,6 +84,24 @@ const summonTowers = (configSummon) => {
 	});
 }
 
+const summonProjectile = (configProjectile) => {
+	const newProjectile = new Projectile(configProjectile)
+	projectiles.push(newProjectile);
+}
+
+const summonProjectiles = (configSummon) => {
+	const { configProjectile } = configSummon
+	const newProjectiles = []
+	// for (let i = 0; i < projectileLocations.length; i++) {
+	// 	const projectile = { ...configProjectile }
+	newProjectiles.push(configProjectile)
+	// };
+	newProjectiles.forEach(projectile => {
+		
+		summonProjectile(projectile)
+	});
+}
+
 class Tower {
 	constructor(configObject) {
 		this.position = {
@@ -192,18 +210,12 @@ class Gloop {
 		this.stroke = configObject.strokeColor;
 		this.waypointIndex = configObject.waypointIndex;
 		this.speed = configObject.speed;
-		//this.gloopsIndex = configObject.gloopsIndex;
 		this.hp = configObject.hp;
 		this.isUnderAttack = false;
 		this.destroyMe = false;
 
 		this.destroy = function () {
 			this.destroyMe = true
-			// for (let i = this.gloopsIndex + 1; i <= gloops.length; i++) {
-			// 	const gloop = gloops[i]
-			// 	gloop.gloopsIndex -= 1
-			// }
-			//gloops.splice(this.gloopsIndex, 1);
 		}
 
 		this.loseHP = function (total) {
@@ -298,6 +310,68 @@ class RangeVisual {
 		return this;
 	}
 }
+class Projectile {
+	constructor(configObject) {
+		this.position = {
+			x: configObject.x,
+			y: configObject.y,
+		};
+		this.radius = configObject.radius;
+		this.color = configObject.fillColor;
+		this.stroke = configObject.strokeColor;
+		this.waypointIndex = configObject.waypointIndex;
+		this.speed = configObject.speed;
+		this.destroyMe = false;
+
+		this.destroy = function () {
+			this.destroyMe = true
+		}
+
+		this.update = function () {
+			this.render()
+			// if (this.waypointIndex < waypoints.length) {
+			// 	let xMoveTo = waypoints[this.waypointIndex].x;
+			// 	let yMoveTo = waypoints[this.waypointIndex].y;
+			// 	let xDelta = xMoveTo - this.position.x;
+			// 	let yDelta = yMoveTo - this.position.y;
+			// 	const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
+			// 	const moves = Math.floor(distance / this.speed);
+			// 	let xTravelDistance = (xMoveTo - this.position.x) / moves || 0;
+			// 	let yTravelDistance = (yMoveTo - this.position.y) / moves || 0;
+			// 	this.position.x += xTravelDistance;
+			// 	this.position.y += yTravelDistance;
+			// 	this.render();
+
+			// 	const reachedWaypoint = () => {
+			// 		const xReached = Math.round(this.position.x) === xMoveTo;
+			// 		const yReached = Math.round(this.position.y) === yMoveTo;
+
+			// 		return xReached && yReached;
+			// 	};
+
+			// 	if (reachedWaypoint()) {
+			// 		this.waypointIndex++
+			// 	}
+			// }
+			// else {
+			// 	this.destroy()
+			// };
+		};
+
+		this.render = function () {
+			if (this.radius > 0) {
+				ctx.beginPath();
+				ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
+				ctx.closePath();
+				ctx.fillStyle = this.color;
+				ctx.fill();
+				ctx.strokeStyle = this.stroke;
+				ctx.stroke();
+			}
+		};
+		return this;
+	}
+}
 
 const waypoints = [
 	{ x: 0, y: 217 },
@@ -317,6 +391,7 @@ const towerLocations = [
 
 let gloops = [];
 const towers = [];
+let projectiles = [];
 
 const configGloop = {
 	ctx,
@@ -344,6 +419,16 @@ const configTower = {
 	showRange: true,
 };
 
+const configProjectile = {
+	ctx,
+	x: 10,
+	y: 10,
+	radius: 10,
+	fillColor: "pink",
+	strokeColor: "blue",
+	speed: 1,
+};
+
 const loop = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	if (towers.length === 0) {
@@ -352,6 +437,13 @@ const loop = () => {
 			towerLocations,
 		}
 		summonTowers(configSummon)
+	}
+
+	if (projectiles.length === 0) {
+		const configSummon = {
+			configProjectile,
+		}
+		summonProjectiles(configSummon)
 	}
 
 	if (gloops.length === 0) {
@@ -375,6 +467,11 @@ const loop = () => {
 	towers.forEach((shape) => {
 		shape.update();
 	});
+
+	projectiles.forEach((shape) => {
+		shape.update();
+	});
+
 };
 
 loop();
