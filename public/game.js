@@ -154,7 +154,7 @@ const configGloop = {
 	waypointIndex: 0,
 	speed: 3,
 	gloopsIndex: gloops.length,
-	hp: 4,
+	hp: 10,
 };
 
 const loop = () => {
