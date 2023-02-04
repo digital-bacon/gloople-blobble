@@ -49,7 +49,12 @@ const summonGloops = (configSummon) => {
 	const { totalGloops, configGloop, xOffset } = configSummon
 	const newGloops = []
 	for (let i = 0; i < totalGloops; i++) {
-		newGloops.push({ ...configGloop })
+		const gloop = { ...configGloop }
+		if (i % 2 === 0) {
+			gloop.hp = 10
+			//console.log(gloop)
+		}
+		newGloops.push(gloop)
 	}
 	let totalOffset = 0
 	newGloops.forEach(gloop => {
@@ -117,7 +122,7 @@ class Tower {
 			const range = new Gloop(rangeConfig);
 			range.render();
 			if (gloops.length > 0) {
-				gloops.forEach(gloop => {
+				gloops.forEach((gloop, index) => {
 					const xGloop = gloop.position.x;
 					const yGloop = gloop.position.y;
 					const xDelta = Math.abs(towerCenter.x - xGloop);
@@ -126,6 +131,7 @@ class Tower {
 					const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloop.radius;
 
 					if (distance <= this.attackRadius / 2) {
+						//console.log(index, " ", gloop.gloopsIndex)
 						gloop.loseHP(1);
 						// console.log("👿 🧱 a little🤕")
 						// gloops[0].color = "red";
@@ -162,12 +168,18 @@ class Gloop {
 		this.stroke = configObject.strokeColor;
 		this.waypointIndex = configObject.waypointIndex;
 		this.speed = configObject.speed;
-		this.gloopsIndex = configObject.gloopsIndex;
+		//this.gloopsIndex = configObject.gloopsIndex;
 		this.hp = configObject.hp;
 		this.isUnderAttack = false;
+		this.destroyMe = false;
 
 		this.destroy = function () {
-			gloops.splice(this.gloopsIndex, 1);
+			this.destroyMe = true
+			// for (let i = this.gloopsIndex + 1; i <= gloops.length; i++) {
+			// 	const gloop = gloops[i]
+			// 	gloop.gloopsIndex -= 1
+			// }
+			//gloops.splice(this.gloopsIndex, 1);
 		}
 
 		this.loseHP = function (total) {
@@ -251,7 +263,7 @@ const towerLocations = [
 	{ x: 410, y: 210 }
 ];
 
-const gloops = [];
+let gloops = [];
 const towers = [];
 
 const configGloop = {
@@ -262,9 +274,9 @@ const configGloop = {
 	fillColor: "black",
 	strokeColor: "yellow",
 	waypointIndex: 0,
-	speed: 1,
-	gloopsIndex: gloops.length,
-	hp: 300,
+	speed: 3,
+	//gloopsIndex: gloops.length,
+	hp: 600,
 };
 
 const configTower = {
@@ -292,8 +304,8 @@ const loop = () => {
 	if (gloops.length === 0) {
 		const configSummon = {
 			configGloop,
-			totalGloops: 100,
-			xOffset: 20,
+			totalGloops: 6,
+			xOffset: 45,
 		}
 		summonGloops(configSummon)
 	}
@@ -302,6 +314,10 @@ const loop = () => {
 	gloops.forEach((shape) => {
 		shape.update();
 	});
+	
+	const survivingGloops = gloops.filter(gloop => gloop.destroyMe === false)
+	gloops = [...survivingGloops]
+	//console.log(survivingGloops)
 
 	towers.forEach((shape) => {
 		shape.update();
