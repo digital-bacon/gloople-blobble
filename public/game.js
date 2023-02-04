@@ -81,6 +81,10 @@ class Gloop {
 		} 
 
 		this.update = function () {
+			if (this.hp <= 0) {
+				this.destroy()
+				return
+			}
 			if (this.waypointIndex < waypoints.length) {
 				let xMoveTo = waypoints[this.waypointIndex].x;
 				let yMoveTo = waypoints[this.waypointIndex].y;
