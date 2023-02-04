@@ -101,6 +101,21 @@ class Tower {
 		this.towersIndex = configObject.towersIndex;
 		this.attackRadius = configObject.attackRadius;
 		this.attacksMultiple = configObject.attacksMultiple;
+		this.showRange = configObject.showRange;
+
+		this.visualizeRange = function () {
+			const configRange = {
+				ctx,
+				x: this.position.center.x,
+				y: this.position.center.y,
+				radius: this.attackRadius / 2,
+				fillColor: "rgba(255,0,0,0.25)",
+				strokeColor: "red",
+	
+			};
+			const range = new RangeVisual(configRange);
+			range.render();
+		}
 
 		this.detectGloop = function () {
 			if (gloops.length === 0) {
@@ -131,18 +146,7 @@ class Tower {
 		}
 
 		this.update = function () {
-			const rangeConfig = { ...configGloop };
-			rangeConfig.fillColor = "rgba(0,0,0,0)";
-			rangeConfig.radius = this.attackRadius / 2;
-			// const towerCenter = {
-			// 	x: this.position.x + this.width / 2,
-			// 	y: this.position.y + this.height / 2,
-			// };
-
-			rangeConfig.x = (this.position.center.x);
-			rangeConfig.y = (this.position.center.y);
-			const range = new Gloop(rangeConfig);
-			range.render();
+			if (this.showRange) this.visualizeRange()
 			if (gloops.length > 0) {
 				if (this.attacksMultiple) {
 					gloops.forEach((gloop, index) => {
@@ -258,6 +262,34 @@ class Gloop {
 	}
 }
 
+class RangeVisual {
+	constructor(configObject) {
+		this.position = {
+			x: configObject.x,
+			y: configObject.y,
+		};
+		this.radius = configObject.radius;
+		this.color = configObject.fillColor;
+		this.stroke = configObject.strokeColor;
+
+		this.update = function () {
+			this.render()
+		};
+
+		this.render = function () {
+			if (this.radius > 0) {
+				ctx.beginPath();
+				ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
+				ctx.closePath();
+				ctx.fillStyle = this.color;
+				ctx.fill();
+				ctx.strokeStyle = this.stroke;
+				ctx.stroke();
+			}
+		};
+		return this;
+	}
+}
 
 const waypoints = [
 	{ x: 0, y: 217 },
@@ -302,6 +334,7 @@ const configTower = {
 	towersIndex: towers.length,
 	attackRadius: 125,
 	attacksMultiple: true,
+	showRange: true,
 };
 
 const loop = () => {
