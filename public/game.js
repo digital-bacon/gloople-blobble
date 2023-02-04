@@ -40,6 +40,10 @@ const colorFromHexString = (hexadecimalString) => {
 
 const randomColor = () => colorFromHexString(randomHex());
 
+const summonGloop = () => {
+	console.log("I am a gloop!")
+}
+
 class Circle {
 	constructor(configObject) {
 		this.position = {
@@ -134,7 +138,7 @@ const configCircle2 = {
 	fillColor: randomColor(),
 	strokeColor: randomColor(),
 	waypointIndex: 1,
-	speed: 1,
+	speed: 3,
 	gloopsIndex: gloops.length
 };
 
@@ -142,6 +146,9 @@ gloops.push(new Circle(configCircle2));
 
 const loop = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	if (gloops.length === 0) {
+		summonGloop()
+	}
 	requestAnimationFrame(loop)
 	gloops.forEach((shape) => {
 		// if (canvas.width > shape.position.x + shape.radius) {
@@ -152,3 +159,5 @@ const loop = () => {
 };
 
 loop();
+
+
