@@ -90,9 +90,16 @@ class Tower {
 		this.stroke = configObject.strokeColor;
 		this.towersIndex = configObject.towersIndex;
 
+		this.detectGloop = function () {
+			if (gloops.length === 0) {
+				return false
+			}
+			return true
+		};
+
 		this.destroy = function () {
 			towers.splice(this.towersIndex, 1);
-		}
+		};
 
 		this.update = function () {
 			this.render()
@@ -245,10 +252,12 @@ const loop = () => {
 		summonGloops(configSummon)
 	}
 	requestAnimationFrame(loop)
-	towers.forEach((shape) => {
+	
+	gloops.forEach((shape) => {
 		shape.update();
 	});
-	gloops.forEach((shape) => {
+
+	towers.forEach((shape) => {
 		shape.update();
 	});
 };
