@@ -65,17 +65,18 @@ const summonTower = (configTower) => {
 }
 
 const summonTowers = (configSummon) => {
-	const { totalTowers, configTower, xOffset } = configSummon
+	const { configTower, towerLocations } = configSummon
 	const newTowers = []
-	for (let i = 0; i < totalTowers; i++) {
-		newTowers.push({ ...configTower })
-	}
-	let totalOffset = 0
+	for (let i = 0; i < towerLocations.length; i++) {
+		const tower = { ...configTower }
+		tower.x = towerLocations[i].x;
+		tower.y = towerLocations[i].y;
+		newTowers.push(tower)
+	};
 	newTowers.forEach(tower => {
-		tower.x = tower.x - totalOffset
+		
 		summonTower(tower)
-		totalOffset += xOffset
-	})
+	});
 }
 
 class Tower {
@@ -106,8 +107,6 @@ class Tower {
 			const rangeConfig = { ...configGloop };
 			rangeConfig.fillColor = "rgba(0,0,0,0)";
 			rangeConfig.radius = this.attackRadius / 2;
-			// rangeConfig.width = this.attackRadius;
-			// rangeConfig.height = this.attackRadius;
 			const towerCenter = {
 				x: this.position.x + this.width / 2,
 				y: this.position.y + this.height / 2,
@@ -116,8 +115,6 @@ class Tower {
 			rangeConfig.x = (towerCenter.x);
 			rangeConfig.y = (towerCenter.y);
 			const range = new Gloop(rangeConfig);
-			// ctx.fillStyle = "rgba(0,0,0,0)";
-			// ctx.fill();
 			range.render();
 			if (gloops.length > 0) {
 				const xGloop = gloops[0].position.x;
@@ -133,7 +130,7 @@ class Tower {
 				if (distance <= this.attackRadius / 2) {
 					gloops[0].loseHP(1);
 					// console.log("👿 🧱 a little🤕")
-					gloops[0].color = "purple";
+					gloops[0].color = "red";
 					// console.log("I 👀 you 😈")
 				}
 				else {
@@ -242,6 +239,11 @@ const waypoints = [
 	{ x: 667, y: 176 },
 ];
 
+const towerLocations = [
+	{ x: 135, y: 135 },
+	{ x: 410, y: 210 }
+];
+
 const gloops = [];
 const towers = [];
 
@@ -255,7 +257,7 @@ const configGloop = {
 	waypointIndex: 0,
 	speed: 1,
 	gloopsIndex: gloops.length,
-	hp: 10,
+	hp: 150,
 };
 
 const configTower = {
@@ -275,8 +277,7 @@ const loop = () => {
 	if (towers.length === 0) {
 		const configSummon = {
 			configTower,
-			totalTowers: 1,
-			xOffset: 0,
+			towerLocations,
 		}
 		summonTowers(configSummon)
 	}
@@ -284,7 +285,7 @@ const loop = () => {
 	if (gloops.length === 0) {
 		const configSummon = {
 			configGloop,
-			totalGloops: 1,
+			totalGloops: 4,
 			xOffset: 45,
 		}
 		summonGloops(configSummon)
