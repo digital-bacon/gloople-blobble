@@ -51,6 +51,10 @@ class Circle {
 		this.stroke = configObject.strokeColor;
 		this.waypointIndex = configObject.waypointIndex;
 		this.speed = configObject.speed;
+		this.gloopsIndex = configObject.gloopsIndex;
+		this.destroy = function () {
+			gloops.splice(this.gloopsIndex, 1);
+		}
 
 		this.update = function () {
 			if (this.waypointIndex < waypoints.length) {
@@ -64,16 +68,20 @@ class Circle {
 				let yTravelDistance = (yMoveTo - this.position.y) / moves || 0;
 				this.position.x += xTravelDistance;
 				this.position.y += yTravelDistance;
-				this.render(this);
+				this.render();
 
 				const reachedWaypoint = () => {
 					const xReached = Math.round(this.position.x) === xMoveTo;
 					const yReached = Math.round(this.position.y) === yMoveTo;
+					
 					return xReached && yReached;
 				};
 
-				if (reachedWaypoint()) this.waypointIndex++;
+				if (reachedWaypoint()) this.waypointIndex++	
 			}
+			else {
+				this.destroy()
+			};
 		};
 
 		this.render = function () {
@@ -92,52 +100,55 @@ class Circle {
 }
 
 const waypoints = [
-	{ x: 3, y: 217 },
+	{ x: -52, y: 217 },
 	{ x: 95, y: 215 },
 	{ x: 98, y: 97 },
 	{ x: 224, y: 103 },
 	{ x: 219, y: 254 },
 	{ x: 381, y: 254 },
 	{ x: 382, y: 181 },
-	{ x: 601, y: 176 },
+	{ x: 667, y: 176 },
 ];
 
-const arrShapes = [];
+const gloops = [];
 
-const configCircle1 = {
-	ctx,
-	x: 150,
-	y: 150,
-	radius: 15,
-	fillColor: "black",
-	strokeColor: "yellow",
-	waypointIndex: 0,
-	speed: 3,
-};
+// const configCircle1 = {
+// 	ctx,
+// 	x: 150,
+// 	y: 150,
+// 	radius: 15,
+// 	fillColor: "black",
+// 	strokeColor: "yellow",
+// 	waypointIndex: 0,
+// 	speed: 3,
+// 	gloopsIndex: gloops.length
+// };
 
-arrShapes.push(new Circle(configCircle1));
+// gloops.push(new Circle(configCircle1));
 
 const configCircle2 = {
 	ctx,
-	x: 250,
-	y: 250,
+	x: waypoints[0].x,
+	y: waypoints[0].y,
 	radius: 25,
 	fillColor: randomColor(),
 	strokeColor: randomColor(),
-	waypointIndex: 0,
+	waypointIndex: 1,
 	speed: 1,
+	gloopsIndex: gloops.length
 };
 
-arrShapes.push(new Circle(configCircle2));
+gloops.push(new Circle(configCircle2));
 
 const loop = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	arrShapes.forEach((shape) => {
-		if (canvas.width > shape.position.x + shape.radius) {
+	requestAnimationFrame(loop)
+	gloops.forEach((shape) => {
+		// if (canvas.width > shape.position.x + shape.radius) {
 			shape.update();
-		}
+			
+		// }
 	});
-	requestAnimationFrame(loop);
 };
 
 loop();
