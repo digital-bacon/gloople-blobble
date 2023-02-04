@@ -76,6 +76,7 @@ const summonTowers = (configSummon) => {
 		summonTower(tower)
 		totalOffset += xOffset
 	})
+	console.log("towers", towers)
 }
 
 class Tower {
@@ -89,6 +90,7 @@ class Tower {
 		this.color = configObject.fillColor;
 		this.stroke = configObject.strokeColor;
 		this.towersIndex = configObject.towersIndex;
+		this.attackRadius = configObject.attackRadius;
 
 		this.detectGloop = function () {
 			if (gloops.length === 0) {
@@ -229,6 +231,7 @@ const configTower = {
 	fillColor: "cyan",
 	strokeColor: "green",
 	towersIndex: towers.length,
+	attackRadius: 60,
 };
 
 const loop = () => {
