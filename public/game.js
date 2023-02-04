@@ -103,40 +103,43 @@ class Tower {
 		};
 
 		this.update = function () {
-				const rangeConfig = {...configGloop};
-				rangeConfig.fillColor =  "rgba(0,0,0,0)";
-				rangeConfig.radius = this.attackRadius / 2;
-				// rangeConfig.width = this.attackRadius;
-				// rangeConfig.height = this.attackRadius;
-				const towerCenter = {
-					x: this.position.x + this.width / 2,
-					y: this.position.y + this.height / 2,
-				};
-				
-				rangeConfig.x = (towerCenter.x);
-				rangeConfig.y = (towerCenter.y);
-				const range = new Gloop(rangeConfig);
-				// ctx.fillStyle = "rgba(0,0,0,0)";
-				// ctx.fill();
-				range.render();
+			const rangeConfig = { ...configGloop };
+			rangeConfig.fillColor = "rgba(0,0,0,0)";
+			rangeConfig.radius = this.attackRadius / 2;
+			// rangeConfig.width = this.attackRadius;
+			// rangeConfig.height = this.attackRadius;
+			const towerCenter = {
+				x: this.position.x + this.width / 2,
+				y: this.position.y + this.height / 2,
+			};
+
+			rangeConfig.x = (towerCenter.x);
+			rangeConfig.y = (towerCenter.y);
+			const range = new Gloop(rangeConfig);
+			// ctx.fillStyle = "rgba(0,0,0,0)";
+			// ctx.fill();
+			range.render();
+			if (gloops.length > 0) {
 				const xGloop = gloops[0].position.x;
 				const yGloop = gloops[0].position.y;
-				
+
 				let xDelta = Math.abs(towerCenter.x - xGloop);
-				
+
 				let yDelta = Math.abs(towerCenter.y - yGloop);
-			
+
 				const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloops[0].radius;
-				
-				
+
+
 				if (distance <= this.attackRadius / 2) {
+					gloops[0].loseHP(1);
+					// console.log("👿 🧱 a little🤕")
 					gloops[0].color = "purple";
-					console.log("I 👀 you 😈")
+					// console.log("I 👀 you 😈")
 				}
 				else {
 					gloops[0].color = "black";
 				}
-
+			};
 			this.render()
 		};
 
@@ -287,7 +290,7 @@ const loop = () => {
 		summonGloops(configSummon)
 	}
 	requestAnimationFrame(loop)
-	
+
 	gloops.forEach((shape) => {
 		shape.update();
 	});
