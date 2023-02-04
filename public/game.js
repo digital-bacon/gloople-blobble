@@ -76,6 +76,9 @@ class Gloop {
 			gloops.splice(this.gloopsIndex, 1);
 		}
 	
+		this.loseHP = function (total) {
+			this.hp -= total
+		} 
 
 		this.update = function () {
 			if (this.waypointIndex < waypoints.length) {
@@ -98,7 +101,11 @@ class Gloop {
 					return xReached && yReached;
 				};
 
-				if (reachedWaypoint()) this.waypointIndex++	
+				if (reachedWaypoint()) {
+					this.waypointIndex++	
+					this.loseHP(1)
+					console.log(this.hp)
+				}
 			}
 			else {
 				this.destroy()
@@ -143,13 +150,13 @@ const configGloop = {
 	waypointIndex: 0,
 	speed: 3,
 	gloopsIndex: gloops.length,
-	hp: 10,
+	hp: 4,
 };
 
 const loop = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	if (gloops.length === 0) {
-		summonGloops(2, configGloop, 50)
+		summonGloops(1, configGloop, 50)
 	}
 	requestAnimationFrame(loop)
 	gloops.forEach((shape) => {
