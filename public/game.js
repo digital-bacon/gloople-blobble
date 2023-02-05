@@ -122,14 +122,10 @@ const goldStash = {
 		this.total -= amount
 	},
 };
-goldStash.setTotal(0);
-goldStash.deposit(2);
-goldStash.withdraw(1);
-console.log(goldStash.total)
 
 const configWave = {
-	speedDefault: 0.2,
-	hpDefault: 10,
+	speedDefault: 1,
+	hpDefault: 1,
 	currentWave: 0,
 	nextWave: 1,
 	speedMultiplier: 0.5,
@@ -252,13 +248,13 @@ const loop = () => {
 		circle.update();
 	});
 
-	console.log(gloops)
 	gloops.forEach((gloop) => {
 		gloop.update();
 	});
 
 	const survivingGloops = gloops.filter(gloop => gloop.destroyMe === false)
 	gloops = [...survivingGloops]
+	console.log(goldStash.total)
 
 	towers.forEach((tower) => {
 		tower.update();
