@@ -50,10 +50,10 @@ const summonGloops = (configSummon) => {
 	const newGloops = []
 	for (let i = 0; i < totalGloops; i++) {
 		const gloop = { ...configGloop }
-		if (i % 2 === 0) {
-			gloop.hp = 10
-			//console.log(gloop)
-		}
+		// if (i % 2 === 0) {
+		// 	gloop.hp = 10
+		// 	//console.log(gloop)
+		// }
 		newGloops.push(gloop)
 	}
 	let totalOffset = 0
@@ -89,6 +89,10 @@ class Tower {
 		this.position = {
 			x: configObject.x,
 			y: configObject.y,
+			center: {
+				x: configObject.x + configObject.width / 2,
+				y: configObject.y + configObject.height / 2,
+			},
 		};
 		this.width = configObject.width;
 		this.height = configObject.height;
@@ -96,6 +100,40 @@ class Tower {
 		this.stroke = configObject.strokeColor;
 		this.towersIndex = configObject.towersIndex;
 		this.attackRadius = configObject.attackRadius;
+		this.attacksMultiple = configObject.attacksMultiple;
+		this.showRange = configObject.showRange;
+		this.projectileSize = configObject.projectileSize;
+		this.target = null;
+
+		this.createProjectile = function (target) {
+			const configProjectile = {
+				ctx,
+				target,
+				x: this.position.center.x,
+				y: this.position.center.y,
+				radius: this.projectileSize / 2,
+				fillColor: "pink",
+				strokeColor: "blue",
+				speed: 3,
+				tower: this,
+			};
+			const projectile = new Projectile(configProjectile);
+			projectiles.push(projectile)
+		}
+
+		this.visualizeRange = function () {
+			const configRange = {
+				ctx,
+				x: this.position.center.x,
+				y: this.position.center.y,
+				radius: this.attackRadius,
+				fillColor: "rgba(255,0,0,0.25)",
+				strokeColor: "red",
+			};
+			
+			const range = new RangeVisual(configRange);
+			range.render();
+		}
 
 		this.detectGloop = function () {
 			if (gloops.length === 0) {
@@ -108,36 +146,45 @@ class Tower {
 			towers.splice(this.towersIndex, 1);
 		};
 
-		this.update = function () {
-			const rangeConfig = { ...configGloop };
-			rangeConfig.fillColor = "rgba(0,0,0,0)";
-			rangeConfig.radius = this.attackRadius / 2;
-			const towerCenter = {
-				x: this.position.x + this.width / 2,
-				y: this.position.y + this.height / 2,
-			};
+		this.attack = function (gloop) {
+				gloop.loseHP(1);
+		}
 
-			rangeConfig.x = (towerCenter.x);
-			rangeConfig.y = (towerCenter.y);
-			const range = new Gloop(rangeConfig);
-			range.render();
+		this.canAttack = function (gloop) {
+			const xGloop = gloop.position.x;
+			const yGloop = gloop.position.y;
+			const xDelta = Math.abs(this.position.center.x - xGloop);
+			const yDelta = Math.abs(this.position.center.y - yGloop);
+
+			const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloop.radius;
+
+			if (distance <= this.attackRadius) {
+				return true;
+			}
+			return false;
+		}
+
+		this.update = function () { 
+			
+			if (this.showRange) this.visualizeRange()
 			if (gloops.length > 0) {
-				gloops.forEach((gloop, index) => {
-					const xGloop = gloop.position.x;
-					const yGloop = gloop.position.y;
-					const xDelta = Math.abs(towerCenter.x - xGloop);
-					const yDelta = Math.abs(towerCenter.y - yGloop);
-
-					const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloop.radius;
-
-					if (distance <= this.attackRadius / 2) {
-						//console.log(index, " ", gloop.gloopsIndex)
-						gloop.loseHP(1);
-						// console.log("👿 🧱 a little🤕")
-						// gloops[0].color = "red";
-						// console.log("I 👀 you 😈")
+				if (this.attacksMultiple) {
+					gloops.forEach((gloop) => {
+						if(this.canAttack(gloop)) this.attack(gloop)
+					})
+				} else {
+					for (const gloop of gloops) {
+						
+						if(this.canAttack(gloop)) {
+							if (this.target === null) {
+								this.target = gloop
+								this.createProjectile(this.target) 
+							}
+							break; 
+						}
 					}
-				})
+				}
+
 			};
 			this.render()
 		};
@@ -168,18 +215,12 @@ class Gloop {
 		this.stroke = configObject.strokeColor;
 		this.waypointIndex = configObject.waypointIndex;
 		this.speed = configObject.speed;
-		//this.gloopsIndex = configObject.gloopsIndex;
 		this.hp = configObject.hp;
 		this.isUnderAttack = false;
 		this.destroyMe = false;
 
 		this.destroy = function () {
 			this.destroyMe = true
-			// for (let i = this.gloopsIndex + 1; i <= gloops.length; i++) {
-			// 	const gloop = gloops[i]
-			// 	gloop.gloopsIndex -= 1
-			// }
-			//gloops.splice(this.gloopsIndex, 1);
 		}
 
 		this.loseHP = function (total) {
@@ -246,6 +287,100 @@ class Gloop {
 	}
 }
 
+class RangeVisual {
+	constructor(configObject) {
+		this.position = {
+			x: configObject.x,
+			y: configObject.y,
+		};
+		this.radius = configObject.radius;
+		this.color = configObject.fillColor;
+		this.stroke = configObject.strokeColor;
+
+		this.update = function () {
+			this.render()
+		};
+
+		this.render = function () {
+			if (this.radius > 0) {
+				ctx.beginPath();
+				ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
+				ctx.closePath();
+				ctx.fillStyle = this.color;
+				ctx.fill();
+				ctx.strokeStyle = this.stroke;
+				ctx.stroke();
+			}
+		};
+		return this;
+	}
+}
+class Projectile {
+	constructor(configObject) {
+		this.position = {
+			x: configObject.x,
+			y: configObject.y,
+		};
+		this.radius = configObject.radius;
+		this.color = configObject.fillColor;
+		this.stroke = configObject.strokeColor;
+		this.speed = configObject.speed;
+		this.destroyMe = false;
+		this.target = configObject.target;
+		this.targetReached = false;
+		this.tower = configObject.tower
+
+		this.destroy = function () {
+			this.destroyMe = true
+		}
+		this.update = function () {
+			//console.log(this.position.x)
+			// if (this.waypointIndex < this.waypoints.length) {
+				let xMoveTo = this.target.position.x
+				let yMoveTo = this.target.position.y
+				let xDelta = xMoveTo - this.position.x;
+				let yDelta = yMoveTo - this.position.y;
+				const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
+				// console.log(distance)
+				const moves = Math.floor(distance / this.speed);
+				let xTravelDistance = (xMoveTo - this.position.x) / moves || 0;
+				let yTravelDistance = (yMoveTo - this.position.y) / moves || 0;
+				this.position.x += xTravelDistance;
+				this.position.y += yTravelDistance;
+				this.render();
+
+				const reachedTarget = () => {
+					const xReached = Math.round(this.position.x) === Math.round(xMoveTo);
+					const yReached = Math.round(this.position.y) === Math.round(yMoveTo);
+
+					return xReached && yReached;
+				};
+
+				if (reachedTarget()) {
+					this.target.loseHP(1)
+					this.tower.target = null
+					this.destroy()
+				}
+			//}
+			// else {
+			// 	this.destroy()
+			// };
+		};
+
+		this.render = function () {
+			if (this.radius > 0) {
+				ctx.beginPath();
+				ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
+				ctx.closePath();
+				ctx.fillStyle = this.color;
+				ctx.fill();
+				ctx.strokeStyle = this.stroke;
+				ctx.stroke();
+			}
+		};
+		return this;
+	}
+}
 
 const waypoints = [
 	{ x: 0, y: 217 },
@@ -265,6 +400,7 @@ const towerLocations = [
 
 let gloops = [];
 const towers = [];
+let projectiles = [];
 
 const configGloop = {
 	ctx,
@@ -274,9 +410,8 @@ const configGloop = {
 	fillColor: "black",
 	strokeColor: "yellow",
 	waypointIndex: 0,
-	speed: 3,
-	//gloopsIndex: gloops.length,
-	hp: 600,
+	speed: 1,
+	hp: 10,
 };
 
 const configTower = {
@@ -288,7 +423,10 @@ const configTower = {
 	fillColor: "transparent",
 	strokeColor: "cyan",
 	towersIndex: towers.length,
-	attackRadius: 125,
+	attackRadius: 60,
+	attacksMultiple: false,
+	showRange: true,
+	projectileSize: 10,
 };
 
 const loop = () => {
@@ -304,24 +442,32 @@ const loop = () => {
 	if (gloops.length === 0) {
 		const configSummon = {
 			configGloop,
-			totalGloops: 6,
+			totalGloops: 3,
 			xOffset: 45,
 		}
 		summonGloops(configSummon)
 	}
 	requestAnimationFrame(loop)
 
-	gloops.forEach((shape) => {
-		shape.update();
+	gloops.forEach((gloop) => {
+		gloop.update();
 	});
 	
 	const survivingGloops = gloops.filter(gloop => gloop.destroyMe === false)
 	gloops = [...survivingGloops]
-	//console.log(survivingGloops)
 
-	towers.forEach((shape) => {
-		shape.update();
+	towers.forEach((tower) => {
+		tower.update();
 	});
+
+	//console.log(projectiles)
+	projectiles.forEach((projectile) => {
+		projectile.update();
+	});
+
+	const activeProjectiles = projectiles.filter(projectile => projectile.destroyMe === false)
+	projectiles = [...activeProjectiles]
+
 };
 
 loop();
