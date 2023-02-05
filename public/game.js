@@ -84,24 +84,6 @@ const summonTowers = (configSummon) => {
 	});
 }
 
-const summonProjectile = (configProjectile) => {
-	const newProjectile = new Projectile(configProjectile)
-	projectiles.push(newProjectile);
-}
-
-const summonProjectiles = (configSummon) => {
-	const { configProjectile } = configSummon
-	const newProjectiles = []
-	// for (let i = 0; i < projectileLocations.length; i++) {
-	// 	const projectile = { ...configProjectile }
-	newProjectiles.push(configProjectile)
-	// };
-	newProjectiles.forEach(projectile => {
-		
-		summonProjectile(projectile)
-	});
-}
-
 class Tower {
 	constructor(configObject) {
 		this.position = {
@@ -120,19 +102,32 @@ class Tower {
 		this.attackRadius = configObject.attackRadius;
 		this.attacksMultiple = configObject.attacksMultiple;
 		this.showRange = configObject.showRange;
+		this.projectileSize = configObject.projectileSize;
 
 		this.visualizeRange = function () {
 			const configRange = {
 				ctx,
 				x: this.position.center.x,
 				y: this.position.center.y,
-				radius: this.attackRadius / 2,
+				radius: this.attackRadius,
 				fillColor: "rgba(255,0,0,0.25)",
 				strokeColor: "red",
-	
 			};
 			const range = new RangeVisual(configRange);
 			range.render();
+		}
+
+		this.createProjectile = function () {
+			const configProjectile = {
+				ctx,
+				x: this.position.center.x,
+				y: this.position.center.y,
+				radius: this.projectileSize / 2,
+				fillColor: "pink",
+				strokeColor: "blue",
+			};
+			const projectile = new Projectile(configProjectile);
+			projectile.render();
 		}
 
 		this.detectGloop = function () {
@@ -158,13 +153,14 @@ class Tower {
 
 			const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloop.radius;
 
-			if (distance <= this.attackRadius / 2) {
+			if (distance <= this.attackRadius) {
 				return true;
 			}
 			return false;
 		}
 
 		this.update = function () {
+			this.createProjectile() 
 			if (this.showRange) this.visualizeRange()
 			if (gloops.length > 0) {
 				if (this.attacksMultiple) {
@@ -414,9 +410,10 @@ const configTower = {
 	fillColor: "transparent",
 	strokeColor: "cyan",
 	towersIndex: towers.length,
-	attackRadius: 125,
+	attackRadius: 60,
 	attacksMultiple: false,
 	showRange: true,
+	projectileSize: 10,
 };
 
 const configProjectile = {
@@ -437,13 +434,6 @@ const loop = () => {
 			towerLocations,
 		}
 		summonTowers(configSummon)
-	}
-
-	if (projectiles.length === 0) {
-		const configSummon = {
-			configProjectile,
-		}
-		summonProjectiles(configSummon)
 	}
 
 	if (gloops.length === 0) {
