@@ -7,12 +7,13 @@ class Gloop {
 		this.radius = configObject.radius;
 		this.color = configObject.fillColor;
 		this.stroke = configObject.strokeColor;
-		this.waypointIndex = configObject.waypointIndex;
 		this.speed = configObject.speed;
 		this.hp = configObject.hp;
+		this.gold = configObject.gold;
+		this.wave = configObject.wave;
+		this.waypointIndex = configObject.waypointIndex;
 		this.isUnderAttack = false;
 		this.destroyMe = false;
-		this.wave = configObject.wave;
 		
 		this.destroy = function () {
 			this.destroyMe = true

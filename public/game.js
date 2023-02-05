@@ -145,6 +145,7 @@ const configGloop = {
 	strokeColor: "yellow",
 	waypointIndex: 0,
 	wave: 0,
+	gold: 10,
 	get speed() {
 		return this._speed
 	},
@@ -251,6 +252,7 @@ const loop = () => {
 		circle.update();
 	});
 
+	console.log(gloops)
 	gloops.forEach((gloop) => {
 		gloop.update();
 	});
