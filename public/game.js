@@ -102,10 +102,12 @@ const towerLocations = [
 	{ x: 410, y: 210 }
 ];
 
-let gloops = [];
-const towers = [];
-let projectiles = [];
 const circles = [];
+const towers = [];
+let gloops = [];
+let projectiles = [];
+
+let goldStash = 0;
 
 const configWave = {
 	speedDefault: 0.2,
