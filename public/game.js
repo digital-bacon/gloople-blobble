@@ -107,7 +107,7 @@ let projectiles = [];
 const circles = [];
 
 const configWave = {
-	speedDefault: 5,
+	speedDefault: 1,
 	hpDefault: 50,
 	currentWave: 1,
 	speedMultiplier: 0.5,
@@ -173,7 +173,9 @@ gameCanvas.addEventListener("click", (event) => {
 	const mousePosition = getMousePosition(event)
 	circles.forEach(circle => {
 		if (isIntersecting(mousePosition, circle)) {
-			console.log("clicked on ", circle)
+			console.log("wave before", configWave.currentWave)
+			configWave.currentWave ++
+			console.log("wave count after", configWave.currentWave)
 		}
 	})
 })
