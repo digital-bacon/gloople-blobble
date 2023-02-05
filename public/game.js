@@ -20,11 +20,11 @@ const xOffset = Math.round(screenCenter.x - canvasCenter.x); // because the canv
 const yOffset = 0; // because the canvas is at the top of the page
 
 // Uncomment this block to enable waypoint building in the console.
-const trackedArray = [];
-document.onclick = (event) => {
-	trackedArray.push(getMousePosition(event));
-	//console.log(JSON.stringify(trackedArray));
-};
+// const trackedArray = [];
+// document.onclick = (event) => {
+// 	trackedArray.push(getMousePosition(event));
+// 	console.log(JSON.stringify(trackedArray));
+// };
 
 const getMousePosition = (event) => {
 	const x = event.clientX - xOffset;
@@ -39,6 +39,11 @@ const colorFromHexString = (hexadecimalString) => {
 };
 
 const randomColor = () => colorFromHexString(randomHex());
+
+const summonCircle = (configCircle) => {
+	const newCircle = new Circle(configCircle)
+	circles.push(newCircle);
+}
 
 const summonGloop = (configGloop) => {
 	const newGloop = new Gloop(configGloop)
@@ -75,7 +80,7 @@ const summonTowers = (configSummon) => {
 		newTowers.push(tower)
 	};
 	newTowers.forEach(tower => {
-		
+
 		summonTower(tower)
 	});
 }
@@ -99,9 +104,10 @@ const towerLocations = [
 let gloops = [];
 const towers = [];
 let projectiles = [];
+const circles = [];
 
 const configWave = {
-	speedDefault: 5,
+	speedDefault: 0.2,
 	hpDefault: 50,
 	currentWave: 1,
 	speedMultiplier: 0.5,
@@ -151,8 +157,53 @@ const configTower = {
 	projectileSize: 10,
 };
 
+const configNextWaveButton = {
+	x: 20,
+	y: 20,
+	radius: 20,
+	fillColor: "cyan",
+	strokeColor: "rgba(0, 0, 0, 0)"
+}
+
+const isIntersecting = (mousePoint, circle) => {
+  return Math.sqrt((mousePoint.x - circle.position.x) ** 2 + (mousePoint.y - circle.position.y) ** 2) < circle.radius;
+}
+
+gameCanvas.addEventListener("click", (event) => {
+	const mousePosition = getMousePosition(event)
+	circles.forEach(circle => {
+		if (isIntersecting(mousePosition, circle)) {
+			nextWave()
+		}
+	})
+})
+
+const nextWave = () => {
+	//configGloop.speed = 1
+	if (configWave.currentWave > 1) {
+		configGloop.speed = configWave.speedDefault + ((configWave.currentWave - 1) * configWave.speedMultiplier)
+		configGloop.hp = configWave.hpDefault + ((configWave.currentWave - 1) * configWave.hpMultiplier)
+	} else {
+		configGloop.speed = configWave.speedDefault
+		configGloop.hp = configWave.hpDefault
+	}
+	configWave.currentWave++
+	
+	const configSummon = {
+		configGloop,
+		totalGloops: 3,
+		xOffset: 45,
+	}
+	summonGloops(configSummon)
+}
+
 const loop = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+	if (circles.length === 0) {
+		summonCircle(configNextWaveButton)
+	};
+
 	if (towers.length === 0) {
 		const configSummon = {
 			configTower,
@@ -162,29 +213,18 @@ const loop = () => {
 	}
 
 	if (gloops.length === 0) {
-		//configGloop.speed = 1
-		if (configWave.currentWave > 1) {
-			configGloop.speed = configWave.speedDefault + ((configWave.currentWave - 1) * configWave.speedMultiplier)
-			configGloop.hp = configWave.hpDefault + ((configWave.currentWave - 1) * configWave.hpMultiplier)
-		} else {
-			configGloop.speed = configWave.speedDefault
-			configGloop.hp = configWave.hpDefault
-		}
-		configWave.currentWave++
-		//console.log(configGloop.speed)
-		const configSummon = {
-			configGloop,
-			totalGloops: 3,
-			xOffset: 45,
-		}
-		summonGloops(configSummon)
+		nextWave()
 	}
 	requestAnimationFrame(loop)
+
+	circles.forEach((circle) => {
+		circle.update();
+	});
 
 	gloops.forEach((gloop) => {
 		gloop.update();
 	});
-	
+
 	const survivingGloops = gloops.filter(gloop => gloop.destroyMe === false)
 	gloops = [...survivingGloops]
 
@@ -192,7 +232,7 @@ const loop = () => {
 		tower.update();
 	});
 
-	
+
 	projectiles.forEach((projectile) => {
 		projectile.update();
 	});
