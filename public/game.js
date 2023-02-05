@@ -50,10 +50,6 @@ const summonGloops = (configSummon) => {
 	const newGloops = []
 	for (let i = 0; i < totalGloops; i++) {
 		const gloop = { ...configGloop }
-		// if (i % 2 === 0) {
-		// 	gloop.hp = 10
-		// 	//console.log(gloop)
-		// }
 		newGloops.push(gloop)
 	}
 	let totalOffset = 0
@@ -104,6 +100,12 @@ let gloops = [];
 const towers = [];
 let projectiles = [];
 
+const configWave = {
+	speed: 1,
+	hp: 50,
+	currentWave: 1,
+};
+
 const configGloop = {
 	ctx,
 	x: waypoints[0].x,
@@ -112,8 +114,8 @@ const configGloop = {
 	fillColor: "black",
 	strokeColor: "yellow",
 	waypointIndex: 0,
-	speed: 3,
-	hp: 50,
+	speed: configWave.speed,
+	hp: configWave.hp,
 };
 
 const configTower = {
