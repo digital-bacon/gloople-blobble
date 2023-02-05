@@ -114,7 +114,8 @@ class Tower {
 				radius: this.projectileSize / 2,
 				fillColor: "pink",
 				strokeColor: "blue",
-				speed: 3
+				speed: 3,
+				tower: this,
 			};
 			const projectile = new Projectile(configProjectile);
 			projectiles.push(projectile)
@@ -173,16 +174,17 @@ class Tower {
 					})
 				} else {
 					for (const gloop of gloops) {
+						
 						if(this.canAttack(gloop)) {
 							if (this.target === null) {
-								this.target = gloops[0]
+								this.target = gloop
 								this.createProjectile(this.target) 
 							}
 							break; 
 						}
 					}
 				}
-				
+
 			};
 			this.render()
 		};
@@ -326,12 +328,13 @@ class Projectile {
 		this.destroyMe = false;
 		this.target = configObject.target;
 		this.targetReached = false;
+		this.tower = configObject.tower
 
 		this.destroy = function () {
 			this.destroyMe = true
 		}
-
 		this.update = function () {
+			//console.log(this.position.x)
 			// if (this.waypointIndex < this.waypoints.length) {
 				let xMoveTo = this.target.position.x
 				let yMoveTo = this.target.position.y
@@ -355,7 +358,8 @@ class Projectile {
 
 				if (reachedTarget()) {
 					this.target.loseHP(1)
-					//console.log("BoOM!!!")
+					this.tower.target = null
+					this.destroy()
 				}
 			//}
 			// else {
@@ -406,8 +410,8 @@ const configGloop = {
 	fillColor: "black",
 	strokeColor: "yellow",
 	waypointIndex: 0,
-	speed: 2,
-	hp: 300,
+	speed: 1,
+	hp: 10,
 };
 
 const configTower = {
@@ -438,7 +442,7 @@ const loop = () => {
 	if (gloops.length === 0) {
 		const configSummon = {
 			configGloop,
-			totalGloops: 6,
+			totalGloops: 3,
 			xOffset: 45,
 		}
 		summonGloops(configSummon)
@@ -460,6 +464,9 @@ const loop = () => {
 	projectiles.forEach((projectile) => {
 		projectile.update();
 	});
+
+	const activeProjectiles = projectiles.filter(projectile => projectile.destroyMe === false)
+	projectiles = [...activeProjectiles]
 
 };
 
