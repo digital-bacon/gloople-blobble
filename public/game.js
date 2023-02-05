@@ -107,7 +107,7 @@ let projectiles = [];
 const circles = [];
 
 const configWave = {
-	speedDefault: 1,
+	speedDefault: 0.2,
 	hpDefault: 50,
 	currentWave: 1,
 	speedMultiplier: 0.5,
@@ -173,13 +173,29 @@ gameCanvas.addEventListener("click", (event) => {
 	const mousePosition = getMousePosition(event)
 	circles.forEach(circle => {
 		if (isIntersecting(mousePosition, circle)) {
-			console.log("wave before", configWave.currentWave)
-			configWave.currentWave ++
-			console.log("wave count after", configWave.currentWave)
+			nextWave()
 		}
 	})
 })
 
+const nextWave = () => {
+	//configGloop.speed = 1
+	if (configWave.currentWave > 1) {
+		configGloop.speed = configWave.speedDefault + ((configWave.currentWave - 1) * configWave.speedMultiplier)
+		configGloop.hp = configWave.hpDefault + ((configWave.currentWave - 1) * configWave.hpMultiplier)
+	} else {
+		configGloop.speed = configWave.speedDefault
+		configGloop.hp = configWave.hpDefault
+	}
+	configWave.currentWave++
+	
+	const configSummon = {
+		configGloop,
+		totalGloops: 3,
+		xOffset: 45,
+	}
+	summonGloops(configSummon)
+}
 
 const loop = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -197,22 +213,7 @@ const loop = () => {
 	}
 
 	if (gloops.length === 0) {
-		//configGloop.speed = 1
-		if (configWave.currentWave > 1) {
-			configGloop.speed = configWave.speedDefault + ((configWave.currentWave - 1) * configWave.speedMultiplier)
-			configGloop.hp = configWave.hpDefault + ((configWave.currentWave - 1) * configWave.hpMultiplier)
-		} else {
-			configGloop.speed = configWave.speedDefault
-			configGloop.hp = configWave.hpDefault
-		}
-		configWave.currentWave++
-		
-		const configSummon = {
-			configGloop,
-			totalGloops: 3,
-			xOffset: 45,
-		}
-		summonGloops(configSummon)
+		nextWave()
 	}
 	requestAnimationFrame(loop)
 
