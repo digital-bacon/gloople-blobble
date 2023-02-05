@@ -109,11 +109,22 @@ let projectiles = [];
 
 const goldStash = {
 	total: 0,
-	addGold(amount) {
+	setTotal(amount) {
+		if (amount < 0) {
+			return this.total = 0
+		}
+		this.total = amount
+	},
+	deposit(amount) {
 		this.total += amount
-	}
+	},
+	withdraw(amount) {
+		this.total -= amount
+	},
 };
-goldStash.addGold(1);
+goldStash.setTotal(0);
+goldStash.deposit(2);
+goldStash.withdraw(1);
 console.log(goldStash.total)
 
 const configWave = {
