@@ -101,9 +101,10 @@ const towers = [];
 let projectiles = [];
 
 const configWave = {
-	speed: 1,
+	speed: 5,
 	hp: 50,
 	currentWave: 1,
+	speedMultiplier: 0.5
 };
 
 const configGloop = {
@@ -114,7 +115,12 @@ const configGloop = {
 	fillColor: "black",
 	strokeColor: "yellow",
 	waypointIndex: 0,
-	speed: configWave.speed,
+	get speed() {
+		return this._speed
+	},
+	set speed(value) {
+		this._speed = value;
+	},
 	hp: configWave.hp,
 };
 
@@ -144,6 +150,10 @@ const loop = () => {
 	}
 
 	if (gloops.length === 0) {
+		configWave.currentWave++
+		//configGloop.speed = 1
+		configGloop.speed = configWave.currentWave * configWave.speedMultiplier
+		console.log(configGloop.speed)
 		const configSummon = {
 			configGloop,
 			totalGloops: 3,
