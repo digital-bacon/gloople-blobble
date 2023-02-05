@@ -12,7 +12,8 @@ class Gloop {
 		this.hp = configObject.hp;
 		this.isUnderAttack = false;
 		this.destroyMe = false;
-
+		this.wave = configObject.wave;
+		
 		this.destroy = function () {
 			this.destroyMe = true
 		}

@@ -51,10 +51,11 @@ const summonGloop = (configGloop) => {
 }
 
 const summonGloops = (configSummon) => {
-	const { totalGloops, configGloop, xOffset } = configSummon
+	const { totalGloops, configGloop, xOffset, wave } = configSummon
 	const newGloops = []
 	for (let i = 0; i < totalGloops; i++) {
 		const gloop = { ...configGloop }
+		gloop.wave = wave
 		newGloops.push(gloop)
 	}
 	let totalOffset = 0
@@ -108,8 +109,9 @@ const circles = [];
 
 const configWave = {
 	speedDefault: 0.2,
-	hpDefault: 50,
-	currentWave: 1,
+	hpDefault: 10,
+	currentWave: 0,
+	nextWave: 1,
 	speedMultiplier: 0.5,
 	hpMultiplier: 1.0
 };
@@ -122,6 +124,7 @@ const configGloop = {
 	fillColor: "black",
 	strokeColor: "yellow",
 	waypointIndex: 0,
+	wave: 0,
 	get speed() {
 		return this._speed
 	},
@@ -179,22 +182,29 @@ gameCanvas.addEventListener("click", (event) => {
 })
 
 const nextWave = () => {
-	//configGloop.speed = 1
-	if (configWave.currentWave > 1) {
-		configGloop.speed = configWave.speedDefault + ((configWave.currentWave - 1) * configWave.speedMultiplier)
-		configGloop.hp = configWave.hpDefault + ((configWave.currentWave - 1) * configWave.hpMultiplier)
+	if (configWave.nextWave > 1) {
+		configGloop.speed = configWave.speedDefault + (configWave.currentWave * configWave.speedMultiplier)
+		configGloop.hp = configWave.hpDefault + (configWave.currentWave * configWave.hpMultiplier)
 	} else {
 		configGloop.speed = configWave.speedDefault
 		configGloop.hp = configWave.hpDefault
 	}
-	configWave.currentWave++
-	
+	configWave.currentWave = configWave.nextWave
+	configWave.nextWave++
 	const configSummon = {
 		configGloop,
 		totalGloops: 3,
 		xOffset: 45,
+		wave: configWave.currentWave,
 	}
+
 	summonGloops(configSummon)
+
+}
+
+const isWaveClear = (waveNumber) => {
+	const matched = gloops.filter(gloop => gloop.wave === waveNumber)
+	return matched.length === 0
 }
 
 const loop = () => {
@@ -212,7 +222,7 @@ const loop = () => {
 		summonTowers(configSummon)
 	}
 
-	if (gloops.length === 0) {
+	if (gloops.length === 0 || isWaveClear(configWave.currentWave)) {
 		nextWave()
 	}
 	requestAnimationFrame(loop)
