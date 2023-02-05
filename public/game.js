@@ -101,10 +101,11 @@ const towers = [];
 let projectiles = [];
 
 const configWave = {
-	speed: 5,
-	hp: 50,
+	speedDefault: 5,
+	hpDefault: 50,
 	currentWave: 1,
-	speedMultiplier: 0.5
+	speedMultiplier: 0.5,
+	hpMultiplier: 1.0
 };
 
 const configGloop = {
@@ -119,9 +120,20 @@ const configGloop = {
 		return this._speed
 	},
 	set speed(value) {
+		if (value < 0) {
+			return this._speed = 0
+		}
 		this._speed = value;
 	},
-	hp: configWave.hp,
+	get hp() {
+		return this._hp
+	},
+	set hp(value) {
+		if (value < 0) {
+			return this._hp = 0
+		}
+		this._hp = value;
+	},
 };
 
 const configTower = {
@@ -150,10 +162,16 @@ const loop = () => {
 	}
 
 	if (gloops.length === 0) {
-		configWave.currentWave++
 		//configGloop.speed = 1
-		configGloop.speed = configWave.currentWave * configWave.speedMultiplier
-		console.log(configGloop.speed)
+		if (configWave.currentWave > 1) {
+			configGloop.speed = configWave.speedDefault + ((configWave.currentWave - 1) * configWave.speedMultiplier)
+			configGloop.hp = configWave.hpDefault + ((configWave.currentWave - 1) * configWave.hpMultiplier)
+		} else {
+			configGloop.speed = configWave.speedDefault
+			configGloop.hp = configWave.hpDefault
+		}
+		configWave.currentWave++
+		//console.log(configGloop.speed)
 		const configSummon = {
 			configGloop,
 			totalGloops: 3,
