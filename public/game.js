@@ -114,7 +114,7 @@ class Tower {
 				radius: this.projectileSize / 2,
 				fillColor: "pink",
 				strokeColor: "blue",
-				speed: 3,
+				speed: 2,
 				tower: this,
 			};
 			const projectile = new Projectile(configProjectile);
@@ -334,14 +334,11 @@ class Projectile {
 			this.destroyMe = true
 		}
 		this.update = function () {
-			//console.log(this.position.x)
-			// if (this.waypointIndex < this.waypoints.length) {
 				let xMoveTo = this.target.position.x
 				let yMoveTo = this.target.position.y
 				let xDelta = xMoveTo - this.position.x;
 				let yDelta = yMoveTo - this.position.y;
 				const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
-				// console.log(distance)
 				const moves = Math.floor(distance / this.speed);
 				let xTravelDistance = (xMoveTo - this.position.x) / moves || 0;
 				let yTravelDistance = (yMoveTo - this.position.y) / moves || 0;
@@ -350,21 +347,16 @@ class Projectile {
 				this.render();
 
 				const reachedTarget = () => {
-					const xReached = Math.round(this.position.x) === Math.round(xMoveTo);
-					const yReached = Math.round(this.position.y) === Math.round(yMoveTo);
-
-					return xReached && yReached;
+					const distanceToTarget = distance - this.target.radius
+					const reachedTarget = distanceToTarget <= this.target.radius
+					return reachedTarget;
 				};
 
-				if (reachedTarget()) {
+				if (reachedTarget())  {
 					this.target.loseHP(1)
 					this.tower.target = null
 					this.destroy()
 				}
-			//}
-			// else {
-			// 	this.destroy()
-			// };
 		};
 
 		this.render = function () {
@@ -410,8 +402,8 @@ const configGloop = {
 	fillColor: "black",
 	strokeColor: "yellow",
 	waypointIndex: 0,
-	speed: 1,
-	hp: 10,
+	speed: 3,
+	hp: 50,
 };
 
 const configTower = {
@@ -460,14 +452,13 @@ const loop = () => {
 		tower.update();
 	});
 
-	//console.log(projectiles)
+	
 	projectiles.forEach((projectile) => {
 		projectile.update();
 	});
 
 	const activeProjectiles = projectiles.filter(projectile => projectile.destroyMe === false)
 	projectiles = [...activeProjectiles]
-
 };
 
 loop();
