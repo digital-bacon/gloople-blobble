@@ -164,10 +164,7 @@ class Tower {
 		}
 
 		this.update = function () { 
-			if (this.target === null) {
-				this.target = gloops[0]
-				this.createProjectile(this.target) 
-			}
+			
 			if (this.showRange) this.visualizeRange()
 			if (gloops.length > 0) {
 				if (this.attacksMultiple) {
@@ -177,7 +174,10 @@ class Tower {
 				} else {
 					for (const gloop of gloops) {
 						if(this.canAttack(gloop)) {
-							this.attack(gloop)
+							if (this.target === null) {
+								this.target = gloops[0]
+								this.createProjectile(this.target) 
+							}
 							break; 
 						}
 					}
@@ -391,7 +391,7 @@ const waypoints = [
 
 const towerLocations = [
 	{ x: 135, y: 135 },
-	// { x: 410, y: 210 }
+	{ x: 410, y: 210 }
 ];
 
 let gloops = [];
