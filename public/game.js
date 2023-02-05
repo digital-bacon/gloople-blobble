@@ -107,7 +107,14 @@ const towers = [];
 let gloops = [];
 let projectiles = [];
 
-let goldStash = 0;
+const goldStash = {
+	total: 0,
+	addGold(amount) {
+		this.total += amount
+	}
+};
+goldStash.addGold(1);
+console.log(goldStash.total)
 
 const configWave = {
 	speedDefault: 0.2,
