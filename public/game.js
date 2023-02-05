@@ -103,6 +103,22 @@ class Tower {
 		this.attacksMultiple = configObject.attacksMultiple;
 		this.showRange = configObject.showRange;
 		this.projectileSize = configObject.projectileSize;
+		this.target = null;
+
+		this.createProjectile = function (target) {
+			const configProjectile = {
+				ctx,
+				target,
+				x: this.position.center.x,
+				y: this.position.center.y,
+				radius: this.projectileSize / 2,
+				fillColor: "pink",
+				strokeColor: "blue",
+				speed: 3
+			};
+			const projectile = new Projectile(configProjectile);
+			projectiles.push(projectile)
+		}
 
 		this.visualizeRange = function () {
 			const configRange = {
@@ -113,21 +129,9 @@ class Tower {
 				fillColor: "rgba(255,0,0,0.25)",
 				strokeColor: "red",
 			};
+			
 			const range = new RangeVisual(configRange);
 			range.render();
-		}
-
-		this.createProjectile = function () {
-			const configProjectile = {
-				ctx,
-				x: this.position.center.x,
-				y: this.position.center.y,
-				radius: this.projectileSize / 2,
-				fillColor: "pink",
-				strokeColor: "blue",
-			};
-			const projectile = new Projectile(configProjectile);
-			projectile.render();
 		}
 
 		this.detectGloop = function () {
@@ -159,8 +163,11 @@ class Tower {
 			return false;
 		}
 
-		this.update = function () {
-			this.createProjectile() 
+		this.update = function () { 
+			if (this.target === null) {
+				this.target = gloops[0]
+				this.createProjectile(this.target) 
+			}
 			if (this.showRange) this.visualizeRange()
 			if (gloops.length > 0) {
 				if (this.attacksMultiple) {
@@ -315,40 +322,42 @@ class Projectile {
 		this.radius = configObject.radius;
 		this.color = configObject.fillColor;
 		this.stroke = configObject.strokeColor;
-		this.waypointIndex = configObject.waypointIndex;
 		this.speed = configObject.speed;
 		this.destroyMe = false;
+		this.target = configObject.target;
+		this.targetReached = false;
 
 		this.destroy = function () {
 			this.destroyMe = true
 		}
 
 		this.update = function () {
-			this.render()
-			// if (this.waypointIndex < waypoints.length) {
-			// 	let xMoveTo = waypoints[this.waypointIndex].x;
-			// 	let yMoveTo = waypoints[this.waypointIndex].y;
-			// 	let xDelta = xMoveTo - this.position.x;
-			// 	let yDelta = yMoveTo - this.position.y;
-			// 	const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
-			// 	const moves = Math.floor(distance / this.speed);
-			// 	let xTravelDistance = (xMoveTo - this.position.x) / moves || 0;
-			// 	let yTravelDistance = (yMoveTo - this.position.y) / moves || 0;
-			// 	this.position.x += xTravelDistance;
-			// 	this.position.y += yTravelDistance;
-			// 	this.render();
+			// if (this.waypointIndex < this.waypoints.length) {
+				let xMoveTo = this.target.position.x
+				let yMoveTo = this.target.position.y
+				let xDelta = xMoveTo - this.position.x;
+				let yDelta = yMoveTo - this.position.y;
+				const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
+				// console.log(distance)
+				const moves = Math.floor(distance / this.speed);
+				let xTravelDistance = (xMoveTo - this.position.x) / moves || 0;
+				let yTravelDistance = (yMoveTo - this.position.y) / moves || 0;
+				this.position.x += xTravelDistance;
+				this.position.y += yTravelDistance;
+				this.render();
 
-			// 	const reachedWaypoint = () => {
-			// 		const xReached = Math.round(this.position.x) === xMoveTo;
-			// 		const yReached = Math.round(this.position.y) === yMoveTo;
+				const reachedTarget = () => {
+					const xReached = Math.round(this.position.x) === Math.round(xMoveTo);
+					const yReached = Math.round(this.position.y) === Math.round(yMoveTo);
 
-			// 		return xReached && yReached;
-			// 	};
+					return xReached && yReached;
+				};
 
-			// 	if (reachedWaypoint()) {
-			// 		this.waypointIndex++
-			// 	}
-			// }
+				if (reachedTarget()) {
+					this.target.loseHP(1)
+					//console.log("BoOM!!!")
+				}
+			//}
 			// else {
 			// 	this.destroy()
 			// };
@@ -382,7 +391,7 @@ const waypoints = [
 
 const towerLocations = [
 	{ x: 135, y: 135 },
-	{ x: 410, y: 210 }
+	// { x: 410, y: 210 }
 ];
 
 let gloops = [];
@@ -416,16 +425,6 @@ const configTower = {
 	projectileSize: 10,
 };
 
-const configProjectile = {
-	ctx,
-	x: 10,
-	y: 10,
-	radius: 10,
-	fillColor: "pink",
-	strokeColor: "blue",
-	speed: 1,
-};
-
 const loop = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	if (towers.length === 0) {
@@ -446,20 +445,20 @@ const loop = () => {
 	}
 	requestAnimationFrame(loop)
 
-	gloops.forEach((shape) => {
-		shape.update();
+	gloops.forEach((gloop) => {
+		gloop.update();
 	});
 	
 	const survivingGloops = gloops.filter(gloop => gloop.destroyMe === false)
 	gloops = [...survivingGloops]
-	//console.log(survivingGloops)
 
-	towers.forEach((shape) => {
-		shape.update();
+	towers.forEach((tower) => {
+		tower.update();
 	});
 
-	projectiles.forEach((shape) => {
-		shape.update();
+	//console.log(projectiles)
+	projectiles.forEach((projectile) => {
+		projectile.update();
 	});
 
 };
