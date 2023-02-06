@@ -203,7 +203,7 @@ const yOffset = 0; // because the canvas is at the top of the page
 const trackedArray = [];
 document.onclick = (event) => {
 	trackedArray.push(getMousePosition(event));
-	console.log(JSON.stringify(trackedArray));
+	// console.log(JSON.stringify(trackedArray));
 };
 
 const getMousePosition = (event) => {
@@ -287,12 +287,33 @@ const isIntersectingCircle = (mousePoint, circle) => {
 	);
 };
 
+const isIntersectingRect = (mousePoint, rect) => {
+
+	const left = rect.position.x;
+	const right = rect.position.x + rect.width;
+
+	const top = rect.position.y;
+	const bottom = rect.position.y + rect.height;
+	
+	const xClicked = mousePoint.x >= left && mousePoint.x <= right;
+
+	const yClicked = mousePoint.y >= top && mousePoint.y <= bottom;
+	
+	return xClicked && yClicked
+};
+
 gameCanvas.addEventListener("click", (event) => {
 	const mousePosition = getMousePosition(event);
 	circles.forEach((circle) => {
 		if (isIntersectingCircle(mousePosition, circle)) {
 			nextWave();
 			// game.reset();
+		}
+	});
+
+	roundRects.forEach((roundRect) => {
+		if (isIntersectingRect(mousePosition, roundRect)) {
+			console.log("Clicked")
 		}
 	});
 });
