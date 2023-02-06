@@ -87,8 +87,9 @@ const configNextWaveButton = {
 
 const configText = {
 	x: 25,
-	y: 60,
+	y: 64,
 	fillStyle: "gold",
+	font: "bold 16px sans-serif",
 	text: "Hello World",
 };
 
@@ -109,7 +110,7 @@ const configTower = {
 
 const configWave = {
 	speedDefault: 3,
-	hpDefault: 50,
+	hpDefault: 3,
 	currentWave: 0,
 	nextWave: 1,
 	speedMultiplier: 0.2,
@@ -292,7 +293,20 @@ const loop = () => {
 		const configGoldStashText = { ...configText };
 		configGoldStashText.text = goldStash.total.toString();
 		configGoldStashText.textAlign = "center";
+		configGoldStashText.x = 25;
+		configGoldStashText.y = 64;
+		configGoldStashText.fillStyle = "gold";
+		configGoldStashText.font = "bold 16px sans-serif";
 		generateFillText(configGoldStashText);
+
+		const configPlayerHPText = { ...configText };
+		configPlayerHPText.textAlign = configGoldStashText.textAlign;
+		configPlayerHPText.font = configGoldStashText.font;
+		configPlayerHPText.x = configGoldStashText.x;
+		configPlayerHPText.y = configGoldStashText.y + 18;
+		configPlayerHPText.fillStyle = "#aaf0d1";
+		configPlayerHPText.text = player.hp.toString();
+		generateFillText(configPlayerHPText);
 	}
 
 	if (towers.length === 0) {
