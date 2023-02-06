@@ -313,7 +313,7 @@ gameCanvas.addEventListener("click", (event) => {
 
 	roundRects.forEach((roundRect) => {
 		if (isIntersectingRect(mousePosition, roundRect)) {
-			console.log("Clicked")
+			game.setStatus("active")
 		}
 	});
 });
