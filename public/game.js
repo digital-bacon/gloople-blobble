@@ -186,6 +186,10 @@ const game = {
 			return;
 		}
 		this.status = status;
+		if (this.status === "gameover") {
+			gloops = [];
+			towers.forEach(tower => tower.target = null);
+		}
 	},
 
 	reset() {
@@ -326,75 +330,93 @@ const isWaveClear = (waveNumber) => {
 };
 
 const loop = () => {
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		if (circles.length === 0) {
-			generateCircle(configNextWaveButton);
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	if (circles.length === 0) {
+		generateCircle(configNextWaveButton);
+	}
+
+	fillText = [];
+	if (fillText.length === 0) {
+		const configGoldStashText = { ...configText };
+		configGoldStashText.text = goldStash.total.toString();
+		configGoldStashText.textAlign = "center";
+		configGoldStashText.x = 25;
+		configGoldStashText.y = 64;
+		configGoldStashText.fillStyle = "gold";
+		configGoldStashText.font = "bold 16px sans-serif";
+		generateFillText(configGoldStashText);
+
+		const configPlayerHPText = { ...configText };
+		configPlayerHPText.textAlign = configGoldStashText.textAlign;
+		configPlayerHPText.font = configGoldStashText.font;
+		configPlayerHPText.x = configGoldStashText.x;
+		configPlayerHPText.y = configGoldStashText.y + 18;
+		configPlayerHPText.fillStyle = "#aaf0d1";
+		configPlayerHPText.text = player.hp.toString();
+		generateFillText(configPlayerHPText);
+
+		if (game.status === "gameover") {
+			const configGameOverText = { ...configText };
+			configGameOverText.text = "GAME OVER";
+			configGameOverText.textAlign = "center";
+			configGameOverText.x = canvasCenter.x;
+			configGameOverText.y = canvasCenter.y + 36;
+			configGameOverText.fillStyle = "gold";
+			configGameOverText.font = "bold 72px sans-serif";
+			generateFillText(configGameOverText);
 		}
+	}
 
-		fillText = [];
-		if (fillText.length === 0) {
-			const configGoldStashText = { ...configText };
-			configGoldStashText.text = goldStash.total.toString();
-			configGoldStashText.textAlign = "center";
-			configGoldStashText.x = 25;
-			configGoldStashText.y = 64;
-			configGoldStashText.fillStyle = "gold";
-			configGoldStashText.font = "bold 16px sans-serif";
-			generateFillText(configGoldStashText);
+	if (towers.length === 0) {
+		const configSummon = {
+			configTower,
+			towerLocations,
+		};
+		summonTowers(configSummon);
+	}
 
-			const configPlayerHPText = { ...configText };
-			configPlayerHPText.textAlign = configGoldStashText.textAlign;
-			configPlayerHPText.font = configGoldStashText.font;
-			configPlayerHPText.x = configGoldStashText.x;
-			configPlayerHPText.y = configGoldStashText.y + 18;
-			configPlayerHPText.fillStyle = "#aaf0d1";
-			configPlayerHPText.text = player.hp.toString();
-			generateFillText(configPlayerHPText);
-		}
+	if (gloops.length === 0 || isWaveClear(configWave.currentWave)) {
+		nextWave();
+	}
+	requestAnimationFrame(loop);
 
-		if (towers.length === 0) {
-			const configSummon = {
-				configTower,
-				towerLocations,
-			};
-			summonTowers(configSummon);
-		}
-
-		if (gloops.length === 0 || isWaveClear(configWave.currentWave)) {
-			nextWave();
-		}
-		requestAnimationFrame(loop);
-
-		if (game.status === "active") {
-			circles.forEach((circle) => {
-				circle.update();
-			});
-
-			gloops.forEach((gloop) => {
-				gloop.update();
-			});
-
-		}
-		fillText.forEach((text) => {
-			text.update();
+	if (game.status === "active") {
+		circles.forEach((circle) => {
+			circle.update();
 		});
 
-		towers.forEach((tower) => {
-			tower.update();
+		gloops.forEach((gloop) => {
+			gloop.update();
 		});
 
 		projectiles.forEach((projectile) => {
 			projectile.update();
 		});
-
-		const survivingGloops = gloops.filter((gloop) => gloop.destroyMe === false);
-		gloops = [...survivingGloops];
-
-		const activeProjectiles = projectiles.filter(
-			(projectile) => projectile.destroyMe === false
-		);
-		projectiles = [...activeProjectiles];
 	
+	}
+
+	towers.forEach((tower) => {
+		tower.update();
+	});
+
+	if (game.status === "gameover") {
+		projectiles.forEach((projectile) => {
+		projectile.render();
+		});
+	};
+
+	fillText.forEach((text) => {
+		text.update();
+	});
+
+	const survivingGloops = gloops.filter((gloop) => gloop.destroyMe === false);
+	gloops = [...survivingGloops];
+
+	const activeProjectiles = projectiles.filter(
+		(projectile) => projectile.destroyMe === false
+	);
+	projectiles = [...activeProjectiles];
+
 };
 
 loop();
