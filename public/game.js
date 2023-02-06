@@ -150,7 +150,16 @@ const goldStash = {
 };
 
 const player = {
-	hp: INITIAL_PLAYER_HP,
+	_hp: INITIAL_PLAYER_HP,
+	get hp() {
+		return this._hp;
+	},
+	set hp(value) {
+		this._hp = value;
+		if (this._hp <= 0) {
+			return game.setStatus("gameover");
+		}
+	},
 	setHP(amount) {
 		if (amount < 0) {
 			return (this.hp = 0);
@@ -178,9 +187,8 @@ const game = {
 		}
 		this.status = status;
 	},
-	
+
 	reset() {
-		console.log("resetting")
 		configWave.currentWave = INITIAL_WAVE;
 		configWave.nextWave = INITIAL_WAVE + 1;
 		goldStash.setTotal(INITIAL_GOLD_STASH_TOTAL);
@@ -190,8 +198,6 @@ const game = {
 		towers.forEach(tower => tower.target = null)
 	}
 }
-
-// console.log(player.hp);
 
 const xOffset = Math.round(screenCenter.x - canvasCenter.x); // because the canvas is centered
 const yOffset = 0; // because the canvas is at the top of the page
@@ -274,7 +280,7 @@ const isIntersectingCircle = (mousePoint, circle) => {
 	return (
 		Math.sqrt(
 			(mousePoint.x - circle.position.x) ** 2 +
-				(mousePoint.y - circle.position.y) ** 2
+			(mousePoint.y - circle.position.y) ** 2
 		) < circle.radius
 	);
 };
@@ -283,8 +289,8 @@ gameCanvas.addEventListener("click", (event) => {
 	const mousePosition = getMousePosition(event);
 	circles.forEach((circle) => {
 		if (isIntersectingCircle(mousePosition, circle)) {
-			//nextWave();
-			game.reset();
+			nextWave();
+			// game.reset();
 		}
 	});
 });
@@ -320,75 +326,76 @@ const isWaveClear = (waveNumber) => {
 };
 
 const loop = () => {
-	//console.log(configWave.currentWave)
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	if (circles.length === 0) {
-		generateCircle(configNextWaveButton);
-	}
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		if (circles.length === 0) {
+			generateCircle(configNextWaveButton);
+		}
 
-	fillText = [];
-	if (fillText.length === 0) {
-		const configGoldStashText = { ...configText };
-		configGoldStashText.text = goldStash.total.toString();
-		configGoldStashText.textAlign = "center";
-		configGoldStashText.x = 25;
-		configGoldStashText.y = 64;
-		configGoldStashText.fillStyle = "gold";
-		configGoldStashText.font = "bold 16px sans-serif";
-		generateFillText(configGoldStashText);
+		fillText = [];
+		if (fillText.length === 0) {
+			const configGoldStashText = { ...configText };
+			configGoldStashText.text = goldStash.total.toString();
+			configGoldStashText.textAlign = "center";
+			configGoldStashText.x = 25;
+			configGoldStashText.y = 64;
+			configGoldStashText.fillStyle = "gold";
+			configGoldStashText.font = "bold 16px sans-serif";
+			generateFillText(configGoldStashText);
 
-		const configPlayerHPText = { ...configText };
-		configPlayerHPText.textAlign = configGoldStashText.textAlign;
-		configPlayerHPText.font = configGoldStashText.font;
-		configPlayerHPText.x = configGoldStashText.x;
-		configPlayerHPText.y = configGoldStashText.y + 18;
-		configPlayerHPText.fillStyle = "#aaf0d1";
-		configPlayerHPText.text = player.hp.toString();
-		generateFillText(configPlayerHPText);
-	}
+			const configPlayerHPText = { ...configText };
+			configPlayerHPText.textAlign = configGoldStashText.textAlign;
+			configPlayerHPText.font = configGoldStashText.font;
+			configPlayerHPText.x = configGoldStashText.x;
+			configPlayerHPText.y = configGoldStashText.y + 18;
+			configPlayerHPText.fillStyle = "#aaf0d1";
+			configPlayerHPText.text = player.hp.toString();
+			generateFillText(configPlayerHPText);
+		}
 
-	if (towers.length === 0) {
-		const configSummon = {
-			configTower,
-			towerLocations,
-		};
-		summonTowers(configSummon);
-	}
+		if (towers.length === 0) {
+			const configSummon = {
+				configTower,
+				towerLocations,
+			};
+			summonTowers(configSummon);
+		}
 
-	if (gloops.length === 0 || isWaveClear(configWave.currentWave)) {
-		nextWave();
-	}
-	requestAnimationFrame(loop);
+		if (gloops.length === 0 || isWaveClear(configWave.currentWave)) {
+			nextWave();
+		}
+		requestAnimationFrame(loop);
 
-	circles.forEach((circle) => {
-		circle.update();
-	});
+		if (game.status === "active") {
+			circles.forEach((circle) => {
+				circle.update();
+			});
 
-	fillText.forEach((text) => {
-		text.update();
-	});
+			gloops.forEach((gloop) => {
+				gloop.update();
+			});
 
-	gloops.forEach((gloop) => {
-		gloop.update();
-	});
+		}
+		fillText.forEach((text) => {
+			text.update();
+		});
 
-	towers.forEach((tower) => {
-		tower.update();
-	});
+		towers.forEach((tower) => {
+			tower.update();
+		});
 
-	projectiles.forEach((projectile) => {
-		projectile.update();
-	});
+		projectiles.forEach((projectile) => {
+			projectile.update();
+		});
 
-	const survivingGloops = gloops.filter((gloop) => gloop.destroyMe === false);
-	gloops = [...survivingGloops];
+		const survivingGloops = gloops.filter((gloop) => gloop.destroyMe === false);
+		gloops = [...survivingGloops];
 
-	const activeProjectiles = projectiles.filter(
-		(projectile) => projectile.destroyMe === false
-	);
-	projectiles = [...activeProjectiles];
+		const activeProjectiles = projectiles.filter(
+			(projectile) => projectile.destroyMe === false
+		);
+		projectiles = [...activeProjectiles];
+	
 };
 
-if (game.status === "active") {
-	loop();
-}
+loop();
+
