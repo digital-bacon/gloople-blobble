@@ -40,7 +40,7 @@ const colorFromHexString = (hexadecimalString) => {
 
 const randomColor = () => colorFromHexString(randomHex());
 
-const summonCircle = (configCircle) => {
+const generateCircle = (configCircle) => {
 	const newCircle = new Circle(configCircle)
 	circles.push(newCircle);
 }
@@ -66,9 +66,9 @@ const summonGloops = (configSummon) => {
 	})
 }
 
-const summonText = (configText) => {
-	const newText = new Text(configText)
-	text.push(newText);
+const generateFillText = (configFillText) => {
+	const newFillText = new FillText(configFillText)
+	text.push(newFillText);
 }
 
 const summonTower = (configTower) => {
@@ -205,10 +205,10 @@ const configNextWaveButton = {
 }
 
 const configText = {
-	x: 20,
-	y: 20,
-	fillColor: "black",
-	strokeColor: "rgba(0, 0, 0, 0)"
+	x: 50,
+	y: 50,
+	fillStyle: "black",
+	text: "Hello World"
 }
 
 const isIntersecting = (mousePoint, circle) => {
@@ -255,11 +255,11 @@ const loop = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 	if (circles.length === 0) {
-		summonCircle(configNextWaveButton)
+		generateCircle(configNextWaveButton)
 	};
 
 	if (text.length === 0) {
-		summonText(configText)
+		generateFillText(configText)
 	}
 
 	if (towers.length === 0) {
