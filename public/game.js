@@ -118,6 +118,10 @@ const configWave = {
 	goldMultiplier: 2,
 };
 
+const game = {
+	status: "initial",
+}
+
 const goldStash = {
 	total: 0,
 	setTotal(amount) {
