@@ -34,6 +34,7 @@ const towers = [];
 let fillText = [];
 let gloops = [];
 let projectiles = [];
+let roundRects = [];
 
 const canvas = {
 	width: gameCanvas.width,
@@ -237,6 +238,11 @@ const generateFillText = (configFillText) => {
 	fillText.push(newFillText);
 };
 
+const generateRoundRect = (configRoundRect) => {
+	const newRoundRect = new RoundRect(configRoundRect);
+	roundRects.push(newRoundRect);
+};
+
 const summonGloop = (configGloop) => {
 	const newGloop = new Gloop(configGloop);
 	gloops.push(newGloop);
@@ -367,6 +373,20 @@ const animationLoop = () => {
 		}
 	}
 
+	roundRects = [];
+	if (roundRects.length === 0) {
+		const configStartButton = {
+			x: canvasCenter.x - 100,
+			y: canvasCenter.y - 25,
+			width: 200,
+			height: 50,
+			radii: 10,
+			strokeStyle: "green",
+			fillStyle: "pink",
+		}
+		generateRoundRect(configStartButton)
+	}
+
 	if (towers.length === 0) {
 		const configSummon = {
 			configTower,
@@ -380,6 +400,12 @@ const animationLoop = () => {
 	}
 	requestAnimationFrame(animationLoop);
 
+	if (game.status === "initial") {
+		roundRects.forEach((roundRect) => {
+			roundRect.update();
+		})
+	}
+
 	if (game.status === "active") {
 		circles.forEach((circle) => {
 			circle.update();
@@ -392,11 +418,11 @@ const animationLoop = () => {
 		projectiles.forEach((projectile) => {
 			projectile.update();
 		});
-		
+
 		towers.forEach((tower) => {
 			tower.update();
 		});
-		
+
 		fillText.forEach((text) => {
 			text.update();
 		});
@@ -405,7 +431,7 @@ const animationLoop = () => {
 
 	if (game.status === "gameover") {
 		projectiles.forEach((projectile) => {
-		projectile.render();
+			projectile.render();
 		});
 
 		towers.forEach((tower) => {
