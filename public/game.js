@@ -85,25 +85,6 @@ const configNextWaveButton = {
 	strokeColor: "rgba(0, 0, 0, 0)",
 };
 
-const configPlayer = {
-	hp: 10,
-	setTotal(amount) {
-		if (amount < 0) {
-			return (this.hp = 0);
-		}
-		this.hp = this.convertToWhole(amount);
-	},
-	deposit(amount) {
-		this.hp += this.convertToWhole(amount);
-	},
-	withdraw(amount) {
-		this.hp -= this.convertToWhole(amount);
-	},
-	convertToWhole(amount) {
-		return Math.floor(amount);
-	},
-};
-
 const configText = {
 	x: 25,
 	y: 60,
@@ -149,6 +130,25 @@ const goldStash = {
 	},
 	withdraw(amount) {
 		this.total -= this.convertToWhole(amount);
+	},
+	convertToWhole(amount) {
+		return Math.floor(amount);
+	},
+};
+
+const player = {
+	hp: 10,
+	setTotal(amount) {
+		if (amount < 0) {
+			return (this.hp = 0);
+		}
+		this.hp = this.convertToWhole(amount);
+	},
+	gainHP(amount) {
+		this.hp += this.convertToWhole(amount);
+	},
+	loseHP(amount) {
+		this.hp -= this.convertToWhole(amount);
 	},
 	convertToWhole(amount) {
 		return Math.floor(amount);
