@@ -1,5 +1,22 @@
+const INITIAL_WAVE = 0;
+const INITIAL_GAME_STATUS = "active";
+const INITIAL_PLAYER_HP = 10;
+const INITIAL_GOLD_STASH_TOTAL = 0;
+
 const gameCanvas = document.getElementById("gameCanvas");
 const ctx = gameCanvas.getContext("2d");
+
+const gameStatusTypes = [
+	"initial",
+	"active",
+	"gameover",
+];
+
+const towerLocations = [
+	{ x: 135, y: 135 },
+	{ x: 275, y: 150 },
+	{ x: 410, y: 210 },
+];
 
 const waypoints = [
 	{ x: 0, y: 217 },
@@ -12,11 +29,6 @@ const waypoints = [
 	{ x: 667, y: 176 },
 ];
 
-const towerLocations = [
-	{ x: 135, y: 135 },
-	{ x: 275, y: 150 },
-	{ x: 410, y: 210 },
-];
 const circles = [];
 const towers = [];
 let fillText = [];
@@ -111,15 +123,15 @@ const configTower = {
 const configWave = {
 	speedDefault: 3,
 	hpDefault: 3,
-	currentWave: 0,
-	nextWave: 1,
+	currentWave: INITIAL_WAVE,
+	nextWave: INITIAL_WAVE + 1,
 	speedMultiplier: 0.2,
 	hpMultiplier: 1.025,
 	goldMultiplier: 2,
 };
 
 const goldStash = {
-	total: 0,
+	total: INITIAL_GOLD_STASH_TOTAL,
 	setTotal(amount) {
 		if (amount < 0) {
 			return (this.total = 0);
@@ -138,8 +150,8 @@ const goldStash = {
 };
 
 const player = {
-	hp: 10,
-	setTotal(amount) {
+	hp: INITIAL_PLAYER_HP,
+	setHP(amount) {
 		if (amount < 0) {
 			return (this.hp = 0);
 		}
@@ -155,6 +167,30 @@ const player = {
 		return Math.floor(amount);
 	},
 };
+
+const game = {
+	status: INITIAL_GAME_STATUS,
+	setStatus(status) {
+		const match = gameStatusTypes.filter(gameType => gameType === status)
+		if (match.length === 0) {
+			console.log(status, "is not a valid game status😡😡😡")
+			return;
+		}
+		this.status = status;
+	},
+	
+	reset() {
+		console.log("resetting")
+		configWave.currentWave = INITIAL_WAVE;
+		configWave.nextWave = INITIAL_WAVE + 1;
+		goldStash.setTotal(INITIAL_GOLD_STASH_TOTAL);
+		player.setHP(INITIAL_PLAYER_HP);
+		gloops = [];
+		projectiles = [];
+		towers.forEach(tower => tower.target = null)
+	}
+}
+
 // console.log(player.hp);
 
 const xOffset = Math.round(screenCenter.x - canvasCenter.x); // because the canvas is centered
@@ -247,7 +283,8 @@ gameCanvas.addEventListener("click", (event) => {
 	const mousePosition = getMousePosition(event);
 	circles.forEach((circle) => {
 		if (isIntersectingCircle(mousePosition, circle)) {
-			nextWave();
+			//nextWave();
+			game.reset();
 		}
 	});
 });
@@ -283,6 +320,7 @@ const isWaveClear = (waveNumber) => {
 };
 
 const loop = () => {
+	//console.log(configWave.currentWave)
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	if (circles.length === 0) {
 		generateCircle(configNextWaveButton);
@@ -351,4 +389,6 @@ const loop = () => {
 	projectiles = [...activeProjectiles];
 };
 
-loop();
+if (game.status === "active") {
+	loop();
+}
