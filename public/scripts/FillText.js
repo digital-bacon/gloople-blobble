@@ -17,6 +17,7 @@ class FillText {
 		this.render = function () {
 			ctx.font = this.font;
 			ctx.fillStyle = this.fillStyle;
+			ctx.textAlign = this.textAlign;
 			ctx.fillText(this.text, this.position.x, this.position.y);
 		};
 		return this;

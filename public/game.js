@@ -1,6 +1,126 @@
 const gameCanvas = document.getElementById("gameCanvas");
 const ctx = gameCanvas.getContext("2d");
 
+const circles = [];
+const towers = [];
+let fillText = [];
+let gloops = [];
+let projectiles = [];
+
+const waypoints = [
+	{ x: 0, y: 217 },
+	{ x: 95, y: 215 },
+	{ x: 98, y: 97 },
+	{ x: 224, y: 103 },
+	{ x: 219, y: 254 },
+	{ x: 381, y: 254 },
+	{ x: 382, y: 181 },
+	{ x: 667, y: 176 },
+];
+
+const towerLocations = [
+	{ x: 135, y: 135 },
+	{ x: 410, y: 210 }
+];
+
+const goldStash = {
+	total: 0,
+	setTotal(amount) {
+		if (amount < 0) {
+			return this.total = 0
+		}
+		this.total = this.convertToWhole(amount)
+	},
+	deposit(amount) {
+		this.total += this.convertToWhole(amount)
+	},
+	withdraw(amount) {
+		this.total -= this.convertToWhole(amount)
+	},
+	convertToWhole(amount) {
+		return Math.floor(amount)
+	}
+};
+
+const configWave = {
+	speedDefault: 0.5,
+	hpDefault: 1,
+	currentWave: 0,
+	nextWave: 1,
+	speedMultiplier: 0.02,
+	hpMultiplier: 1.0,
+	goldMultiplier: 2,
+};
+
+const configGloop = {
+	ctx,
+	x: waypoints[0].x,
+	y: waypoints[0].y,
+	radius: 15,
+	fillColor: "black",
+	strokeColor: "yellow",
+	waypointIndex: 0,
+	wave: 0,
+	_gold: 10,
+	get gold() {
+		return this._gold
+	},
+	set gold(value) {
+		if (value < 0) {
+			return this._gold = 0
+		}
+		this._gold = value;
+	},
+	get hp() {
+		return this._hp
+	},
+	set hp(value) {
+		if (value < 0) {
+			return this._hp = 0
+		}
+		this._hp = value;
+	},
+	get speed() {
+		return this._speed
+	},
+	set speed(value) {
+		if (value < 0) {
+			return this._speed = 0
+		}
+		this._speed = value;
+	},
+};
+
+const configTower = {
+	ctx,
+	x: 135,
+	y: 135,
+	width: 50,
+	height: 50,
+	fillColor: "transparent",
+	strokeColor: "cyan",
+	towersIndex: towers.length,
+	attackRadius: 60,
+	attacksMultiple: false,
+	showRange: true,
+	projectileSize: 10,
+};
+
+const configNextWaveButton = {
+	x: 25,
+	y: 25,
+	radius: 20,
+	fillColor: "cyan",
+	strokeColor: "rgba(0, 0, 0, 0)"
+}
+
+const configText = {
+	x: 25,
+	y: 60,
+	fillStyle: "gold",
+	text: "Hello World"
+}
+
 const canvas = {
 	width: gameCanvas.width,
 	height: gameCanvas.height,
@@ -68,7 +188,7 @@ const summonGloops = (configSummon) => {
 
 const generateFillText = (configFillText) => {
 	const newFillText = new FillText(configFillText)
-	text.push(newFillText);
+	fillText.push(newFillText);
 }
 
 const summonTower = (configTower) => {
@@ -89,126 +209,6 @@ const summonTowers = (configSummon) => {
 
 		summonTower(tower)
 	});
-}
-
-const waypoints = [
-	{ x: 0, y: 217 },
-	{ x: 95, y: 215 },
-	{ x: 98, y: 97 },
-	{ x: 224, y: 103 },
-	{ x: 219, y: 254 },
-	{ x: 381, y: 254 },
-	{ x: 382, y: 181 },
-	{ x: 667, y: 176 },
-];
-
-const towerLocations = [
-	{ x: 135, y: 135 },
-	{ x: 410, y: 210 }
-];
-
-const circles = [];
-const towers = [];
-let gloops = [];
-let projectiles = [];
-let text = [];
-
-const goldStash = {
-	total: 0,
-	setTotal(amount) {
-		if (amount < 0) {
-			return this.total = 0
-		}
-		this.total = this.convertToWhole(amount)
-	},
-	deposit(amount) {
-		this.total += this.convertToWhole(amount)
-	},
-	withdraw(amount) {
-		this.total -= this.convertToWhole(amount)
-	},
-	convertToWhole(amount) {
-		return Math.floor(amount)
-	}
-};
-
-const configWave = {
-	speedDefault: 1,
-	hpDefault: 1,
-	currentWave: 0,
-	nextWave: 1,
-	speedMultiplier: 0.5,
-	hpMultiplier: 1.0,
-	goldMultiplier: 2,
-};
-
-const configGloop = {
-	ctx,
-	x: waypoints[0].x,
-	y: waypoints[0].y,
-	radius: 15,
-	fillColor: "black",
-	strokeColor: "yellow",
-	waypointIndex: 0,
-	wave: 0,
-	_gold: 10,
-	get gold() {
-		return this._gold
-	},
-	set gold(value) {
-		if (value < 0) {
-			return this._gold = 0
-		}
-		this._gold = value;
-	},
-	get hp() {
-		return this._hp
-	},
-	set hp(value) {
-		if (value < 0) {
-			return this._hp = 0
-		}
-		this._hp = value;
-	},
-	get speed() {
-		return this._speed
-	},
-	set speed(value) {
-		if (value < 0) {
-			return this._speed = 0
-		}
-		this._speed = value;
-	},
-};
-
-const configTower = {
-	ctx,
-	x: 135,
-	y: 135,
-	width: 50,
-	height: 50,
-	fillColor: "transparent",
-	strokeColor: "cyan",
-	towersIndex: towers.length,
-	attackRadius: 60,
-	attacksMultiple: false,
-	showRange: true,
-	projectileSize: 10,
-};
-
-const configNextWaveButton = {
-	x: 20,
-	y: 20,
-	radius: 20,
-	fillColor: "cyan",
-	strokeColor: "rgba(0, 0, 0, 0)"
-}
-
-const configText = {
-	x: 50,
-	y: 50,
-	fillStyle: "black",
-	text: "Hello World"
 }
 
 const isIntersecting = (mousePoint, circle) => {
@@ -237,7 +237,7 @@ const nextWave = () => {
 	configWave.nextWave++
 	const configSummon = {
 		configGloop,
-		totalGloops: 1,
+		totalGloops: 7,
 		xOffset: 45,
 		wave: configWave.currentWave,
 	}
@@ -253,13 +253,16 @@ const isWaveClear = (waveNumber) => {
 
 const loop = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-
 	if (circles.length === 0) {
 		generateCircle(configNextWaveButton)
 	};
 
-	if (text.length === 0) {
-		generateFillText(configText)
+	fillText = [];
+	if (fillText.length === 0) {
+		const configGoldStashText = { ...configText }
+		configGoldStashText.text = goldStash.total.toString();
+		configGoldStashText.textAlign = "center";
+		generateFillText(configGoldStashText)
 	}
 
 	if (towers.length === 0) {
@@ -279,7 +282,7 @@ const loop = () => {
 		circle.update();
 	});
 
-	text.forEach((text) => {
+	fillText.forEach((text) => {
 		text.update();
 	});
 
