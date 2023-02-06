@@ -1,5 +1,5 @@
 const INITIAL_WAVE = 0;
-const INITIAL_GAME_STATUS = "active";
+const INITIAL_GAME_STATUS = "initial";
 const INITIAL_PLAYER_HP = 10;
 const INITIAL_GOLD_STASH_TOTAL = 0;
 
@@ -329,7 +329,7 @@ const isWaveClear = (waveNumber) => {
 	return matched.length === 0;
 };
 
-const loop = () => {
+const animationLoop = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	if (circles.length === 0) {
 		generateCircle(configNextWaveButton);
@@ -378,7 +378,7 @@ const loop = () => {
 	if (gloops.length === 0 || isWaveClear(configWave.currentWave)) {
 		nextWave();
 	}
-	requestAnimationFrame(loop);
+	requestAnimationFrame(animationLoop);
 
 	if (game.status === "active") {
 		circles.forEach((circle) => {
@@ -392,22 +392,30 @@ const loop = () => {
 		projectiles.forEach((projectile) => {
 			projectile.update();
 		});
-	
+		
+		towers.forEach((tower) => {
+			tower.update();
+		});
+		
+		fillText.forEach((text) => {
+			text.update();
+		});
 	}
 
-	towers.forEach((tower) => {
-		tower.update();
-	});
 
 	if (game.status === "gameover") {
 		projectiles.forEach((projectile) => {
 		projectile.render();
 		});
-	};
 
-	fillText.forEach((text) => {
-		text.update();
-	});
+		towers.forEach((tower) => {
+			tower.render();
+		});
+
+		fillText.forEach((text) => {
+			text.render();
+		});
+	};
 
 	const survivingGloops = gloops.filter((gloop) => gloop.destroyMe === false);
 	gloops = [...survivingGloops];
@@ -419,5 +427,5 @@ const loop = () => {
 
 };
 
-loop();
+animationLoop();
 
