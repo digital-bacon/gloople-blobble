@@ -14,10 +14,10 @@ class Gloop {
 		this.waypointIndex = configObject.waypointIndex;
 		this.isUnderAttack = false;
 		this.destroyMe = false;
-		
+
 		this.destroy = function () {
-			this.destroyMe = true
-		}
+			this.destroyMe = true;
+		};
 
 		this.loseHP = function (total) {
 			this.hp -= total;
@@ -26,20 +26,20 @@ class Gloop {
 
 		this.underAttack = function () {
 			if (this.isUnderAttack) {
-				return this.color = "red";
+				return (this.color = "red");
 			}
-			return this.color = "black";
+			return (this.color = "black");
 		};
 
 		this.update = function () {
 			this.underAttack();
 			this.isUnderAttack = false;
 			if (this.hp <= 0) {
-				goldStash.deposit(this.gold)
-				this.destroy()
-				return
-			};
-			
+				goldStash.deposit(this.gold);
+				this.destroy();
+				return;
+			}
+
 			if (this.waypointIndex < waypoints.length) {
 				let xMoveTo = waypoints[this.waypointIndex].x;
 				let yMoveTo = waypoints[this.waypointIndex].y;
@@ -61,12 +61,11 @@ class Gloop {
 				};
 
 				if (reachedWaypoint()) {
-					this.waypointIndex++
+					this.waypointIndex++;
 				}
+			} else {
+				this.destroy();
 			}
-			else {
-				this.destroy()
-			};
 		};
 
 		this.render = function () {

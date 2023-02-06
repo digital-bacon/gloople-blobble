@@ -9,7 +9,7 @@ class Circle {
 		this.stroke = configObject.strokeColor;
 
 		this.update = function () {
-			this.render()
+			this.render();
 		};
 
 		this.render = function () {

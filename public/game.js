@@ -20,26 +20,26 @@ const waypoints = [
 
 const towerLocations = [
 	{ x: 135, y: 135 },
-	{ x: 410, y: 210 }
+	{ x: 410, y: 210 },
 ];
 
 const goldStash = {
 	total: 0,
 	setTotal(amount) {
 		if (amount < 0) {
-			return this.total = 0
+			return (this.total = 0);
 		}
-		this.total = this.convertToWhole(amount)
+		this.total = this.convertToWhole(amount);
 	},
 	deposit(amount) {
-		this.total += this.convertToWhole(amount)
+		this.total += this.convertToWhole(amount);
 	},
 	withdraw(amount) {
-		this.total -= this.convertToWhole(amount)
+		this.total -= this.convertToWhole(amount);
 	},
 	convertToWhole(amount) {
-		return Math.floor(amount)
-	}
+		return Math.floor(amount);
+	},
 };
 
 const configWave = {
@@ -63,29 +63,29 @@ const configGloop = {
 	wave: 0,
 	_gold: 10,
 	get gold() {
-		return this._gold
+		return this._gold;
 	},
 	set gold(value) {
 		if (value < 0) {
-			return this._gold = 0
+			return (this._gold = 0);
 		}
 		this._gold = value;
 	},
 	get hp() {
-		return this._hp
+		return this._hp;
 	},
 	set hp(value) {
 		if (value < 0) {
-			return this._hp = 0
+			return (this._hp = 0);
 		}
 		this._hp = value;
 	},
 	get speed() {
-		return this._speed
+		return this._speed;
 	},
 	set speed(value) {
 		if (value < 0) {
-			return this._speed = 0
+			return (this._speed = 0);
 		}
 		this._speed = value;
 	},
@@ -111,15 +111,15 @@ const configNextWaveButton = {
 	y: 25,
 	radius: 20,
 	fillColor: "cyan",
-	strokeColor: "rgba(0, 0, 0, 0)"
-}
+	strokeColor: "rgba(0, 0, 0, 0)",
+};
 
 const configText = {
 	x: 25,
 	y: 60,
 	fillStyle: "gold",
-	text: "Hello World"
-}
+	text: "Hello World",
+};
 
 const canvas = {
 	width: gameCanvas.width,
@@ -161,122 +161,129 @@ const colorFromHexString = (hexadecimalString) => {
 const randomColor = () => colorFromHexString(randomHex());
 
 const generateCircle = (configCircle) => {
-	const newCircle = new Circle(configCircle)
+	const newCircle = new Circle(configCircle);
 	circles.push(newCircle);
-}
+};
 
 const summonGloop = (configGloop) => {
-	const newGloop = new Gloop(configGloop)
+	const newGloop = new Gloop(configGloop);
 	gloops.push(newGloop);
-}
+};
 
 const summonGloops = (configSummon) => {
-	const { totalGloops, configGloop, xOffset, wave } = configSummon
-	const newGloops = []
+	const { totalGloops, configGloop, xOffset, wave } = configSummon;
+	const newGloops = [];
 	for (let i = 0; i < totalGloops; i++) {
-		const gloop = { ...configGloop }
-		gloop.wave = wave
-		newGloops.push(gloop)
+		const gloop = { ...configGloop };
+		gloop.wave = wave;
+		newGloops.push(gloop);
 	}
-	let totalOffset = 0
-	newGloops.forEach(gloop => {
-		gloop.x = gloop.x - totalOffset
-		summonGloop(gloop)
-		totalOffset += xOffset
-	})
-}
+	let totalOffset = 0;
+	newGloops.forEach((gloop) => {
+		gloop.x = gloop.x - totalOffset;
+		summonGloop(gloop);
+		totalOffset += xOffset;
+	});
+};
 
 const generateFillText = (configFillText) => {
-	const newFillText = new FillText(configFillText)
+	const newFillText = new FillText(configFillText);
 	fillText.push(newFillText);
-}
+};
 
 const summonTower = (configTower) => {
-	const newTower = new Tower(configTower)
+	const newTower = new Tower(configTower);
 	towers.push(newTower);
-}
+};
 
 const summonTowers = (configSummon) => {
-	const { configTower, towerLocations } = configSummon
-	const newTowers = []
+	const { configTower, towerLocations } = configSummon;
+	const newTowers = [];
 	for (let i = 0; i < towerLocations.length; i++) {
-		const tower = { ...configTower }
+		const tower = { ...configTower };
 		tower.x = towerLocations[i].x;
 		tower.y = towerLocations[i].y;
-		newTowers.push(tower)
-	};
-	newTowers.forEach(tower => {
-
-		summonTower(tower)
+		newTowers.push(tower);
+	}
+	newTowers.forEach((tower) => {
+		summonTower(tower);
 	});
-}
+};
 
 const isIntersecting = (mousePoint, circle) => {
-  return Math.sqrt((mousePoint.x - circle.position.x) ** 2 + (mousePoint.y - circle.position.y) ** 2) < circle.radius;
-}
+	return (
+		Math.sqrt(
+			(mousePoint.x - circle.position.x) ** 2 +
+				(mousePoint.y - circle.position.y) ** 2
+		) < circle.radius
+	);
+};
 
 gameCanvas.addEventListener("click", (event) => {
-	const mousePosition = getMousePosition(event)
-	circles.forEach(circle => {
+	const mousePosition = getMousePosition(event);
+	circles.forEach((circle) => {
 		if (isIntersecting(mousePosition, circle)) {
-			nextWave()
+			nextWave();
 		}
-	})
-})
+	});
+});
 
 const nextWave = () => {
 	if (configWave.nextWave > 1) {
-		configGloop.speed = configWave.speedDefault + (configWave.currentWave * configWave.speedMultiplier)
-		configGloop.hp = configWave.hpDefault + (configWave.currentWave * configWave.hpMultiplier)
-		configGloop.gold = configGloop.gold + (configWave.currentWave * configWave.goldMultiplier)
+		configGloop.speed =
+			configWave.speedDefault +
+			configWave.currentWave * configWave.speedMultiplier;
+		configGloop.hp =
+			configWave.hpDefault + configWave.currentWave * configWave.hpMultiplier;
+		configGloop.gold =
+			configGloop.gold + configWave.currentWave * configWave.goldMultiplier;
 	} else {
-		configGloop.speed = configWave.speedDefault
-		configGloop.hp = configWave.hpDefault
+		configGloop.speed = configWave.speedDefault;
+		configGloop.hp = configWave.hpDefault;
 	}
-	configWave.currentWave = configWave.nextWave
-	configWave.nextWave++
+	configWave.currentWave = configWave.nextWave;
+	configWave.nextWave++;
 	const configSummon = {
 		configGloop,
 		totalGloops: 7,
 		xOffset: 45,
 		wave: configWave.currentWave,
-	}
+	};
 
-	summonGloops(configSummon)
-
-}
+	summonGloops(configSummon);
+};
 
 const isWaveClear = (waveNumber) => {
-	const matched = gloops.filter(gloop => gloop.wave === waveNumber)
-	return matched.length === 0
-}
+	const matched = gloops.filter((gloop) => gloop.wave === waveNumber);
+	return matched.length === 0;
+};
 
 const loop = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	if (circles.length === 0) {
-		generateCircle(configNextWaveButton)
-	};
+		generateCircle(configNextWaveButton);
+	}
 
 	fillText = [];
 	if (fillText.length === 0) {
-		const configGoldStashText = { ...configText }
+		const configGoldStashText = { ...configText };
 		configGoldStashText.text = goldStash.total.toString();
 		configGoldStashText.textAlign = "center";
-		generateFillText(configGoldStashText)
+		generateFillText(configGoldStashText);
 	}
 
 	if (towers.length === 0) {
 		const configSummon = {
 			configTower,
 			towerLocations,
-		}
-		summonTowers(configSummon)
+		};
+		summonTowers(configSummon);
 	}
 
 	if (gloops.length === 0 || isWaveClear(configWave.currentWave)) {
-		nextWave()
+		nextWave();
 	}
-	requestAnimationFrame(loop)
+	requestAnimationFrame(loop);
 
 	circles.forEach((circle) => {
 		circle.update();
@@ -289,24 +296,22 @@ const loop = () => {
 	gloops.forEach((gloop) => {
 		gloop.update();
 	});
-	
-	const survivingGloops = gloops.filter(gloop => gloop.destroyMe === false)
-	gloops = [...survivingGloops]
+
+	const survivingGloops = gloops.filter((gloop) => gloop.destroyMe === false);
+	gloops = [...survivingGloops];
 
 	towers.forEach((tower) => {
 		tower.update();
 	});
 
-
 	projectiles.forEach((projectile) => {
 		projectile.update();
 	});
 
-	const activeProjectiles = projectiles.filter(projectile => projectile.destroyMe === false)
-	projectiles = [...activeProjectiles]
+	const activeProjectiles = projectiles.filter(
+		(projectile) => projectile.destroyMe === false
+	);
+	projectiles = [...activeProjectiles];
 };
 
 loop();
-
-
-

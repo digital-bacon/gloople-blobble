@@ -32,8 +32,8 @@ class Tower {
 				tower: this,
 			};
 			const projectile = new Projectile(configProjectile);
-			projectiles.push(projectile)
-		}
+			projectiles.push(projectile);
+		};
 
 		this.visualizeRange = function () {
 			const configRange = {
@@ -44,16 +44,16 @@ class Tower {
 				fillColor: "rgba(255,0,0,0.25)",
 				strokeColor: "red",
 			};
-			
+
 			const range = new RangeVisual(configRange);
 			range.render();
-		}
+		};
 
 		this.detectGloop = function () {
 			if (gloops.length === 0) {
-				return false
+				return false;
 			}
-			return true
+			return true;
 		};
 
 		this.destroy = function () {
@@ -61,8 +61,8 @@ class Tower {
 		};
 
 		this.attack = function (gloop) {
-				gloop.loseHP(1);
-		}
+			gloop.loseHP(1);
+		};
 
 		this.canAttack = function (gloop) {
 			const xGloop = gloop.position.x;
@@ -70,37 +70,35 @@ class Tower {
 			const xDelta = Math.abs(this.position.center.x - xGloop);
 			const yDelta = Math.abs(this.position.center.y - yGloop);
 
-			const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloop.radius;
+			const distance =
+				Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloop.radius;
 
 			if (distance <= this.attackRadius) {
 				return true;
 			}
 			return false;
-		}
+		};
 
-		this.update = function () { 
-			
-			if (this.showRange) this.visualizeRange()
+		this.update = function () {
+			if (this.showRange) this.visualizeRange();
 			if (gloops.length > 0) {
 				if (this.attacksMultiple) {
 					gloops.forEach((gloop) => {
-						if(this.canAttack(gloop)) this.attack(gloop)
-					})
+						if (this.canAttack(gloop)) this.attack(gloop);
+					});
 				} else {
 					for (const gloop of gloops) {
-						
-						if(this.canAttack(gloop)) {
+						if (this.canAttack(gloop)) {
 							if (this.target === null) {
-								this.target = gloop
-								this.createProjectile(this.target) 
+								this.target = gloop;
+								this.createProjectile(this.target);
 							}
-							break; 
+							break;
 						}
 					}
 				}
-
-			};
-			this.render()
+			}
+			this.render();
 		};
 
 		this.render = function () {
