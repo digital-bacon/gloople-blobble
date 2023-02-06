@@ -129,7 +129,8 @@ const configWave = {
 	currentWave: 0,
 	nextWave: 1,
 	speedMultiplier: 0.5,
-	hpMultiplier: 1.0
+	hpMultiplier: 1.0,
+	goldMultiplier: 2,
 };
 
 const configGloop = {
@@ -141,15 +142,15 @@ const configGloop = {
 	strokeColor: "yellow",
 	waypointIndex: 0,
 	wave: 0,
-	gold: 10,
-	get speed() {
-		return this._speed
+	_gold: 10,
+	get gold() {
+		return this._gold
 	},
-	set speed(value) {
+	set gold(value) {
 		if (value < 0) {
-			return this._speed = 0
+			return this._gold = 0
 		}
-		this._speed = value;
+		this._gold = value;
 	},
 	get hp() {
 		return this._hp
@@ -159,6 +160,15 @@ const configGloop = {
 			return this._hp = 0
 		}
 		this._hp = value;
+	},
+	get speed() {
+		return this._speed
+	},
+	set speed(value) {
+		if (value < 0) {
+			return this._speed = 0
+		}
+		this._speed = value;
 	},
 };
 
@@ -202,6 +212,7 @@ const nextWave = () => {
 	if (configWave.nextWave > 1) {
 		configGloop.speed = configWave.speedDefault + (configWave.currentWave * configWave.speedMultiplier)
 		configGloop.hp = configWave.hpDefault + (configWave.currentWave * configWave.hpMultiplier)
+		configGloop.gold = configGloop.gold + (configWave.currentWave * configWave.goldMultiplier)
 	} else {
 		configGloop.speed = configWave.speedDefault
 		configGloop.hp = configWave.hpDefault
@@ -210,7 +221,7 @@ const nextWave = () => {
 	configWave.nextWave++
 	const configSummon = {
 		configGloop,
-		totalGloops: 3,
+		totalGloops: 1,
 		xOffset: 45,
 		wave: configWave.currentWave,
 	}
@@ -250,11 +261,11 @@ const loop = () => {
 
 	gloops.forEach((gloop) => {
 		gloop.update();
+		console.log(gloop.gold);
 	});
-
+	
 	const survivingGloops = gloops.filter(gloop => gloop.destroyMe === false)
 	gloops = [...survivingGloops]
-	console.log(goldStash.total)
 
 	towers.forEach((tower) => {
 		tower.update();
