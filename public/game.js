@@ -87,6 +87,21 @@ const configNextWaveButton = {
 
 const configPlayer = {
 	hp: 10,
+	setTotal(amount) {
+		if (amount < 0) {
+			return (this.hp = 0);
+		}
+		this.hp = this.convertToWhole(amount);
+	},
+	deposit(amount) {
+		this.hp += this.convertToWhole(amount);
+	},
+	withdraw(amount) {
+		this.hp -= this.convertToWhole(amount);
+	},
+	convertToWhole(amount) {
+		return Math.floor(amount);
+	},
 };
 
 const configText = {
