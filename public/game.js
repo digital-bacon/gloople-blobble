@@ -66,6 +66,11 @@ const summonGloops = (configSummon) => {
 	})
 }
 
+const summonText = (configText) => {
+	const newText = new Text(configText)
+	text.push(newText);
+}
+
 const summonTower = (configTower) => {
 	const newTower = new Tower(configTower)
 	towers.push(newTower);
@@ -106,6 +111,7 @@ const circles = [];
 const towers = [];
 let gloops = [];
 let projectiles = [];
+let text = [];
 
 const goldStash = {
 	total: 0,
@@ -198,6 +204,13 @@ const configNextWaveButton = {
 	strokeColor: "rgba(0, 0, 0, 0)"
 }
 
+const configText = {
+	x: 20,
+	y: 20,
+	fillColor: "black",
+	strokeColor: "rgba(0, 0, 0, 0)"
+}
+
 const isIntersecting = (mousePoint, circle) => {
   return Math.sqrt((mousePoint.x - circle.position.x) ** 2 + (mousePoint.y - circle.position.y) ** 2) < circle.radius;
 }
@@ -245,6 +258,10 @@ const loop = () => {
 		summonCircle(configNextWaveButton)
 	};
 
+	if (text.length === 0) {
+		summonText(configText)
+	}
+
 	if (towers.length === 0) {
 		const configSummon = {
 			configTower,
@@ -262,9 +279,12 @@ const loop = () => {
 		circle.update();
 	});
 
+	text.forEach((text) => {
+		text.update();
+	});
+
 	gloops.forEach((gloop) => {
 		gloop.update();
-		console.log(gloop.gold);
 	});
 	
 	const survivingGloops = gloops.filter(gloop => gloop.destroyMe === false)
