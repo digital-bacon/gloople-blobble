@@ -11,7 +11,7 @@ class FillText {
 		this.textAlign = configObject.textAlign || "left";
 
 		this.update = function () {
-			this.render()
+			this.render();
 		};
 
 		this.render = function () {
