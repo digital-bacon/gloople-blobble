@@ -370,4 +370,7 @@ const loop = () => {
 	projectiles = [...activeProjectiles];
 };
 
-loop();
+//game.setStatus("active")
+if (game.status === "active") {
+	loop();
+}
