@@ -125,18 +125,6 @@ const configWave = {
 	goldMultiplier: 2,
 };
 
-const game = {
-	status: "initial",
-	setStatus(status) {
-		const match = gameStatusTypes.filter(gameType => gameType === status)
-		if (match.length === 0) {
-			console.log(status, "is not a valid game status😡😡😡")
-			return;
-		}
-		this.status = status;
-	}
-}
-
 const goldStash = {
 	total: 0,
 	setTotal(amount) {
@@ -174,6 +162,25 @@ const player = {
 		return Math.floor(amount);
 	},
 };
+
+const game = {
+	status: "initial",
+	setStatus(status) {
+		const match = gameStatusTypes.filter(gameType => gameType === status)
+		if (match.length === 0) {
+			console.log(status, "is not a valid game status😡😡😡")
+			return;
+		}
+		this.status = status;
+	},
+	
+	reset() {
+		console.log("resetting")
+		configWave.currentWave = 0;
+		configWave.nextWave = 1;
+	}
+}
+
 // console.log(player.hp);
 
 const xOffset = Math.round(screenCenter.x - canvasCenter.x); // because the canvas is centered
@@ -302,6 +309,7 @@ const isWaveClear = (waveNumber) => {
 };
 
 const loop = () => {
+	//console.log(configWave.currentWave)
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	if (circles.length === 0) {
 		generateCircle(configNextWaveButton);
@@ -370,7 +378,7 @@ const loop = () => {
 	projectiles = [...activeProjectiles];
 };
 
-//game.setStatus("active")
+game.setStatus("active")
 if (game.status === "active") {
 	loop();
 }
