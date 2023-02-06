@@ -113,14 +113,17 @@ const goldStash = {
 		if (amount < 0) {
 			return this.total = 0
 		}
-		this.total = amount
+		this.total = this.convertToWhole(amount)
 	},
 	deposit(amount) {
-		this.total += amount
+		this.total += this.convertToWhole(amount)
 	},
 	withdraw(amount) {
-		this.total -= amount
+		this.total -= this.convertToWhole(amount)
 	},
+	convertToWhole(amount) {
+		return Math.floor(amount)
+	}
 };
 
 const configWave = {
