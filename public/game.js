@@ -108,8 +108,8 @@ const configTower = {
 };
 
 const configWave = {
-	speedDefault: 1,
-	hpDefault: 1,
+	speedDefault: 3,
+	hpDefault: 50,
 	currentWave: 0,
 	nextWave: 1,
 	speedMultiplier: 0.2,
@@ -154,6 +154,7 @@ const player = {
 		return Math.floor(amount);
 	},
 };
+// console.log(player.hp);
 
 const xOffset = Math.round(screenCenter.x - canvasCenter.x); // because the canvas is centered
 const yOffset = 0; // because the canvas is at the top of the page
@@ -267,7 +268,7 @@ const nextWave = () => {
 	configWave.nextWave++;
 	const configSummon = {
 		configGloop,
-		totalGloops: 5,
+		totalGloops: 1,
 		xOffset: 40,
 		wave: configWave.currentWave,
 	};

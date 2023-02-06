@@ -65,6 +65,7 @@ class Gloop {
 				}
 			} else {
 				this.destroy();
+				player.loseHP(1);
 			}
 		};
 
