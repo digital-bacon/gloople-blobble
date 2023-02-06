@@ -98,14 +98,6 @@ const configNextWaveButton = {
 	strokeColor: "rgba(0, 0, 0, 0)",
 };
 
-const configText = {
-	x: 25,
-	y: 64,
-	fillStyle: "gold",
-	font: "bold 16px sans-serif",
-	text: "Hello World",
-};
-
 const configTower = {
 	ctx,
 	x: 135,
@@ -343,49 +335,67 @@ const animationLoop = () => {
 
 	fillText = [];
 	if (fillText.length === 0) {
-		const configGoldStashText = { ...configText };
-		configGoldStashText.text = goldStash.total.toString();
-		configGoldStashText.textAlign = "center";
-		configGoldStashText.x = 25;
-		configGoldStashText.y = 64;
-		configGoldStashText.fillStyle = "gold";
-		configGoldStashText.font = "bold 16px sans-serif";
-		generateFillText(configGoldStashText);
 
-		const configPlayerHPText = { ...configText };
-		configPlayerHPText.textAlign = configGoldStashText.textAlign;
-		configPlayerHPText.font = configGoldStashText.font;
-		configPlayerHPText.x = configGoldStashText.x;
-		configPlayerHPText.y = configGoldStashText.y + 18;
-		configPlayerHPText.fillStyle = "#aaf0d1";
-		configPlayerHPText.text = player.hp.toString();
-		generateFillText(configPlayerHPText);
+		if (game.status !== "initial") {
+			const configGoldStashText = {
+				x: 25,
+				y: 64,
+				fillStyle: "gold",
+				font: "bold 16px sans-serif",
+				text: goldStash.total.toString(),
+				textAlign: "center",
+			};
+			generateFillText(configGoldStashText);
+
+			const configPlayerHPText = {
+				x: configGoldStashText.x,
+				y: configGoldStashText.y + 18,
+				fillStyle: "#aaf0d1",
+				font: configGoldStashText.font,
+				text: player.hp.toString(),
+				textAlign: configGoldStashText.textAlign,
+			};
+			generateFillText(configPlayerHPText);
+		}
+
+		if (game.status === "initial") {
+			const configStartButtonText = {
+				x: canvasCenter.x,
+				y: canvasCenter.y + 9,
+				fillStyle: "black",
+				font: "bold 24px sans-serif",
+				text: "UNLEASH THE GLOOPS!",
+				textAlign: "center",
+			};
+			generateFillText(configStartButtonText);
+		};
 
 		if (game.status === "gameover") {
-			const configGameOverText = { ...configText };
-			configGameOverText.text = "GAME OVER";
-			configGameOverText.textAlign = "center";
-			configGameOverText.x = canvasCenter.x;
-			configGameOverText.y = canvasCenter.y + 36;
-			configGameOverText.fillStyle = "gold";
-			configGameOverText.font = "bold 72px sans-serif";
+			const configGameOverText = {
+				x: canvasCenter.x,
+				y: canvasCenter.y + 36,
+				fillStyle: "gold",
+				font: "bold 72px sans-serif",
+				text: "GAME OVER",
+				textAlign: "center",
+			};
 			generateFillText(configGameOverText);
-		}
+		};
 	}
 
 	roundRects = [];
 	if (roundRects.length === 0) {
 		const configStartButton = {
-			x: canvasCenter.x - 100,
+			x: canvasCenter.x - 160,
 			y: canvasCenter.y - 25,
-			width: 200,
+			width: 320,
 			height: 50,
 			radii: 10,
 			strokeStyle: "green",
 			fillStyle: "pink",
 		}
 		generateRoundRect(configStartButton)
-	}
+	};
 
 	if (towers.length === 0) {
 		const configSummon = {
@@ -404,6 +414,9 @@ const animationLoop = () => {
 		roundRects.forEach((roundRect) => {
 			roundRect.update();
 		})
+		fillText.forEach((text) => {
+			text.update();
+		});
 	}
 
 	if (game.status === "active") {
