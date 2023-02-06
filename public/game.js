@@ -1,6 +1,18 @@
 const gameCanvas = document.getElementById("gameCanvas");
 const ctx = gameCanvas.getContext("2d");
 
+const gameStatusTypes = [
+	"initial",
+	"active",
+	"gameover",
+];
+
+const towerLocations = [
+	{ x: 135, y: 135 },
+	{ x: 275, y: 150 },
+	{ x: 410, y: 210 },
+];
+
 const waypoints = [
 	{ x: 0, y: 217 },
 	{ x: 95, y: 215 },
@@ -12,11 +24,6 @@ const waypoints = [
 	{ x: 667, y: 176 },
 ];
 
-const towerLocations = [
-	{ x: 135, y: 135 },
-	{ x: 275, y: 150 },
-	{ x: 410, y: 210 },
-];
 const circles = [];
 const towers = [];
 let fillText = [];
@@ -120,6 +127,14 @@ const configWave = {
 
 const game = {
 	status: "initial",
+	setStatus(status) {
+		const match = gameStatusTypes.filter(gameType => gameType === status)
+		if (match.length === 0) {
+			console.log(status, "is not a valid game status😡😡😡")
+			return;
+		}
+		this.status = status;
+	}
 }
 
 const goldStash = {
