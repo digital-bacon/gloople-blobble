@@ -1,12 +1,6 @@
 const gameCanvas = document.getElementById("gameCanvas");
 const ctx = gameCanvas.getContext("2d");
 
-const circles = [];
-const towers = [];
-let fillText = [];
-let gloops = [];
-let projectiles = [];
-
 const waypoints = [
 	{ x: 0, y: 217 },
 	{ x: 95, y: 215 },
@@ -20,36 +14,28 @@ const waypoints = [
 
 const towerLocations = [
 	{ x: 135, y: 135 },
+	{ x: 275, y: 150 },
 	{ x: 410, y: 210 },
 ];
+const circles = [];
+const towers = [];
+let fillText = [];
+let gloops = [];
+let projectiles = [];
 
-const goldStash = {
-	total: 0,
-	setTotal(amount) {
-		if (amount < 0) {
-			return (this.total = 0);
-		}
-		this.total = this.convertToWhole(amount);
-	},
-	deposit(amount) {
-		this.total += this.convertToWhole(amount);
-	},
-	withdraw(amount) {
-		this.total -= this.convertToWhole(amount);
-	},
-	convertToWhole(amount) {
-		return Math.floor(amount);
-	},
+const canvas = {
+	width: gameCanvas.width,
+	height: gameCanvas.height,
 };
 
-const configWave = {
-	speedDefault: 0.5,
-	hpDefault: 1,
-	currentWave: 0,
-	nextWave: 1,
-	speedMultiplier: 0.02,
-	hpMultiplier: 1.0,
-	goldMultiplier: 2,
+const canvasCenter = {
+	x: gameCanvas.width / 2,
+	y: gameCanvas.height / 2,
+};
+
+const screenCenter = {
+	x: window.innerWidth / 2,
+	y: window.innerHeight / 2,
 };
 
 const configGloop = {
@@ -91,6 +77,25 @@ const configGloop = {
 	},
 };
 
+const configNextWaveButton = {
+	x: 25,
+	y: 25,
+	radius: 20,
+	fillColor: "cyan",
+	strokeColor: "rgba(0, 0, 0, 0)",
+};
+
+const configPlayer = {
+	hp: 10,
+};
+
+const configText = {
+	x: 25,
+	y: 60,
+	fillStyle: "gold",
+	text: "Hello World",
+};
+
 const configTower = {
 	ctx,
 	x: 135,
@@ -106,45 +111,44 @@ const configTower = {
 	projectileSize: 10,
 };
 
-const configNextWaveButton = {
-	x: 25,
-	y: 25,
-	radius: 20,
-	fillColor: "cyan",
-	strokeColor: "rgba(0, 0, 0, 0)",
+const configWave = {
+	speedDefault: 1,
+	hpDefault: 1,
+	currentWave: 0,
+	nextWave: 1,
+	speedMultiplier: 0.2,
+	hpMultiplier: 1.025,
+	goldMultiplier: 2,
 };
 
-const configText = {
-	x: 25,
-	y: 60,
-	fillStyle: "gold",
-	text: "Hello World",
-};
-
-const canvas = {
-	width: gameCanvas.width,
-	height: gameCanvas.height,
-};
-
-const canvasCenter = {
-	x: gameCanvas.width / 2,
-	y: gameCanvas.height / 2,
-};
-
-const screenCenter = {
-	x: window.innerWidth / 2,
-	y: window.innerHeight / 2,
+const goldStash = {
+	total: 0,
+	setTotal(amount) {
+		if (amount < 0) {
+			return (this.total = 0);
+		}
+		this.total = this.convertToWhole(amount);
+	},
+	deposit(amount) {
+		this.total += this.convertToWhole(amount);
+	},
+	withdraw(amount) {
+		this.total -= this.convertToWhole(amount);
+	},
+	convertToWhole(amount) {
+		return Math.floor(amount);
+	},
 };
 
 const xOffset = Math.round(screenCenter.x - canvasCenter.x); // because the canvas is centered
 const yOffset = 0; // because the canvas is at the top of the page
 
 // Uncomment this block to enable waypoint building in the console.
-// const trackedArray = [];
-// document.onclick = (event) => {
-// 	trackedArray.push(getMousePosition(event));
-// 	console.log(JSON.stringify(trackedArray));
-// };
+const trackedArray = [];
+document.onclick = (event) => {
+	trackedArray.push(getMousePosition(event));
+	console.log(JSON.stringify(trackedArray));
+};
 
 const getMousePosition = (event) => {
 	const x = event.clientX - xOffset;
@@ -163,6 +167,11 @@ const randomColor = () => colorFromHexString(randomHex());
 const generateCircle = (configCircle) => {
 	const newCircle = new Circle(configCircle);
 	circles.push(newCircle);
+};
+
+const generateFillText = (configFillText) => {
+	const newFillText = new FillText(configFillText);
+	fillText.push(newFillText);
 };
 
 const summonGloop = (configGloop) => {
@@ -186,11 +195,6 @@ const summonGloops = (configSummon) => {
 	});
 };
 
-const generateFillText = (configFillText) => {
-	const newFillText = new FillText(configFillText);
-	fillText.push(newFillText);
-};
-
 const summonTower = (configTower) => {
 	const newTower = new Tower(configTower);
 	towers.push(newTower);
@@ -203,6 +207,9 @@ const summonTowers = (configSummon) => {
 		const tower = { ...configTower };
 		tower.x = towerLocations[i].x;
 		tower.y = towerLocations[i].y;
+		if (i === 1) {
+			tower.attackRadius = 90;
+		}
 		newTowers.push(tower);
 	}
 	newTowers.forEach((tower) => {
@@ -210,7 +217,7 @@ const summonTowers = (configSummon) => {
 	});
 };
 
-const isIntersecting = (mousePoint, circle) => {
+const isIntersectingCircle = (mousePoint, circle) => {
 	return (
 		Math.sqrt(
 			(mousePoint.x - circle.position.x) ** 2 +
@@ -222,7 +229,7 @@ const isIntersecting = (mousePoint, circle) => {
 gameCanvas.addEventListener("click", (event) => {
 	const mousePosition = getMousePosition(event);
 	circles.forEach((circle) => {
-		if (isIntersecting(mousePosition, circle)) {
+		if (isIntersectingCircle(mousePosition, circle)) {
 			nextWave();
 		}
 	});
@@ -245,8 +252,8 @@ const nextWave = () => {
 	configWave.nextWave++;
 	const configSummon = {
 		configGloop,
-		totalGloops: 7,
-		xOffset: 45,
+		totalGloops: 5,
+		xOffset: 40,
 		wave: configWave.currentWave,
 	};
 
@@ -297,9 +304,6 @@ const loop = () => {
 		gloop.update();
 	});
 
-	const survivingGloops = gloops.filter((gloop) => gloop.destroyMe === false);
-	gloops = [...survivingGloops];
-
 	towers.forEach((tower) => {
 		tower.update();
 	});
@@ -307,6 +311,9 @@ const loop = () => {
 	projectiles.forEach((projectile) => {
 		projectile.update();
 	});
+
+	const survivingGloops = gloops.filter((gloop) => gloop.destroyMe === false);
+	gloops = [...survivingGloops];
 
 	const activeProjectiles = projectiles.filter(
 		(projectile) => projectile.destroyMe === false
