@@ -1,5 +1,5 @@
 const INITIAL_WAVE = 0;
-const INITIAL_GAME_STATUS = "active";
+const INITIAL_GAME_STATUS = "initial";
 const INITIAL_PLAYER_HP = 10;
 const INITIAL_GOLD_STASH_TOTAL = 0;
 
@@ -34,6 +34,7 @@ const towers = [];
 let fillText = [];
 let gloops = [];
 let projectiles = [];
+let roundRects = [];
 
 const canvas = {
 	width: gameCanvas.width,
@@ -95,14 +96,6 @@ const configNextWaveButton = {
 	radius: 20,
 	fillColor: "cyan",
 	strokeColor: "rgba(0, 0, 0, 0)",
-};
-
-const configText = {
-	x: 25,
-	y: 64,
-	fillStyle: "gold",
-	font: "bold 16px sans-serif",
-	text: "Hello World",
 };
 
 const configTower = {
@@ -210,7 +203,7 @@ const yOffset = 0; // because the canvas is at the top of the page
 const trackedArray = [];
 document.onclick = (event) => {
 	trackedArray.push(getMousePosition(event));
-	console.log(JSON.stringify(trackedArray));
+	// console.log(JSON.stringify(trackedArray));
 };
 
 const getMousePosition = (event) => {
@@ -235,6 +228,11 @@ const generateCircle = (configCircle) => {
 const generateFillText = (configFillText) => {
 	const newFillText = new FillText(configFillText);
 	fillText.push(newFillText);
+};
+
+const generateRoundRect = (configRoundRect) => {
+	const newRoundRect = new RoundRect(configRoundRect);
+	roundRects.push(newRoundRect);
 };
 
 const summonGloop = (configGloop) => {
@@ -289,12 +287,33 @@ const isIntersectingCircle = (mousePoint, circle) => {
 	);
 };
 
+const isIntersectingRect = (mousePoint, rect) => {
+
+	const left = rect.position.x;
+	const right = rect.position.x + rect.width;
+
+	const top = rect.position.y;
+	const bottom = rect.position.y + rect.height;
+	
+	const xClicked = mousePoint.x >= left && mousePoint.x <= right;
+
+	const yClicked = mousePoint.y >= top && mousePoint.y <= bottom;
+	
+	return xClicked && yClicked
+};
+
 gameCanvas.addEventListener("click", (event) => {
 	const mousePosition = getMousePosition(event);
 	circles.forEach((circle) => {
 		if (isIntersectingCircle(mousePosition, circle)) {
 			nextWave();
 			// game.reset();
+		}
+	});
+
+	roundRects.forEach((roundRect) => {
+		if (isIntersectingRect(mousePosition, roundRect)) {
+			game.setStatus("active")
 		}
 	});
 });
@@ -329,7 +348,7 @@ const isWaveClear = (waveNumber) => {
 	return matched.length === 0;
 };
 
-const loop = () => {
+const animationLoop = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	if (circles.length === 0) {
 		generateCircle(configNextWaveButton);
@@ -337,35 +356,67 @@ const loop = () => {
 
 	fillText = [];
 	if (fillText.length === 0) {
-		const configGoldStashText = { ...configText };
-		configGoldStashText.text = goldStash.total.toString();
-		configGoldStashText.textAlign = "center";
-		configGoldStashText.x = 25;
-		configGoldStashText.y = 64;
-		configGoldStashText.fillStyle = "gold";
-		configGoldStashText.font = "bold 16px sans-serif";
-		generateFillText(configGoldStashText);
 
-		const configPlayerHPText = { ...configText };
-		configPlayerHPText.textAlign = configGoldStashText.textAlign;
-		configPlayerHPText.font = configGoldStashText.font;
-		configPlayerHPText.x = configGoldStashText.x;
-		configPlayerHPText.y = configGoldStashText.y + 18;
-		configPlayerHPText.fillStyle = "#aaf0d1";
-		configPlayerHPText.text = player.hp.toString();
-		generateFillText(configPlayerHPText);
+		if (game.status !== "initial") {
+			const configGoldStashText = {
+				x: 25,
+				y: 64,
+				fillStyle: "gold",
+				font: "bold 16px sans-serif",
+				text: goldStash.total.toString(),
+				textAlign: "center",
+			};
+			generateFillText(configGoldStashText);
+
+			const configPlayerHPText = {
+				x: configGoldStashText.x,
+				y: configGoldStashText.y + 18,
+				fillStyle: "#aaf0d1",
+				font: configGoldStashText.font,
+				text: player.hp.toString(),
+				textAlign: configGoldStashText.textAlign,
+			};
+			generateFillText(configPlayerHPText);
+		}
+
+		if (game.status === "initial") {
+			const configStartButtonText = {
+				x: canvasCenter.x,
+				y: canvasCenter.y + 9,
+				fillStyle: "black",
+				font: "bold 24px sans-serif",
+				text: "UNLEASH THE GLOOPS!",
+				textAlign: "center",
+			};
+			generateFillText(configStartButtonText);
+		};
 
 		if (game.status === "gameover") {
-			const configGameOverText = { ...configText };
-			configGameOverText.text = "GAME OVER";
-			configGameOverText.textAlign = "center";
-			configGameOverText.x = canvasCenter.x;
-			configGameOverText.y = canvasCenter.y + 36;
-			configGameOverText.fillStyle = "gold";
-			configGameOverText.font = "bold 72px sans-serif";
+			const configGameOverText = {
+				x: canvasCenter.x,
+				y: canvasCenter.y + 36,
+				fillStyle: "gold",
+				font: "bold 72px sans-serif",
+				text: "GAME OVER",
+				textAlign: "center",
+			};
 			generateFillText(configGameOverText);
-		}
+		};
 	}
+
+	roundRects = [];
+	if (roundRects.length === 0) {
+		const configStartButton = {
+			x: canvasCenter.x - 160,
+			y: canvasCenter.y - 25,
+			width: 320,
+			height: 50,
+			radii: 10,
+			strokeStyle: "green",
+			fillStyle: "pink",
+		}
+		generateRoundRect(configStartButton)
+	};
 
 	if (towers.length === 0) {
 		const configSummon = {
@@ -378,7 +429,16 @@ const loop = () => {
 	if (gloops.length === 0 || isWaveClear(configWave.currentWave)) {
 		nextWave();
 	}
-	requestAnimationFrame(loop);
+	requestAnimationFrame(animationLoop);
+
+	if (game.status === "initial") {
+		roundRects.forEach((roundRect) => {
+			roundRect.update();
+		})
+		fillText.forEach((text) => {
+			text.update();
+		});
+	}
 
 	if (game.status === "active") {
 		circles.forEach((circle) => {
@@ -392,22 +452,30 @@ const loop = () => {
 		projectiles.forEach((projectile) => {
 			projectile.update();
 		});
-	
+
+		towers.forEach((tower) => {
+			tower.update();
+		});
+
+		fillText.forEach((text) => {
+			text.update();
+		});
 	}
 
-	towers.forEach((tower) => {
-		tower.update();
-	});
 
 	if (game.status === "gameover") {
 		projectiles.forEach((projectile) => {
-		projectile.render();
+			projectile.render();
+		});
+
+		towers.forEach((tower) => {
+			tower.render();
+		});
+
+		fillText.forEach((text) => {
+			text.render();
 		});
 	};
-
-	fillText.forEach((text) => {
-		text.update();
-	});
 
 	const survivingGloops = gloops.filter((gloop) => gloop.destroyMe === false);
 	gloops = [...survivingGloops];
@@ -419,5 +487,5 @@ const loop = () => {
 
 };
 
-loop();
+animationLoop();
 
