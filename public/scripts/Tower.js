@@ -22,11 +22,14 @@ class Tower {
 		this.level = configObject.level || 1;
 		this.upgradeCost = configObject.upgradeCost || 0;
 		this.multiplier = {
-			attackRadius: configObject.multiplier.attackRadius || 1,
-			attackDamage: configObject.multiplier.attackDamage || 1,
-			upgradeCost: configObject.multiplier.upgradeCost || 1,
-		}
+			attackRadius: configObject?.multiplier?.attackRadius || 2,
+			attackDamage: configObject?.multiplier?.attackDamage || 1,
+			upgradeCost: configObject?.multiplier?.upgradeCost || 1,
+		};
 
+		this.calculateAttackRadius = function () {
+			return this.attackRadius * this.multiplier.attackRadius
+		}
 
 		this.upgrade = function () {
 			this.level++
@@ -53,7 +56,7 @@ class Tower {
 				ctx,
 				x: this.position.center.x,
 				y: this.position.center.y,
-				radius: this.attackRadius,
+				radius: this.calculateAttackRadius(),
 				fillColor: "rgba(255,0,0,0.25)",
 				strokeColor: "red",
 			};
@@ -86,7 +89,7 @@ class Tower {
 			const distance =
 				Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloop.radius;
 
-			if (distance <= this.attackRadius) {
+			if (distance <= this.calculateAttackRadius()) {
 				return true;
 			}
 			return false;
