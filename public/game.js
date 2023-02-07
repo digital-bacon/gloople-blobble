@@ -394,10 +394,10 @@ const animationLoop = () => {
 		if (game.status === "gameover") {
 			const configGameOverText = {
 				x: canvasCenter.x,
-				y: canvasCenter.y + 36,
-				fillStyle: "gold",
-				font: "bold 72px sans-serif",
-				text: "GAME OVER",
+				y: canvasCenter.y + 18,
+				fillStyle: "MAROON",
+				font: "bold 24px sans-serif",
+				text: "THE GL😈😈PS ATE YOUR FACE!!",
 				textAlign: "center",
 			};
 			generateFillText(configGameOverText);
