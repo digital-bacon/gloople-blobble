@@ -11,8 +11,8 @@ const gameStatusTypes = ["initial", "active", "gameover"];
 
 const towerLocations = [
 	{ x: 135, y: 135 },
-	// { x: 275, y: 150 },
-	// { x: 410, y: 210 },
+	{ x: 275, y: 150 },
+	{ x: 410, y: 210 },
 ];
 
 const waypoints = [
@@ -187,6 +187,10 @@ const player = {
 	convertToWhole(amount) {
 		return Math.floor(amount);
 	},
+	purchaseTowerUpgrade(tower) {
+		goldStash.withdraw(tower.calculateUpgradeCost())
+		tower.upgrade()
+	}
 };
 
 const game = {
@@ -382,7 +386,7 @@ gameCanvas.addEventListener("click", (event) => {
 
 	towers.forEach((tower) => {
 		if (isIntersectingRect(mousePosition, tower)) {
-			tower.upgrade()
+			player.purchaseTowerUpgrade(tower)
 		}
 	});
 
