@@ -101,6 +101,7 @@ const configTower = {
 	attacksMultiple: false,
 	showRange: true,
 	projectileSize: 10,
+	attackDamage: 1,
 };
 
 const configWave = {
