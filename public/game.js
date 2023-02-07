@@ -402,6 +402,7 @@ const nextWave = () => {
 		wave: configWave.currentWave,
 	};
 	summonGloops(configSummon);
+
 };
 
 const isWaveClear = (waveNumber) => {

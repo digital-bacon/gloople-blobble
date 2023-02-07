@@ -20,6 +20,11 @@ class Tower {
 		this.target = null;
 		this.attackDamage = configObject.attackDamage || 1;
 		this.level = configObject.level || 1;
+		this.upgradeCost = configObject.upgradeCost || 0;
+
+		this.upgrade = function () {
+			this.level++
+		}
 
 		this.createProjectile = function (target) {
 			const configProjectile = {
