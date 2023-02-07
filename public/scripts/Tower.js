@@ -18,6 +18,7 @@ class Tower {
 		this.showRange = configObject.showRange;
 		this.projectileSize = configObject.projectileSize;
 		this.target = null;
+		this.attackDamage = 5;
 
 		this.createProjectile = function (target) {
 			const configProjectile = {

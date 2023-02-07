@@ -400,7 +400,6 @@ const nextWave = () => {
 		xOffset: 40,
 		wave: configWave.currentWave,
 	};
-console.log(configWave.totalGloops)
 	summonGloops(configSummon);
 };
 
