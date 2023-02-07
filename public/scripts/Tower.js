@@ -19,17 +19,21 @@ class Tower {
 		this.projectileSize = configObject.projectileSize;
 		this.target = null;
 		this.attackDamage = configObject.attackDamage || 1;
-		this.level = configObject.level || 1;
+		this.level = configObject.level || 3;
 		this.upgradeCost = configObject.upgradeCost || 0;
 		this.multiplier = {
 			attackRadius: configObject?.multiplier?.attackRadius || 10,
-			attackDamage: configObject?.multiplier?.attackDamage || 1,
+			attackDamage: configObject?.multiplier?.attackDamage || 0.25,
 			upgradeCost: configObject?.multiplier?.upgradeCost || 1,
 		};
 
 		this.calculateAttackRadius = function () {
 			const total = Math.floor(this.attackRadius + ((this.level) * this.multiplier.attackRadius))
-			console.log(total)
+			return total
+		}
+
+		this.calculateAttackDamage = function () {
+			const total = Math.floor( this.attackDamage + (this.attackDamage * ((this.level) * this.multiplier.attackDamage)))
 			return total
 		}
 

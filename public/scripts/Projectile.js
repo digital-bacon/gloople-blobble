@@ -36,7 +36,7 @@ class Projectile {
 			};
 
 			if (reachedTarget()) {
-				this.target.loseHP(this.tower.attackDamage);
+				this.target.loseHP(this.tower.calculateAttackDamage());
 				this.tower.target = null;
 				this.destroy();
 			}
