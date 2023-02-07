@@ -44,7 +44,6 @@ class Tower {
 
 		this.upgrade = function () {
 			this.level++
-			console.log(this.calculateUpgradeCost())
 		}
 
 		this.createProjectile = function (target) {
