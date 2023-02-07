@@ -34,6 +34,7 @@ const towers = [];
 let fillText = [];
 let gloops = [];
 let projectiles = [];
+let rects = [];
 let roundRects = [];
 
 const canvas = {
@@ -230,6 +231,11 @@ const generateFillText = (configFillText) => {
 	fillText.push(newFillText);
 };
 
+const generateRect = (configRect) => {
+	const newRect = new Rect(configRect);
+	rects.push(newRect);
+};
+
 const generateRoundRect = (configRoundRect) => {
 	const newRoundRect = new RoundRect(configRoundRect);
 	roundRects.push(newRoundRect);
@@ -394,29 +400,55 @@ const animationLoop = () => {
 		if (game.status === "gameover") {
 			const configGameOverText = {
 				x: canvasCenter.x,
-				y: canvasCenter.y + 36,
-				fillStyle: "gold",
-				font: "bold 72px sans-serif",
-				text: "GAME OVER",
+				y: canvasCenter.y -30,
+				fillStyle: "maroon",
+				font: "bold 24px sans-serif",
+				text: "THE GL😈😈PS ATE YOUR FACE!!",
 				textAlign: "center",
 			};
 			generateFillText(configGameOverText);
+
+			const configPlayAgainButtonText = {
+				x: canvasCenter.x,
+				y: canvasCenter.y + 30,
+				fillStyle: "gold",
+				font: "bold 16px sans-serif",
+				text: "Play Again!",
+				textAlign: "center",
+			};
+			generateFillText(configPlayAgainButtonText);
 		};
 	}
 
+	// rects = [];
+	// if (rects.length === 0) {
+	// 	if(game.status === "gameover") {
+	// 		const configPlayAgainButton = {
+	// 			x: canvasCenter.x - 55,
+	// 			y: canvasCenter.y + 4,
+	// 			width: 110,
+	// 			height: 40,
+	// 			strokeStyle: "green",
+	// 			fillStyle: "blue",
+	// 		}
+	// 		generateRect(configPlayAgainButton)
+	// 	};
+	// }
 	roundRects = [];
 	if (roundRects.length === 0) {
-		const configStartButton = {
-			x: canvasCenter.x - 160,
-			y: canvasCenter.y - 25,
-			width: 320,
-			height: 50,
-			radii: 10,
-			strokeStyle: "green",
-			fillStyle: "pink",
+		if (game.status === "initial") {
+			const configStartButton = {
+				x: canvasCenter.x - 160,
+				y: canvasCenter.y - 25,
+				width: 320,
+				height: 50,
+				radii: 10,
+				strokeStyle: "green",
+				fillStyle: "pink",
+			}
+			generateRoundRect(configStartButton)
 		}
-		generateRoundRect(configStartButton)
-	};
+	}
 
 	if (towers.length === 0) {
 		const configSummon = {
@@ -429,6 +461,7 @@ const animationLoop = () => {
 	if (gloops.length === 0 || isWaveClear(configWave.currentWave)) {
 		nextWave();
 	}
+
 	requestAnimationFrame(animationLoop);
 
 	if (game.status === "initial") {
@@ -464,17 +497,31 @@ const animationLoop = () => {
 
 
 	if (game.status === "gameover") {
-		projectiles.forEach((projectile) => {
-			projectile.render();
-		});
 
 		towers.forEach((tower) => {
 			tower.render();
 		});
 
+		projectiles.forEach((projectile) => {
+			projectile.render();
+		});
+
+		// rects.forEach((rect) => {
+		// 	rect.render();
+		// })
+		
+		ctx.beginPath();
+		ctx.rect(canvasCenter.x - 55, canvasCenter.y + 4, 110, 40);
+		ctx.fillStyle = "black";
+		ctx.fill();
+		ctx.strokeStyle = "white";
+		ctx.stroke();
+		ctx.closePath();
+
 		fillText.forEach((text) => {
 			text.render();
 		});
+
 	};
 
 	const survivingGloops = gloops.filter((gloop) => gloop.destroyMe === false);
