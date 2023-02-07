@@ -144,7 +144,11 @@ const goldStash = {
 		this.total += this.convertToWhole(amount);
 	},
 	withdraw(amount) {
+		if (this.total - amount <= 0) {
+			return false;
+		} 
 		this.total -= this.convertToWhole(amount);
+		return true;
 	},
 	convertToWhole(amount) {
 		return Math.floor(amount);
@@ -188,10 +192,14 @@ const player = {
 		return Math.floor(amount);
 	},
 	purchaseTowerUpgrade(tower) {
-		goldStash.withdraw(tower.calculateUpgradeCost())
-		tower.upgrade()
-	}
-};
+		const purchaseSuccessful = goldStash.withdraw(tower.calculateUpgradeCost())
+		if (purchaseSuccessful) {
+			tower.upgrade()
+		}
+		return purchaseSuccessful;
+	},
+
+}
 
 const game = {
 	status: INITIAL_GAME_STATUS,
@@ -386,7 +394,8 @@ gameCanvas.addEventListener("click", (event) => {
 
 	towers.forEach((tower) => {
 		if (isIntersectingRect(mousePosition, tower)) {
-			player.purchaseTowerUpgrade(tower)
+			const purchaseCompleted = player.purchaseTowerUpgrade(tower)
+			console.log("Purchase Completed: ", purchaseCompleted)
 		}
 	});
 
