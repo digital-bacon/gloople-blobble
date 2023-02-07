@@ -15,11 +15,11 @@ class RoundRect {
 		};
 
 		this.render = function () {
+			ctx.roundRect(this.position.x, this.position.y, this.width, this.height, this.radii);
 			ctx.strokeStyle = this.strokeStyle;
 			ctx.fillStyle = this.fillStyle;
 			ctx.stroke();
 			ctx.fill();
-			ctx.roundRect(this.position.x, this.position.y, this.width, this.height, this.radii);
 		};
 		return this;
 	}

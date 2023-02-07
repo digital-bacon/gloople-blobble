@@ -1,10 +1,15 @@
-class Circle {
+class Rect {
 	constructor(configObject) {
 		this.position = {
 			x: configObject.x,
 			y: configObject.y,
+			center: {
+				x: configObject.x + configObject.width / 2,
+				y: configObject.y + configObject.height / 2,
+			},
 		};
-		this.radius = configObject.radius;
+		this.width = configObject.width;
+		this.height = configObject.height;
 		this.color = configObject.fillColor;
 		this.stroke = configObject.strokeColor;
 
@@ -13,14 +18,14 @@ class Circle {
 		};
 
 		this.render = function () {
-			if (this.radius > 0) {
+			if (this.width > 0 && this.height > 0) {
 				ctx.beginPath();
-				ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
-				// ctx.closePath();
+				ctx.rect(this.position.x, this.position.y, this.width, this.height);
 				ctx.fillStyle = this.color;
 				ctx.fill();
 				ctx.strokeStyle = this.stroke;
 				ctx.stroke();
+				ctx.closePath();
 			}
 		};
 		return this;
