@@ -232,6 +232,7 @@ const generateFillText = (configFillText) => {
 
 const generateRoundRect = (configRoundRect) => {
 	const newRoundRect = new RoundRect(configRoundRect);
+	console.log(newRoundRect)
 	roundRects.push(newRoundRect);
 };
 
@@ -395,7 +396,7 @@ const animationLoop = () => {
 			const configGameOverText = {
 				x: canvasCenter.x,
 				y: canvasCenter.y + 18,
-				fillStyle: "MAROON",
+				fillStyle: "maroon",
 				font: "bold 24px sans-serif",
 				text: "THE GL😈😈PS ATE YOUR FACE!!",
 				textAlign: "center",
@@ -416,6 +417,17 @@ const animationLoop = () => {
 			fillStyle: "pink",
 		}
 		generateRoundRect(configStartButton)
+
+		const configPlayAgainButton = {
+			x: canvasCenter.x - 160,
+			y: canvasCenter.y -100,
+			width: 320,
+			height: 50,
+			radii: 10,
+			strokeStyle: "green",
+			fillStyle: "pink",
+		}
+		generateRoundRect(configPlayAgainButton)
 	};
 
 	if (towers.length === 0) {
