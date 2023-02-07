@@ -38,3 +38,18 @@ const getMousePosition = (event) => {
 };
 
 const randomColor = () => colorFromHexString(randomHex());
+
+const generateDrawing = (drawingType, config) => {
+	switch (drawingType) {
+		case "Circle":
+			return new Circle(config);
+		case "FillText":
+			return new FillText(config);
+		case "Rect":
+			return new Rect(config);
+		case "RoundRect":
+			return new RoundRect(config);
+		default:
+			break;
+	}
+};
