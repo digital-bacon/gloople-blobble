@@ -1,4 +1,4 @@
-const INITIAL_WAVE_GLOOPS = 1;
+const INITIAL_WAVE_GLOOPS = 10;
 const INITIAL_WAVE = 0;
 const INITIAL_GAME_STATUS = "initial";
 const INITIAL_PLAYER_HP = 10;
@@ -104,14 +104,14 @@ const configTower = {
 };
 
 const configWave = {
-	speedDefault: 2,
-	hpDefault: 1,
+	speedDefault: 1,
+	hpDefault: 5,
 	currentWave: INITIAL_WAVE,
 	nextWave: INITIAL_WAVE + 1,
 	speedMultiplier: 0.2,
 	hpMultiplier: 1.025,
 	goldMultiplier: 2,
-	earlyBonus: 5000,
+	earlyBonus: 100,
 	totalGloops: INITIAL_WAVE_GLOOPS,
 };
 
@@ -352,7 +352,12 @@ gameCanvas.addEventListener("click", (event) => {
 	const mousePosition = getMousePosition(event);
 	circles.forEach((circle) => {
 		if (isIntersectingCircle(mousePosition, circle)) {
-			goldStash.deposit(configWave.earlyBonus)
+			const currentWaveGloops = gloops.filter(gloop => gloop.wave === configWave.currentWave);
+			const countGloops = currentWaveGloops.length;
+			if (countGloops > 0) {
+				const totalReward = configWave.earlyBonus * countGloops;
+				goldStash.deposit(totalReward)
+			}
 			nextWave();
 		}
 	});
