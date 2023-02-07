@@ -15,11 +15,19 @@ class RoundRect {
 		};
 
 		this.render = function () {
-			ctx.roundRect(this.position.x, this.position.y, this.width, this.height, this.radii);
-			ctx.strokeStyle = this.strokeStyle;
+			ctx.beginPath();
 			ctx.fillStyle = this.fillStyle;
+			ctx.strokeStyle = this.strokeStyle;
+			ctx.roundRect(
+				this.position.x,
+				this.position.y,
+				this.width,
+				this.height,
+				this.radii
+			);
 			ctx.stroke();
 			ctx.fill();
+			ctx.closePath();
 		};
 		return this;
 	}

@@ -6,11 +6,7 @@ const INITIAL_GOLD_STASH_TOTAL = 0;
 const gameCanvas = document.getElementById("gameCanvas");
 const ctx = gameCanvas.getContext("2d");
 
-const gameStatusTypes = [
-	"initial",
-	"active",
-	"gameover",
-];
+const gameStatusTypes = ["initial", "active", "gameover"];
 
 const towerLocations = [
 	{ x: 135, y: 135 },
@@ -174,15 +170,15 @@ const player = {
 const game = {
 	status: INITIAL_GAME_STATUS,
 	setStatus(status) {
-		const match = gameStatusTypes.filter(gameType => gameType === status)
+		const match = gameStatusTypes.filter((gameType) => gameType === status);
 		if (match.length === 0) {
-			console.log(status, "is not a valid game status😡😡😡")
+			console.log(status, "is not a valid game status😡😡😡");
 			return;
 		}
 		this.status = status;
 		if (this.status === "gameover") {
 			gloops = [];
-			towers.forEach(tower => tower.target = null);
+			towers.forEach((tower) => (tower.target = null));
 		}
 	},
 
@@ -193,9 +189,9 @@ const game = {
 		player.setHP(INITIAL_PLAYER_HP);
 		gloops = [];
 		projectiles = [];
-		towers.forEach(tower => tower.target = null)
-	}
-}
+		towers.forEach((tower) => (tower.target = null));
+	},
+};
 
 const xOffset = Math.round(screenCenter.x - canvasCenter.x); // because the canvas is centered
 const yOffset = 0; // because the canvas is at the top of the page
@@ -288,24 +284,23 @@ const isIntersectingCircle = (mousePoint, circle) => {
 	return (
 		Math.sqrt(
 			(mousePoint.x - circle.position.x) ** 2 +
-			(mousePoint.y - circle.position.y) ** 2
+				(mousePoint.y - circle.position.y) ** 2
 		) < circle.radius
 	);
 };
 
 const isIntersectingRect = (mousePoint, rect) => {
-
 	const left = rect.position.x;
 	const right = rect.position.x + rect.width;
 
 	const top = rect.position.y;
 	const bottom = rect.position.y + rect.height;
-	
+
 	const xClicked = mousePoint.x >= left && mousePoint.x <= right;
 
 	const yClicked = mousePoint.y >= top && mousePoint.y <= bottom;
-	
-	return xClicked && yClicked
+
+	return xClicked && yClicked;
 };
 
 gameCanvas.addEventListener("click", (event) => {
@@ -319,7 +314,7 @@ gameCanvas.addEventListener("click", (event) => {
 
 	roundRects.forEach((roundRect) => {
 		if (isIntersectingRect(mousePosition, roundRect)) {
-			game.setStatus("active")
+			game.setStatus("active");
 		}
 	});
 });
@@ -362,7 +357,6 @@ const animationLoop = () => {
 
 	fillText = [];
 	if (fillText.length === 0) {
-
 		if (game.status !== "initial") {
 			const configGoldStashText = {
 				x: 25,
@@ -395,12 +389,12 @@ const animationLoop = () => {
 				textAlign: "center",
 			};
 			generateFillText(configStartButtonText);
-		};
+		}
 
 		if (game.status === "gameover") {
 			const configGameOverText = {
 				x: canvasCenter.x,
-				y: canvasCenter.y -30,
+				y: canvasCenter.y - 30,
 				fillStyle: "maroon",
 				font: "bold 24px sans-serif",
 				text: "THE GL😈😈PS ATE YOUR FACE!!",
@@ -417,7 +411,7 @@ const animationLoop = () => {
 				textAlign: "center",
 			};
 			generateFillText(configPlayAgainButtonText);
-		};
+		}
 	}
 
 	// rects = [];
@@ -434,6 +428,7 @@ const animationLoop = () => {
 	// 		generateRect(configPlayAgainButton)
 	// 	};
 	// }
+
 	roundRects = [];
 	if (roundRects.length === 0) {
 		if (game.status === "initial") {
@@ -445,8 +440,21 @@ const animationLoop = () => {
 				radii: 10,
 				strokeStyle: "green",
 				fillStyle: "pink",
-			}
-			generateRoundRect(configStartButton)
+			};
+			generateRoundRect(configStartButton);
+		}
+
+		if (game.status === "gameover") {
+			const configPlayAgainButton = {
+				x: canvasCenter.x - 55,
+				y: canvasCenter.y + 4,
+				width: 110,
+				height: 40,
+				radii: 10,
+				strokeStyle: "green",
+				fillStyle: "blue",
+			};
+			generateRoundRect(configPlayAgainButton);
 		}
 	}
 
@@ -467,13 +475,17 @@ const animationLoop = () => {
 	if (game.status === "initial") {
 		roundRects.forEach((roundRect) => {
 			roundRect.update();
-		})
+		});
 		fillText.forEach((text) => {
 			text.update();
 		});
 	}
 
 	if (game.status === "active") {
+		towers.forEach((tower) => {
+			tower.update();
+		});
+
 		circles.forEach((circle) => {
 			circle.update();
 		});
@@ -486,18 +498,12 @@ const animationLoop = () => {
 			projectile.update();
 		});
 
-		towers.forEach((tower) => {
-			tower.update();
-		});
-
 		fillText.forEach((text) => {
 			text.update();
 		});
 	}
 
-
 	if (game.status === "gameover") {
-
 		towers.forEach((tower) => {
 			tower.render();
 		});
@@ -506,23 +512,22 @@ const animationLoop = () => {
 			projectile.render();
 		});
 
-		// rects.forEach((rect) => {
-		// 	rect.render();
-		// })
-		
-		ctx.beginPath();
-		ctx.rect(canvasCenter.x - 55, canvasCenter.y + 4, 110, 40);
-		ctx.fillStyle = "black";
-		ctx.fill();
-		ctx.strokeStyle = "white";
-		ctx.stroke();
-		ctx.closePath();
+		roundRects.forEach((roundRect) => {
+			roundRect.render();
+		});
+
+		// ctx.beginPath();
+		// ctx.rect(canvasCenter.x - 55, canvasCenter.y + 4, 110, 40);
+		// ctx.fillStyle = "black";
+		// ctx.fill();
+		// ctx.strokeStyle = "white";
+		// ctx.stroke();
+		// ctx.closePath();
 
 		fillText.forEach((text) => {
 			text.render();
 		});
-
-	};
+	}
 
 	const survivingGloops = gloops.filter((gloop) => gloop.destroyMe === false);
 	gloops = [...survivingGloops];
@@ -531,8 +536,6 @@ const animationLoop = () => {
 		(projectile) => projectile.destroyMe === false
 	);
 	projectiles = [...activeProjectiles];
-
 };
 
 animationLoop();
-

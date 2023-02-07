@@ -15,10 +15,12 @@ class FillText {
 		};
 
 		this.render = function () {
+			ctx.beginPath();
 			ctx.font = this.font;
 			ctx.fillStyle = this.fillStyle;
 			ctx.textAlign = this.textAlign;
 			ctx.fillText(this.text, this.position.x, this.position.y);
+			ctx.closePath();
 		};
 		return this;
 	}
