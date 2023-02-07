@@ -87,14 +87,6 @@ const configGloop = {
 	},
 };
 
-const configNextWaveButton = {
-	x: 25,
-	y: 25,
-	radius: 20,
-	fillColor: "cyan",
-	strokeColor: "rgba(0, 0, 0, 0)",
-};
-
 const configTower = {
 	ctx,
 	x: 135,
@@ -122,6 +114,16 @@ const configWave = {
 
 const goldStash = {
 	total: INITIAL_GOLD_STASH_TOTAL,
+	drawing: {
+		x: 25,
+		y: 64,
+		fillStyle: "gold",
+		font: "bold 16px sans-serif",
+		textAlign: "center",
+		get text() {
+			return goldStash.total.toString();
+		},
+	},
 	setTotal(amount) {
 		if (amount < 0) {
 			return (this.total = 0);
@@ -149,6 +151,16 @@ const player = {
 		if (this._hp <= 0) {
 			return game.setStatus("gameover");
 		}
+	},
+	drawing: {
+		x: goldStash.drawing.x,
+		y: goldStash.drawing.y + 18,
+		fillStyle: "#aaf0d1",
+		font: goldStash.drawing.font,
+		textAlign: goldStash.drawing.textAlign,
+		get text() {
+			return player.hp.toString();
+		},
 	},
 	setHP(amount) {
 		if (amount < 0) {
@@ -193,6 +205,76 @@ const game = {
 	},
 };
 
+const ui = {
+	buttons: {
+		nextWave: {
+			drawing: {
+				shape: {
+					x: 25,
+					y: 25,
+					radius: 20,
+					fillColor: "cyan",
+					strokeColor: "rgba(0, 0, 0, 0)",
+				},
+			},
+		},
+		start: {
+			drawing: {
+				shape: {
+					x: canvasCenter.x - 160,
+					y: canvasCenter.y - 25,
+					width: 320,
+					height: 50,
+					radii: 10,
+					strokeStyle: "green",
+					fillStyle: "pink",
+				},
+				text: {
+					x: canvasCenter.x,
+					y: canvasCenter.y + 9,
+					fillStyle: "black",
+					font: "bold 24px sans-serif",
+					text: "UNLEASH THE GLOOPS!",
+					textAlign: "center",
+				},
+			},
+		},
+		playAgain: {
+			drawing: {
+				shape: {
+					x: canvasCenter.x - 55,
+					y: canvasCenter.y + 4,
+					width: 110,
+					height: 40,
+					radii: 10,
+					strokeStyle: "green",
+					fillStyle: "blue",
+				},
+				text: {
+					x: canvasCenter.x,
+					y: canvasCenter.y + 30,
+					fillStyle: "gold",
+					font: "bold 16px sans-serif",
+					text: "Play Again!",
+					textAlign: "center",
+				},
+			},
+		},
+	},
+	messages: {
+		gameOver: {
+			drawing: {
+				x: canvasCenter.x,
+				y: canvasCenter.y - 30,
+				fillStyle: "maroon",
+				font: "bold 24px sans-serif",
+				text: "THE GL😈😈PS ATE YOUR FACE!!",
+				textAlign: "center",
+			},
+		},
+	},
+};
+
 const xOffset = Math.round(screenCenter.x - canvasCenter.x); // because the canvas is centered
 const yOffset = 0; // because the canvas is at the top of the page
 
@@ -213,26 +295,6 @@ const cleanupProjectiles = () => {
 		(projectile) => projectile.destroyMe === false
 	);
 	projectiles = [...activeProjectiles];
-};
-
-const generateCircle = (configCircle) => {
-	const newCircle = new Circle(configCircle);
-	circles.push(newCircle);
-};
-
-const generateFillText = (configFillText) => {
-	const newFillText = new FillText(configFillText);
-	fillText.push(newFillText);
-};
-
-const generateRect = (configRect) => {
-	const newRect = new Rect(configRect);
-	rects.push(newRect);
-};
-
-const generateRoundRect = (configRoundRect) => {
-	const newRoundRect = new RoundRect(configRoundRect);
-	roundRects.push(newRoundRect);
 };
 
 const summonGloop = (configGloop) => {
@@ -283,7 +345,6 @@ gameCanvas.addEventListener("click", (event) => {
 	circles.forEach((circle) => {
 		if (isIntersectingCircle(mousePosition, circle)) {
 			nextWave();
-			// game.reset();
 		}
 	});
 
@@ -326,7 +387,11 @@ const isWaveClear = (waveNumber) => {
 
 const populateCircles = () => {
 	if (circles.length === 0) {
-		generateCircle(configNextWaveButton);
+		const nextWaveButton = generateDrawing(
+			"Circle",
+			ui.buttons.nextWave.drawing.shape
+		);
+		circles.push(nextWaveButton);
 	}
 };
 
@@ -334,59 +399,36 @@ const populateFillText = () => {
 	fillText = [];
 	if (fillText.length === 0) {
 		if (game.status !== "initial") {
-			const configGoldStashText = {
-				x: 25,
-				y: 64,
-				fillStyle: "gold",
-				font: "bold 16px sans-serif",
-				text: goldStash.total.toString(),
-				textAlign: "center",
-			};
-			generateFillText(configGoldStashText);
+			const drawingGoldStashText = generateDrawing(
+				"FillText",
+				goldStash.drawing
+			);
+			fillText.push(drawingGoldStashText);
 
-			const configPlayerHPText = {
-				x: configGoldStashText.x,
-				y: configGoldStashText.y + 18,
-				fillStyle: "#aaf0d1",
-				font: configGoldStashText.font,
-				text: player.hp.toString(),
-				textAlign: configGoldStashText.textAlign,
-			};
-			generateFillText(configPlayerHPText);
+			const drawingPlayerHPText = generateDrawing("FillText", player.drawing);
+			fillText.push(drawingPlayerHPText);
 		}
 
 		if (game.status === "initial") {
-			const configStartButtonText = {
-				x: canvasCenter.x,
-				y: canvasCenter.y + 9,
-				fillStyle: "black",
-				font: "bold 24px sans-serif",
-				text: "UNLEASH THE GLOOPS!",
-				textAlign: "center",
-			};
-			generateFillText(configStartButtonText);
+			const drawingStartButtonText = generateDrawing(
+				"FillText",
+				ui.buttons.start.drawing.text
+			);
+			fillText.push(drawingStartButtonText);
 		}
 
 		if (game.status === "gameover") {
-			const configGameOverText = {
-				x: canvasCenter.x,
-				y: canvasCenter.y - 30,
-				fillStyle: "maroon",
-				font: "bold 24px sans-serif",
-				text: "THE GL😈😈PS ATE YOUR FACE!!",
-				textAlign: "center",
-			};
-			generateFillText(configGameOverText);
+			const drawingGameOverText = generateDrawing(
+				"FillText",
+				ui.messages.gameOver.drawing
+			);
+			fillText.push(drawingGameOverText);
 
-			const configPlayAgainButtonText = {
-				x: canvasCenter.x,
-				y: canvasCenter.y + 30,
-				fillStyle: "gold",
-				font: "bold 16px sans-serif",
-				text: "Play Again!",
-				textAlign: "center",
-			};
-			generateFillText(configPlayAgainButtonText);
+			const drawingPlayAgainButtonText = generateDrawing(
+				"FillText",
+				ui.buttons.playAgain.drawing.text
+			);
+			fillText.push(drawingPlayAgainButtonText);
 		}
 	}
 };
@@ -395,29 +437,19 @@ const populateRoundRects = () => {
 	roundRects = [];
 	if (roundRects.length === 0) {
 		if (game.status === "initial") {
-			const configStartButton = {
-				x: canvasCenter.x - 160,
-				y: canvasCenter.y - 25,
-				width: 320,
-				height: 50,
-				radii: 10,
-				strokeStyle: "green",
-				fillStyle: "pink",
-			};
-			generateRoundRect(configStartButton);
+			const drawingStartButton = generateDrawing(
+				"RoundRect",
+				ui.buttons.start.drawing.shape
+			);
+			roundRects.push(drawingStartButton);
 		}
 
 		if (game.status === "gameover") {
-			const configPlayAgainButton = {
-				x: canvasCenter.x - 55,
-				y: canvasCenter.y + 4,
-				width: 110,
-				height: 40,
-				radii: 10,
-				strokeStyle: "green",
-				fillStyle: "blue",
-			};
-			generateRoundRect(configPlayAgainButton);
+			const drawingPlayAgainButton = generateDrawing(
+				"RoundRect",
+				ui.buttons.playAgain.drawing.shape
+			);
+			roundRects.push(drawingPlayAgainButton);
 		}
 	}
 };
