@@ -111,8 +111,8 @@ const configTower = {
 };
 
 const configWave = {
-	speedDefault: 3,
-	hpDefault: 3,
+	speedDefault: 2,
+	hpDefault: 1,
 	currentWave: INITIAL_WAVE,
 	nextWave: INITIAL_WAVE + 1,
 	speedMultiplier: 0.2,
@@ -203,19 +203,17 @@ document.onclick = (event) => {
 	// console.log(JSON.stringify(trackedArray));
 };
 
-const getMousePosition = (event) => {
-	const x = event.clientX - xOffset;
-	const y = event.clientY;
-	return { x, y };
+const cleanupGloops = () => {
+	const survivingGloops = gloops.filter((gloop) => gloop.destroyMe === false);
+	gloops = [...survivingGloops];
 };
 
-const randomHex = () => (Math.random() * 0xfffff * 1000000).toString(16);
-
-const colorFromHexString = (hexadecimalString) => {
-	return "#" + hexadecimalString.slice(0, 6).toUpperCase();
+const cleanupProjectiles = () => {
+	const activeProjectiles = projectiles.filter(
+		(projectile) => projectile.destroyMe === false
+	);
+	projectiles = [...activeProjectiles];
 };
-
-const randomColor = () => colorFromHexString(randomHex());
 
 const generateCircle = (configCircle) => {
 	const newCircle = new Circle(configCircle);
@@ -280,29 +278,6 @@ const summonTowers = (configSummon) => {
 	});
 };
 
-const isIntersectingCircle = (mousePoint, circle) => {
-	return (
-		Math.sqrt(
-			(mousePoint.x - circle.position.x) ** 2 +
-				(mousePoint.y - circle.position.y) ** 2
-		) < circle.radius
-	);
-};
-
-const isIntersectingRect = (mousePoint, rect) => {
-	const left = rect.position.x;
-	const right = rect.position.x + rect.width;
-
-	const top = rect.position.y;
-	const bottom = rect.position.y + rect.height;
-
-	const xClicked = mousePoint.x >= left && mousePoint.x <= right;
-
-	const yClicked = mousePoint.y >= top && mousePoint.y <= bottom;
-
-	return xClicked && yClicked;
-};
-
 gameCanvas.addEventListener("click", (event) => {
 	const mousePosition = getMousePosition(event);
 	circles.forEach((circle) => {
@@ -349,12 +324,13 @@ const isWaveClear = (waveNumber) => {
 	return matched.length === 0;
 };
 
-const animationLoop = () => {
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
+const populateCircles = () => {
 	if (circles.length === 0) {
 		generateCircle(configNextWaveButton);
 	}
+};
 
+const populateFillText = () => {
 	fillText = [];
 	if (fillText.length === 0) {
 		if (game.status !== "initial") {
@@ -413,22 +389,9 @@ const animationLoop = () => {
 			generateFillText(configPlayAgainButtonText);
 		}
 	}
+};
 
-	// rects = [];
-	// if (rects.length === 0) {
-	// 	if(game.status === "gameover") {
-	// 		const configPlayAgainButton = {
-	// 			x: canvasCenter.x - 55,
-	// 			y: canvasCenter.y + 4,
-	// 			width: 110,
-	// 			height: 40,
-	// 			strokeStyle: "green",
-	// 			fillStyle: "blue",
-	// 		}
-	// 		generateRect(configPlayAgainButton)
-	// 	};
-	// }
-
+const populateRoundRects = () => {
 	roundRects = [];
 	if (roundRects.length === 0) {
 		if (game.status === "initial") {
@@ -457,7 +420,9 @@ const animationLoop = () => {
 			generateRoundRect(configPlayAgainButton);
 		}
 	}
+};
 
+const populateTowers = () => {
 	if (towers.length === 0) {
 		const configSummon = {
 			configTower,
@@ -465,77 +430,47 @@ const animationLoop = () => {
 		};
 		summonTowers(configSummon);
 	}
+};
 
+const populateGloops = () => {
 	if (gloops.length === 0 || isWaveClear(configWave.currentWave)) {
 		nextWave();
 	}
+};
+
+const animationLoop = () => {
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+	populateCircles();
+	populateFillText();
+	populateRoundRects();
+	populateTowers();
+	populateGloops();
 
 	requestAnimationFrame(animationLoop);
 
 	if (game.status === "initial") {
-		roundRects.forEach((roundRect) => {
-			roundRect.update();
-		});
-		fillText.forEach((text) => {
-			text.update();
-		});
+		update(roundRects);
+		update(fillText);
 	}
 
 	if (game.status === "active") {
-		towers.forEach((tower) => {
-			tower.update();
-		});
-
-		circles.forEach((circle) => {
-			circle.update();
-		});
-
-		gloops.forEach((gloop) => {
-			gloop.update();
-		});
-
-		projectiles.forEach((projectile) => {
-			projectile.update();
-		});
-
-		fillText.forEach((text) => {
-			text.update();
-		});
+		update(towers);
+		update(circles);
+		update(gloops);
+		update(projectiles);
+		update(fillText);
 	}
 
 	if (game.status === "gameover") {
-		towers.forEach((tower) => {
-			tower.render();
-		});
-
-		projectiles.forEach((projectile) => {
-			projectile.render();
-		});
-
-		roundRects.forEach((roundRect) => {
-			roundRect.render();
-		});
-
-		// ctx.beginPath();
-		// ctx.rect(canvasCenter.x - 55, canvasCenter.y + 4, 110, 40);
-		// ctx.fillStyle = "black";
-		// ctx.fill();
-		// ctx.strokeStyle = "white";
-		// ctx.stroke();
-		// ctx.closePath();
-
-		fillText.forEach((text) => {
-			text.render();
-		});
+		render(towers);
+		render(projectiles);
+		update(roundRects);
+		update(fillText);
 	}
 
-	const survivingGloops = gloops.filter((gloop) => gloop.destroyMe === false);
-	gloops = [...survivingGloops];
-
-	const activeProjectiles = projectiles.filter(
-		(projectile) => projectile.destroyMe === false
-	);
-	projectiles = [...activeProjectiles];
+	cleanupGloops();
+	cleanupProjectiles();
 };
 
 animationLoop();
