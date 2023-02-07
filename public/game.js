@@ -1,4 +1,4 @@
-const INITIAL_WAVE_GLOOPS = 10;
+const INITIAL_WAVE_GLOOPS = 1;
 const INITIAL_WAVE = 0;
 const INITIAL_GAME_STATUS = "initial";
 const INITIAL_PLAYER_HP = 10;
@@ -104,15 +104,20 @@ const configTower = {
 };
 
 const configWave = {
-	speedDefault: 1,
-	hpDefault: 5,
 	currentWave: INITIAL_WAVE,
-	nextWave: INITIAL_WAVE + 1,
-	speedMultiplier: 0.2,
-	hpMultiplier: 1.025,
-	goldMultiplier: 2,
 	earlyBonus: 100,
-	totalGloops: INITIAL_WAVE_GLOOPS,
+	goldMultiplier: 2,
+	hpDefault: 5,
+	hpMultiplier: 1.025,
+	nextWave: INITIAL_WAVE + 1,
+	speedDefault: 1,
+	speedMultiplier: 0.2,
+	totalGloopsMultiplier: 0.25,
+	_totalGloops: INITIAL_WAVE_GLOOPS,
+	get totalGloops() {
+		const total = Math.floor(this._totalGloops + ((this.currentWave - 1) * this.totalGloopsMultiplier))
+		return total;
+	},
 };
 
 const goldStash = {
@@ -395,7 +400,7 @@ const nextWave = () => {
 		xOffset: 40,
 		wave: configWave.currentWave,
 	};
-
+console.log(configWave.totalGloops)
 	summonGloops(configSummon);
 };
 
