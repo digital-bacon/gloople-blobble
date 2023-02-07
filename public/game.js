@@ -104,15 +104,16 @@ const configTower = {
 };
 
 const configWave = {
-	speedDefault: 1,
-	hpDefault: 5,
 	currentWave: INITIAL_WAVE,
-	nextWave: INITIAL_WAVE + 1,
-	speedMultiplier: 0.2,
-	hpMultiplier: 1.025,
-	goldMultiplier: 2,
 	earlyBonus: 100,
+	goldMultiplier: 2,
+	hpDefault: 5,
+	hpMultiplier: 1.025,
+	nextWave: INITIAL_WAVE + 1,
+	speedDefault: 1,
+	speedMultiplier: 0.2,
 	totalGloops: INITIAL_WAVE_GLOOPS,
+	totalGloopsMultiplier: 0.5,
 };
 
 const goldStash = {
