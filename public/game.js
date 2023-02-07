@@ -192,6 +192,9 @@ const game = {
 			gloops = [];
 			towers.forEach((tower) => (tower.target = null));
 		}
+		if (this.status === "active") {
+			this.reset();
+		}
 	},
 
 	reset() {
@@ -221,6 +224,7 @@ const ui = {
 		start: {
 			drawing: {
 				shape: {
+					id: "start-game",
 					x: canvasCenter.x - 160,
 					y: canvasCenter.y - 25,
 					width: 320,
@@ -242,6 +246,7 @@ const ui = {
 		playAgain: {
 			drawing: {
 				shape: {
+					id: "play-again",
 					x: canvasCenter.x - 55,
 					y: canvasCenter.y + 4,
 					width: 110,
@@ -350,7 +355,12 @@ gameCanvas.addEventListener("click", (event) => {
 
 	roundRects.forEach((roundRect) => {
 		if (isIntersectingRect(mousePosition, roundRect)) {
-			game.setStatus("active");
+			if (roundRect.id === "start-game") {
+				game.setStatus("active");
+			}
+			if (roundRect.id === "play-again") {
+				game.setStatus("initial")
+			}
 		}
 	});
 });
@@ -475,9 +485,9 @@ const animationLoop = () => {
 
 	populateCircles();
 	populateFillText();
+	populateGloops();
 	populateRoundRects();
 	populateTowers();
-	populateGloops();
 
 	requestAnimationFrame(animationLoop);
 
@@ -497,8 +507,8 @@ const animationLoop = () => {
 	if (game.status === "gameover") {
 		render(towers);
 		render(projectiles);
-		update(roundRects);
-		update(fillText);
+		render(roundRects);
+		render(fillText);
 	}
 
 	cleanupGloops();
