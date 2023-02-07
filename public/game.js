@@ -350,6 +350,7 @@ gameCanvas.addEventListener("click", (event) => {
 	const mousePosition = getMousePosition(event);
 	circles.forEach((circle) => {
 		if (isIntersectingCircle(mousePosition, circle)) {
+			goldStash.deposit(configWave.earlyBonus)
 			nextWave();
 		}
 	});
