@@ -22,13 +22,15 @@ class Tower {
 		this.level = configObject.level || 1;
 		this.upgradeCost = configObject.upgradeCost || 0;
 		this.multiplier = {
-			attackRadius: configObject?.multiplier?.attackRadius || 2,
+			attackRadius: configObject?.multiplier?.attackRadius || 10,
 			attackDamage: configObject?.multiplier?.attackDamage || 1,
 			upgradeCost: configObject?.multiplier?.upgradeCost || 1,
 		};
 
 		this.calculateAttackRadius = function () {
-			return this.attackRadius * this.multiplier.attackRadius
+			const total = Math.floor(this.attackRadius + ((this.level) * this.multiplier.attackRadius))
+			console.log(total)
+			return total
 		}
 
 		this.upgrade = function () {

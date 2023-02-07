@@ -11,8 +11,8 @@ const gameStatusTypes = ["initial", "active", "gameover"];
 
 const towerLocations = [
 	{ x: 135, y: 135 },
-	{ x: 275, y: 150 },
-	{ x: 410, y: 210 },
+	// { x: 275, y: 150 },
+	// { x: 410, y: 210 },
 ];
 
 const waypoints = [
