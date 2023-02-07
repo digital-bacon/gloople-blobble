@@ -21,6 +21,7 @@ class Circle {
 				ctx.fill();
 				ctx.strokeStyle = this.stroke;
 				ctx.stroke();
+				ctx.closePath();
 			}
 		};
 		return this;

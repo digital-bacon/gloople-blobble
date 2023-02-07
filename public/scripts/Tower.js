@@ -104,10 +104,10 @@ class Tower {
 		this.render = function () {
 			if (this.width > 0 && this.height > 0) {
 				ctx.beginPath();
-				ctx.rect(this.position.x, this.position.y, this.width, this.height);
-				ctx.fillStyle = this.color;
-				ctx.fill();
 				ctx.strokeStyle = this.stroke;
+				ctx.fillStyle = this.color;
+				ctx.rect(this.position.x, this.position.y, this.width, this.height);
+				ctx.fill();
 				ctx.stroke();
 				ctx.closePath();
 			}
