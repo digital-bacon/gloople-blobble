@@ -382,7 +382,7 @@ gameCanvas.addEventListener("click", (event) => {
 
 	towers.forEach((tower) => {
 		if (isIntersectingRect(mousePosition, tower)) {
-				console.log(tower)
+			tower.upgrade()
 		}
 	});
 
