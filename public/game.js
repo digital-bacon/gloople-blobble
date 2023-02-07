@@ -110,6 +110,7 @@ const configWave = {
 	speedMultiplier: 0.2,
 	hpMultiplier: 1.025,
 	goldMultiplier: 2,
+	earlyBonus: 5000,
 };
 
 const goldStash = {
