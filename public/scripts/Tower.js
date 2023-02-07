@@ -21,6 +21,12 @@ class Tower {
 		this.attackDamage = configObject.attackDamage || 1;
 		this.level = configObject.level || 1;
 		this.upgradeCost = configObject.upgradeCost || 0;
+		this.multiplier = {
+			attackRadius: configObject.multiplier.attackRadius || 1,
+			attackDamage: configObject.multiplier.attackDamage || 1,
+			upgradeCost: configObject.multiplier.upgradeCost || 1,
+		}
+
 
 		this.upgrade = function () {
 			this.level++
