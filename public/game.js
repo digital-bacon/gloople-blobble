@@ -29,6 +29,7 @@ const waypoints = [
 const circles = [];
 const towers = [];
 let fillText = [];
+let buttons = [];
 let gloops = [];
 let projectiles = [];
 let rects = [];
@@ -243,6 +244,7 @@ const ui = {
 				},
 			},
 		},
+		
 		start: {
 			drawing: {
 				shape: {
@@ -283,6 +285,28 @@ const ui = {
 					fillStyle: "gold",
 					font: "bold 16px sans-serif",
 					text: "Play Again!",
+					textAlign: "center",
+				},
+			},
+		},
+		towerUpgrade: {
+			drawing: {
+				shape: {
+					id: "tower-upgrade",
+					x: 0,
+					y: 200,
+					width: 110,
+					height: 40,
+					radii: 10,
+					strokeStyle: "neon",
+					fillStyle: "neon",
+				},
+				text: {
+					x: 0,
+					y: 200 + 10,
+					fillStyle: "black",
+					font: "bold 16px sans-serif",
+					text: "Upgrade!",
 					textAlign: "center",
 				},
 			},
@@ -394,8 +418,20 @@ gameCanvas.addEventListener("click", (event) => {
 
 	towers.forEach((tower) => {
 		if (isIntersectingRect(mousePosition, tower)) {
+			buttons = []
+			const towerUpgrade = {}
+			const button = generateDrawing(
+				"RoundRect",
+				ui.buttons.towerUpgrade.drawing.shape
+			);
+			towerUpgrade.button = button
+			const text = generateDrawing(
+				"FillText",
+				ui.buttons.towerUpgrade.drawing.text
+			);
+			towerUpgrade.text = text
+			buttons.push(towerUpgrade)
 			const purchaseCompleted = player.purchaseTowerUpgrade(tower)
-			console.log("Purchase Completed: ", purchaseCompleted)
 		}
 	});
 
@@ -537,6 +573,10 @@ const animationLoop = () => {
 		update(gloops);
 		update(projectiles);
 		update(fillText);
+		const towerButtons = buttons.map(button => button.button)
+		update(towerButtons);
+		const towerButtonsText = buttons.map(button => button.text)
+		update(towerButtonsText);
 	}
 
 	if (game.status === "gameover") {
