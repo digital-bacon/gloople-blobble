@@ -102,6 +102,7 @@ const configTower = {
 	showRange: true,
 	projectileSize: 10,
 	attackDamage: 100,
+	upgradeCost: 100,
 };
 
 const configWave = {
@@ -365,6 +366,12 @@ gameCanvas.addEventListener("click", (event) => {
 				goldStash.deposit(totalReward)
 			}
 			nextWave();
+
+			towers.map(tower => {
+				tower.upgrade()
+				return tower
+			})
+
 		}
 	});
 
@@ -402,7 +409,6 @@ const nextWave = () => {
 		wave: configWave.currentWave,
 	};
 	summonGloops(configSummon);
-
 };
 
 const isWaveClear = (waveNumber) => {

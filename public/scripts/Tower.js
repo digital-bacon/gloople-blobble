@@ -19,12 +19,12 @@ class Tower {
 		this.projectileSize = configObject.projectileSize;
 		this.target = null;
 		this.attackDamage = configObject.attackDamage || 1;
-		this.level = configObject.level || 3;
-		this.upgradeCost = configObject.upgradeCost || 0;
+		this.level = configObject.level || 1;
+		this.upgradeCost = configObject.upgradeCost || 1;
 		this.multiplier = {
 			attackRadius: configObject?.multiplier?.attackRadius || 10,
 			attackDamage: configObject?.multiplier?.attackDamage || 0.25,
-			upgradeCost: configObject?.multiplier?.upgradeCost || 1,
+			upgradeCost: configObject?.multiplier?.upgradeCost || 0.5,
 		};
 
 		this.calculateAttackRadius = function () {
@@ -37,8 +37,14 @@ class Tower {
 			return total
 		}
 
+		this.calculateUpgradeCost = function () {
+			const total = Math.floor( this.upgradeCost + (this.upgradeCost * ((this.level) * this.multiplier.upgradeCost)))
+			return total
+		}
+
 		this.upgrade = function () {
 			this.level++
+			console.log(this.calculateUpgradeCost())
 		}
 
 		this.createProjectile = function (target) {
