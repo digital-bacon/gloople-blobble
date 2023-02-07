@@ -4,6 +4,7 @@ class RoundRect {
 			x: configObject.x || 0,
 			y: configObject.y || 0,
 		};
+		this.id = configObject.id || Math.random().toString(36).substr(2);
 		this.width = configObject.width || 0;
 		this.height = configObject.height || 0;
 		this.radii = configObject.radii || 0;
