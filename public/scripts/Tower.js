@@ -98,7 +98,8 @@ class Tower {
 				x: this.position.center.x,
 				y: this.position.center.y + configFont.size / 3,
 				font: `${configFont.weight} ${configFont.size}px ${configFont.family}`,
-				fillStyle: "white"
+				fillStyle: "white",
+				text: `LVL. ${this.level + 1} 💰${this.calculateUpgradeCost()}`,
 			}
 
 			const text = new FillText(configText);

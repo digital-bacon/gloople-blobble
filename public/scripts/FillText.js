@@ -19,7 +19,7 @@ class FillText {
 			ctx.font = this.font;
 			ctx.fillStyle = this.fillStyle;
 			ctx.textAlign = this.textAlign;
-			ctx.fillText(this.text, this.position.x, this.position.y);
+			ctx.fillText(this.text, this.position.x, this.position.y, this.maxWidth);
 			ctx.closePath();
 		};
 		return this;
