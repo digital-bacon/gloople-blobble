@@ -54,10 +54,16 @@ const startEventListeners = () => {
 				}
 			}
 		}
-
 		for (const location of generatedTowerLocations) {
 			if (isIntersectingRect(mousePosition, location)) {
-				console.log(location.id, "was clicked")
+				console.log(location)
+				// console.log(location.id, "was clicked")
+				const tower = { ...configTower };
+				// console.log(location)
+				tower.x = location.position.x;
+				tower.y = location.position.y;
+				summonTower(tower);
+				// console.log(towers)
 			}
 		}
 
