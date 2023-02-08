@@ -15,6 +15,7 @@ const canvas = getCanvasProperties(gameCanvas);
 const screenCenter = getScreenCenter();
 
 const ui = new UserInterface();
+const goldStash = new GoldStash();
 
 let circles = [];
 let towers = [];
@@ -97,29 +98,6 @@ const configWave = {
 			this._totalGloops + (this.currentWave - 1) * this.totalGloopsMultiplier
 		);
 		return total;
-	},
-};
-
-const goldStash = {
-	total: INITIAL_GOLD_STASH_TOTAL,
-	setTotal(amount) {
-		if (amount < 0) {
-			return (this.total = 0);
-		}
-		this.total = this.convertToWhole(amount);
-	},
-	deposit(amount) {
-		this.total += this.convertToWhole(amount);
-	},
-	withdraw(amount) {
-		if (this.total - amount <= 0) {
-			return false;
-		}
-		this.total -= this.convertToWhole(amount);
-		return true;
-	},
-	convertToWhole(amount) {
-		return Math.floor(amount);
 	},
 };
 
