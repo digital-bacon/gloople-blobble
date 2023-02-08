@@ -16,7 +16,6 @@ class UserInterface {
 						},
 					},
 				},
-
 				start: {
 					evalAvailable: function () {
 						return game.status === "initial";
@@ -39,6 +38,7 @@ class UserInterface {
 							font: "bold 24px sans-serif",
 							text: "UNLEASH THE GLOOPS!",
 							textAlign: "center",
+							maxWidth: 316,
 						},
 					},
 				},
@@ -64,6 +64,7 @@ class UserInterface {
 							font: "bold 16px sans-serif",
 							text: "Play Again!",
 							textAlign: "center",
+							maxWidth: 106,
 						},
 					},
 				},
@@ -89,11 +90,12 @@ class UserInterface {
 							fillStyle: "black",
 							font: {
 								weight: "bold",
-								size: "16",
+								size: "14",
 								family: "sans-serif",
 							},
-							text: "Upgrade!",
+							text: "LVL.?? 💰???????",
 							textAlign: "center",
+							maxWidth: 106,
 						},
 					},
 				},
@@ -111,6 +113,7 @@ class UserInterface {
 							font: "bold 24px sans-serif",
 							text: "THE GL😈😈PS ATE YOUR FACE!!",
 							textAlign: "center",
+							maxWidth: canvas.width - 4,
 						},
 					},
 				},
@@ -125,6 +128,7 @@ class UserInterface {
 							fillStyle: "gold",
 							font: "bold 16px sans-serif",
 							textAlign: "center",
+							maxWidth: canvas.width - 4,
 							get text() {
 								return goldStash.total.toString();
 							},
@@ -142,6 +146,7 @@ class UserInterface {
 							fillStyle: "#aaf0d1",
 							font: "bold 16px sans-serif",
 							textAlign: "center",
+							maxWidth: canvas.width - 4,
 							get text() {
 								return player.hp.toString();
 							},

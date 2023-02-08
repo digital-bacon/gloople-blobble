@@ -79,13 +79,16 @@ class Tower {
 		};
 
 		this.drawUpgradeButton = function () {
-			this.showButton = true
+			const canAffordUpgrade = goldStash.total >= this.calculateUpgradeCost()
 			const configButton = {
 				...ui.buttons.towerUpgrade.drawing.shape,
 				x: this.position.center.x - ui.buttons.towerUpgrade.drawing.shape.width / 2,
 				y: this.position.center.y - ui.buttons.towerUpgrade.drawing.shape.height / 2,
 			}
 
+			if (canAffordUpgrade) {
+				configButton.fillStyle = "green"
+			}
 			const button = new RoundRect(configButton);
 			this.button.push(button)
 			button.render();
@@ -98,7 +101,8 @@ class Tower {
 				x: this.position.center.x,
 				y: this.position.center.y + configFont.size / 3,
 				font: `${configFont.weight} ${configFont.size}px ${configFont.family}`,
-				fillStyle: "white"
+				fillStyle: "white",
+				text: `LVL. ${this.level + 1} 💰${this.calculateUpgradeCost()}`,
 			}
 
 			const text = new FillText(configText);
