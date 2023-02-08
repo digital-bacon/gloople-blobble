@@ -1,6 +1,6 @@
 const INITIAL_WAVE_GLOOPS = 1;
 const INITIAL_WAVE = 0;
-const INITIAL_GAME_STATUS = "initial";
+const INITIAL_GAME_STATUS = "active";
 const INITIAL_PLAYER_HP = 10;
 const INITIAL_GOLD_STASH_TOTAL = 0;
 
@@ -101,7 +101,8 @@ const configTower = {
 	attacksMultiple: false,
 	showRange: true,
 	projectileSize: 10,
-	attackDamage: 1,
+	attackDamage: 100,
+	upgradeCost: 100,
 };
 
 const configWave = {
@@ -143,7 +144,11 @@ const goldStash = {
 		this.total += this.convertToWhole(amount);
 	},
 	withdraw(amount) {
+		if (this.total - amount <= 0) {
+			return false;
+		} 
 		this.total -= this.convertToWhole(amount);
+		return true;
 	},
 	convertToWhole(amount) {
 		return Math.floor(amount);
@@ -186,7 +191,15 @@ const player = {
 	convertToWhole(amount) {
 		return Math.floor(amount);
 	},
-};
+	purchaseTowerUpgrade(tower) {
+		const purchaseSuccessful = goldStash.withdraw(tower.calculateUpgradeCost())
+		if (purchaseSuccessful) {
+			tower.upgrade()
+		}
+		return purchaseSuccessful;
+	},
+
+}
 
 const game = {
 	status: INITIAL_GAME_STATUS,
@@ -230,6 +243,7 @@ const ui = {
 				},
 			},
 		},
+		
 		start: {
 			drawing: {
 				shape: {
@@ -270,6 +284,33 @@ const ui = {
 					fillStyle: "gold",
 					font: "bold 16px sans-serif",
 					text: "Play Again!",
+					textAlign: "center",
+				},
+			},
+		},
+		towerUpgrade: {
+			activeId: null,
+			drawing: {
+				shape: {
+					id: "tower-upgrade",
+					x: 0,
+					y: 200,
+					width: 110,
+					height: 40,
+					radii: 10,
+					strokeStyle: "red",
+					fillStyle: "black",
+				},
+				text: {
+					x: 0,
+					y: 200 + 10,
+					fillStyle: "black",
+					font: {
+						weight: "bold",
+						size: "16",
+						family: "sans-serif",
+					},
+					text: "Upgrade!",
 					textAlign: "center",
 				},
 			},
@@ -378,7 +419,35 @@ gameCanvas.addEventListener("click", (event) => {
 			}
 		}
 	});
+
+	let wasTowerClicked = false;
+
+	for (const tower of towers) {
+		if (isIntersectingRect(mousePosition, tower)) {
+			wasTowerClicked = true;
+			const activeId = ui.buttons.towerUpgrade.activeId
+			const buttonIsActive = activeId !== null
+			if (buttonIsActive && activeId === tower.id) {
+				const purchaseCompleted = player.purchaseTowerUpgrade(tower)
+				break;
+			} else {
+					towers.map(tower => {
+						if (tower.id === activeId) {
+							tower.button = [];
+						}
+					})
+			}
+			tower.drawUpgradeButton()
+			ui.buttons.towerUpgrade.activeId = tower.id
+		}
+	}
+
+	if (!wasTowerClicked) clearTowerButtons() 
 });
+
+const clearTowerButtons = () => {
+	towers.forEach(tower => tower.button = [])
+}
 
 const nextWave = () => {
 	if (configWave.nextWave > 1) {
