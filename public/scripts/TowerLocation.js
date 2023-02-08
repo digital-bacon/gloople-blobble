@@ -17,8 +17,7 @@ class TowerLocation {
 		this.towerCost = configObject.towerCost || 0;
 		
 		this.drawBuildButton = function () {
-			// const canAffordUpgrade = goldStash.total >= this.calculateUpgradeCost()
-			const canAffordUpgrade = true;
+			const canAffordUpgrade = goldStash.total >= this.towerCost;
 			const configButton = {
 				...ui.buttons.towerBuild.drawing.shape,
 				x: this.position.center.x - ui.buttons.towerBuild.drawing.shape.width / 2,
