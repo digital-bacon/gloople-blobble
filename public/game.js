@@ -27,7 +27,7 @@ let gloops = [];
 let projectiles = [];
 let rects = [];
 let roundRects = [];
-let generatedTowerLocations = [];
+let locations = [];
 
 const configGloop = {
 	ctx,
@@ -131,6 +131,11 @@ const cleanupGloops = () => {
 	gloops = [...survivingGloops];
 };
 
+const cleanupTowerLocations = () => {
+	const survivingLocations = locations.filter((location) => location.destroyMe === false);
+	locations = [...survivingLocations];
+};
+
 const cleanupProjectiles = () => {
 	const activeProjectiles = projectiles.filter(
 		(projectile) => projectile.destroyMe === false
@@ -180,7 +185,7 @@ const summonTowers = (configSummon) => {
 
 const generateTowerLocation = (configLocation) => {
 	const newLocation = new TowerLocation(configLocation);
-	generatedTowerLocations.push(newLocation);
+	locations.push(newLocation);
 };
 
 const generateTowerLocations = (configGenerate) => {
@@ -199,7 +204,7 @@ const generateTowerLocations = (configGenerate) => {
 };
 
 const clearBuildButtons = () => {
-	generatedTowerLocations.forEach((location) => {
+	locations.forEach((location) => {
 		location.button = [] 
 		ui.buttons.towerBuild.activeId = null;
 	});
@@ -299,7 +304,7 @@ const populateTowers = () => {
 };
 
 const populateTowerLocations = () => {
-	if (generatedTowerLocations.length === 0) {
+	if (locations.length === 0) {
 		const initialLocations = towerLocations.filter(location => location.id !== 2);
 		const configGenerate = {
 			configTowerLocation,
@@ -333,7 +338,7 @@ const animationLoop = () => {
 	}
 
 	if (game.status === "active") {
-		update(generatedTowerLocations);
+		update(locations);
 		update(towers);
 		update(circles);
 		update(gloops);
@@ -349,6 +354,7 @@ const animationLoop = () => {
 	}
 
 	cleanupGloops();
+	cleanupTowerLocations();
 	cleanupProjectiles();
 };
 

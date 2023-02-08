@@ -58,7 +58,7 @@ const startEventListeners = () => {
 
 		let wasBuildLocationClicked = false;
 		if (ui.buttons.towerBuild.evalAvailable()) {
-			for (const location of generatedTowerLocations) {
+			for (const location of locations) {
 				const buildButton = location.button.length > 0 ? location.button[0] : null
 				if (buildButton) {
 					if (isIntersectingRect(mousePosition, buildButton)) {
@@ -69,6 +69,7 @@ const startEventListeners = () => {
 							tower.y = location.position.y;
 							summonTower(tower);
 							location.towerId = tower.id;
+							location.destroyMe = true;
 							clearBuildButtons();
 						}	
 					}
@@ -81,7 +82,7 @@ const startEventListeners = () => {
 						// const purchaseCompleted = player.purchaseTowerUpgrade(tower);
 						break;
 					} else {
-						generatedTowerLocations.map((location) => {
+						locations.map((location) => {
 							if (location.id === activeId) {
 								location.button = [];
 							}
