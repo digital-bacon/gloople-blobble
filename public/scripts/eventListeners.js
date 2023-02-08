@@ -59,6 +59,12 @@ const startEventListeners = () => {
 		let wasBuildLocationClicked = false;
 		if (ui.buttons.towerBuild.evalAvailable()) {
 			for (const location of generatedTowerLocations) {
+				const buildButton = location.button.length > 0 ? location.button[0] : null
+				if (buildButton) {
+					if (isIntersectingRect(mousePosition, buildButton)) {
+						console.log("button was clicked")
+					}
+				}
 				if (isIntersectingRect(mousePosition, location)) {
 					wasBuildLocationClicked = true;
 					const activeId = ui.buttons.towerBuild.activeId;
