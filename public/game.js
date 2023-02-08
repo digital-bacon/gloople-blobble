@@ -27,6 +27,7 @@ let gloops = [];
 let projectiles = [];
 let rects = [];
 let roundRects = [];
+let generatedTowerLocations = [];
 
 const configGloop = {
 	ctx,
@@ -83,6 +84,16 @@ const configTower = {
 	attackDamage: 100,
 	upgradeCost: 100,
 	level: INITIAL_TOWER_LEVEL,
+};
+
+const configTowerLocation = {
+	ctx,
+	x: 0,
+	y: 0,
+	width: TOWER_LOCATION_SIZE,
+	height: TOWER_LOCATION_SIZE,
+	fillColor: "transparent",
+	strokeColor: "yellow",
 };
 
 const configWave = {
@@ -163,6 +174,26 @@ const summonTowers = (configSummon) => {
 	}
 	newTowers.forEach((tower) => {
 		summonTower(tower);
+	});
+};
+
+const generateTowerLocation = (configLocation) => {
+	const newLocation = new Rect(configLocation);
+	generatedTowerLocations.push(newLocation);
+};
+
+const generateTowerLocations = (configGenerate) => {
+	const { configTowerLocation, towerLocations } = configGenerate;
+	const newLocations = [];
+	for (let i = 0; i < towerLocations.length; i++) {
+		const location = { ...configTowerLocation };
+		location.x = towerLocations[i].x;
+		location.y = towerLocations[i].y;
+		newLocations.push(location);
+	}
+	// console.log(newLocations)
+	newLocations.forEach((location) => {
+		generateTowerLocation(location);
 	});
 };
 
@@ -248,11 +279,23 @@ const populateRoundRects = () => {
 
 const populateTowers = () => {
 	if (towers.length === 0) {
+		const initialTowers = towerLocations.filter(location => location.id === 2);
 		const configSummon = {
 			configTower,
-			towerLocations,
+			towerLocations: initialTowers,
 		};
 		summonTowers(configSummon);
+	}
+};
+
+const populateTowerLocations = () => {
+	if (generatedTowerLocations.length === 0) {
+		const initialLocations = towerLocations.filter(location => location.id !== 2);
+		const configGenerate = {
+			configTowerLocation,
+			towerLocations: initialLocations,
+		};
+		generateTowerLocations(configGenerate);
 	}
 };
 
@@ -270,6 +313,7 @@ const animationLoop = () => {
 	populateGloops();
 	populateRoundRects();
 	populateTowers();
+	populateTowerLocations();
 
 	requestAnimationFrame(animationLoop);
 
@@ -279,6 +323,7 @@ const animationLoop = () => {
 	}
 
 	if (game.status === "active") {
+		update(generatedTowerLocations);
 		update(towers);
 		update(circles);
 		update(gloops);

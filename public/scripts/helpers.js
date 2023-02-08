@@ -78,13 +78,13 @@ const getGameStatusTypes = () => {
 
 const getTowerLocations = () => {
 	return [
-		{ id: 1, x: 40, y: 162},
-		{ id: 2, x: 125, y: 125},
-		{ id: 3, x: 163, y: 125},
-		{ id: 4, x: 243, y: 202},
-		{ id: 5, x: 284, y: 202},
-		{ id: 6, x: 325, y: 202},
-		{ id: 7, x: 410, y: 202},
+		{ towerID: null, id: 1, x: 40, y: 162},
+		{ towerID: null, id: 2, x: 125, y: 125},
+		{ towerID: null, id: 3, x: 163, y: 125},
+		{ towerID: null, id: 4, x: 243, y: 202},
+		{ towerID: null, id: 5, x: 284, y: 202},
+		{ towerID: null, id: 6, x: 325, y: 202},
+		{ towerID: null, id: 7, x: 410, y: 202},
 	];
 };
 
