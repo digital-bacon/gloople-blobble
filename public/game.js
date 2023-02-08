@@ -17,6 +17,7 @@ const screenCenter = getScreenCenter();
 const ui = new UserInterface();
 const game = new Game();
 const goldStash = new GoldStash();
+const player = new Player();
 
 let circles = [];
 let towers = [];
@@ -99,41 +100,6 @@ const configWave = {
 			this._totalGloops + (this.currentWave - 1) * this.totalGloopsMultiplier
 		);
 		return total;
-	},
-};
-
-const player = {
-	_hp: INITIAL_PLAYER_HP,
-	get hp() {
-		return this._hp;
-	},
-	set hp(value) {
-		this._hp = value;
-		if (this._hp <= 0) {
-			if (game.status !== "gameover") game.setStatus("gameover");
-		}
-	},
-	setHP(amount) {
-		if (amount < 0) {
-			return (this.hp = 0);
-		}
-		this.hp = this.convertToWhole(amount);
-	},
-	gainHP(amount) {
-		this.hp += this.convertToWhole(amount);
-	},
-	loseHP(amount) {
-		this.hp -= this.convertToWhole(amount);
-	},
-	convertToWhole(amount) {
-		return Math.floor(amount);
-	},
-	purchaseTowerUpgrade(tower) {
-		const purchaseSuccessful = goldStash.withdraw(tower.calculateUpgradeCost());
-		if (purchaseSuccessful) {
-			tower.upgrade();
-		}
-		return purchaseSuccessful;
 	},
 };
 
