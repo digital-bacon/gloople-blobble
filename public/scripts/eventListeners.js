@@ -87,6 +87,7 @@ const startEventListeners = () => {
 							}
 						});
 					}
+					location.towerCost = configTower.purchaseCost;
 					location.drawBuildButton();
 					ui.buttons.towerBuild.activeId = location.id;
 					

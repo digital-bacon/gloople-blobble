@@ -14,7 +14,8 @@ class TowerLocation {
 		this.height = configObject.height;
 		this.color = configObject.fillColor;
 		this.stroke = configObject.strokeColor;
-
+		this.towerCost = configObject.towerCost || 0;
+		
 		this.drawBuildButton = function () {
 			// const canAffordUpgrade = goldStash.total >= this.calculateUpgradeCost()
 			const canAffordUpgrade = true;
@@ -40,7 +41,7 @@ class TowerLocation {
 				y: this.position.center.y + configFont.size / 3,
 				font: `${configFont.weight} ${configFont.size}px ${configFont.family}`,
 				fillStyle: "white",
-				text: `Build Tower 💰 ???`,
+				text: `Build Tower 💰 ${this.towerCost}`,
 			}
 
 			const text = new FillText(configText);
