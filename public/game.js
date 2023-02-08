@@ -199,11 +199,17 @@ const generateTowerLocations = (configGenerate) => {
 };
 
 const clearBuildButtons = () => {
-	generatedTowerLocations.forEach((location) => (location.button = []));
+	generatedTowerLocations.forEach((location) => {
+		location.button = [] 
+		ui.buttons.towerBuild.activeId = null;
+	});
 };
 
 const clearTowerButtons = () => {
-	towers.forEach((tower) => (tower.button = []));
+	towers.forEach((tower) => {
+		tower.button = []
+		ui.buttons.towerUpgrade.activeId = null;
+	});
 };
 
 const nextWave = () => {
