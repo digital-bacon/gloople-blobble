@@ -63,6 +63,10 @@ const startEventListeners = () => {
 				if (buildButton) {
 					if (isIntersectingRect(mousePosition, buildButton)) {
 						console.log("button was clicked")
+						const tower = { ...configTower };
+						tower.x = location.position.x;
+						tower.y = location.position.y;
+						summonTower(tower);
 					}
 				}
 				if (isIntersectingRect(mousePosition, location)) {
@@ -81,10 +85,7 @@ const startEventListeners = () => {
 					}
 					location.drawBuildButton();
 					ui.buttons.towerBuild.activeId = location.id;
-					// const tower = { ...configTower };
-					// tower.x = location.position.x;
-					// tower.y = location.position.y;
-					// summonTower(tower);
+					
 				}
 			}
 		}
