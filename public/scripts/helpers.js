@@ -53,3 +53,46 @@ const generateDrawing = (drawingType, config) => {
 			break;
 	}
 };
+
+const getCanvasProperties = (gameCanvas) => {
+	return {
+		width: gameCanvas.width,
+		height: gameCanvas.height,
+		center: {
+			x: gameCanvas.width / 2,
+			y: gameCanvas.height / 2,
+		},
+	};
+};
+
+const getScreenCenter = () => {
+	return {
+		x: window.innerWidth / 2,
+		y: window.innerHeight / 2,
+	};
+};
+
+const getGameStatusTypes = () => {
+	return ["initial", "active", "gameover"];
+};
+
+const getTowerLocations = () => {
+	return [
+		{ x: 135, y: 135 },
+		{ x: 275, y: 150 },
+		{ x: 410, y: 210 },
+	];
+};
+
+const getWayPoints = () => {
+	return [
+		{ x: 0, y: 217 },
+		{ x: 95, y: 215 },
+		{ x: 98, y: 97 },
+		{ x: 224, y: 103 },
+		{ x: 219, y: 254 },
+		{ x: 381, y: 254 },
+		{ x: 382, y: 181 },
+		{ x: 667, y: 176 },
+	];
+};
