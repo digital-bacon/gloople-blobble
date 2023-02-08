@@ -54,19 +54,34 @@ const startEventListeners = () => {
 				}
 			}
 		}
-		for (const location of generatedTowerLocations) {
-			if (isIntersectingRect(mousePosition, location)) {
-				console.log(location)
-				// console.log(location.id, "was clicked")
-				const tower = { ...configTower };
-				// console.log(location)
-				tower.x = location.position.x;
-				tower.y = location.position.y;
-				summonTower(tower);
-				// console.log(towers)
+		if (!wasTowerClicked) clearTowerButtons();
+
+		let wasBuildLocationClicked = false;
+		if (ui.buttons.towerBuild.evalAvailable()) {
+			for (const location of generatedTowerLocations) {
+				if (isIntersectingRect(mousePosition, location)) {
+					wasBuildLocationClicked = true;
+					const activeId = ui.buttons.towerBuild.activeId;
+					const buttonIsActive = activeId !== null;
+					if (buttonIsActive && activeId === location.id) {
+						// const purchaseCompleted = player.purchaseTowerUpgrade(tower);
+						break;
+					} else {
+						generatedTowerLocations.map((location) => {
+							if (location.id === activeId) {
+								location.button = [];
+							}
+						});
+					}
+					location.drawBuildButton();
+					ui.buttons.towerBuild.activeId = location.id;
+					// const tower = { ...configTower };
+					// tower.x = location.position.x;
+					// tower.y = location.position.y;
+					// summonTower(tower);
+				}
 			}
 		}
-
-		if (!wasTowerClicked) clearTowerButtons();
+		if (!wasBuildLocationClicked) clearBuildButtons();
 	});
 };

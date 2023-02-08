@@ -197,6 +197,10 @@ const generateTowerLocations = (configGenerate) => {
 	});
 };
 
+const clearBuildButtons = () => {
+	generatedTowerLocations.forEach((location) => (location.button = []));
+};
+
 const clearTowerButtons = () => {
 	towers.forEach((tower) => (tower.button = []));
 };
@@ -248,7 +252,6 @@ const populateFillText = () => {
 		ui.messages.gameOver,
 		ui.buttons.playAgain,
 		ui.buttons.nextWave,
-		ui.buttons.towerBuild,
 	];
 
 	fillText = [];
@@ -264,7 +267,7 @@ const populateFillText = () => {
 };
 
 const populateRoundRects = () => {
-	const elements = [ui.buttons.start, ui.buttons.playAgain, ui.buttons.towerBuild];
+	const elements = [ui.buttons.start, ui.buttons.playAgain];
 	roundRects = [];
 	if (roundRects.length === 0) {
 		elements.forEach((element) => {
@@ -323,7 +326,6 @@ const animationLoop = () => {
 	}
 
 	if (game.status === "active") {
-		update(roundRects);
 		update(generatedTowerLocations);
 		update(towers);
 		update(circles);
