@@ -1,8 +1,9 @@
 const INITIAL_WAVE_GLOOPS = 1;
 const INITIAL_WAVE = 0;
-const INITIAL_GAME_STATUS = "active";
+const INITIAL_GAME_STATUS = "initial";
 const INITIAL_PLAYER_HP = 10;
 const INITIAL_GOLD_STASH_TOTAL = 0;
+const INITIAL_TOWER_LEVEL = 1;
 
 const gameCanvas = document.getElementById("gameCanvas");
 const ctx = gameCanvas.getContext("2d");
@@ -26,8 +27,8 @@ const waypoints = [
 	{ x: 667, y: 176 },
 ];
 
-const circles = [];
-const towers = [];
+let circles = [];
+let towers = [];
 let fillText = [];
 let gloops = [];
 let projectiles = [];
@@ -103,6 +104,7 @@ const configTower = {
 	projectileSize: 10,
 	attackDamage: 100,
 	upgradeCost: 100,
+	level: INITIAL_TOWER_LEVEL,
 };
 
 const configWave = {
@@ -117,23 +119,15 @@ const configWave = {
 	totalGloopsMultiplier: 0.25,
 	_totalGloops: INITIAL_WAVE_GLOOPS,
 	get totalGloops() {
-		const total = Math.floor(this._totalGloops + ((this.currentWave - 1) * this.totalGloopsMultiplier))
+		const total = Math.floor(
+			this._totalGloops + (this.currentWave - 1) * this.totalGloopsMultiplier
+		);
 		return total;
 	},
 };
 
 const goldStash = {
 	total: INITIAL_GOLD_STASH_TOTAL,
-	drawing: {
-		x: 25,
-		y: 64,
-		fillStyle: "gold",
-		font: "bold 16px sans-serif",
-		textAlign: "center",
-		get text() {
-			return goldStash.total.toString();
-		},
-	},
 	setTotal(amount) {
 		if (amount < 0) {
 			return (this.total = 0);
@@ -146,7 +140,7 @@ const goldStash = {
 	withdraw(amount) {
 		if (this.total - amount <= 0) {
 			return false;
-		} 
+		}
 		this.total -= this.convertToWhole(amount);
 		return true;
 	},
@@ -154,52 +148,6 @@ const goldStash = {
 		return Math.floor(amount);
 	},
 };
-
-const player = {
-	_hp: INITIAL_PLAYER_HP,
-	get hp() {
-		return this._hp;
-	},
-	set hp(value) {
-		this._hp = value;
-		if (this._hp <= 0) {
-			return game.setStatus("gameover");
-		}
-	},
-	drawing: {
-		x: goldStash.drawing.x,
-		y: goldStash.drawing.y + 18,
-		fillStyle: "#aaf0d1",
-		font: goldStash.drawing.font,
-		textAlign: goldStash.drawing.textAlign,
-		get text() {
-			return player.hp.toString();
-		},
-	},
-	setHP(amount) {
-		if (amount < 0) {
-			return (this.hp = 0);
-		}
-		this.hp = this.convertToWhole(amount);
-	},
-	gainHP(amount) {
-		this.hp += this.convertToWhole(amount);
-	},
-	loseHP(amount) {
-		this.hp -= this.convertToWhole(amount);
-	},
-	convertToWhole(amount) {
-		return Math.floor(amount);
-	},
-	purchaseTowerUpgrade(tower) {
-		const purchaseSuccessful = goldStash.withdraw(tower.calculateUpgradeCost())
-		if (purchaseSuccessful) {
-			tower.upgrade()
-		}
-		return purchaseSuccessful;
-	},
-
-}
 
 const game = {
 	status: INITIAL_GAME_STATUS,
@@ -211,8 +159,10 @@ const game = {
 		}
 		this.status = status;
 		if (this.status === "gameover") {
+			circles = [];
 			gloops = [];
 			towers.forEach((tower) => (tower.target = null));
+			player.setHP(0);
 		}
 		if (this.status === "active") {
 			this.reset();
@@ -226,13 +176,16 @@ const game = {
 		player.setHP(INITIAL_PLAYER_HP);
 		gloops = [];
 		projectiles = [];
-		towers.forEach((tower) => (tower.target = null));
+		towers = [];
 	},
 };
 
 const ui = {
 	buttons: {
 		nextWave: {
+			evalAvailable: function () {
+				return game.status === "active";
+			},
 			drawing: {
 				shape: {
 					x: 25,
@@ -243,8 +196,11 @@ const ui = {
 				},
 			},
 		},
-		
+
 		start: {
+			evalAvailable: function () {
+				return game.status === "initial";
+			},
 			drawing: {
 				shape: {
 					id: "start-game",
@@ -267,6 +223,9 @@ const ui = {
 			},
 		},
 		playAgain: {
+			evalAvailable: function () {
+				return game.status === "gameover";
+			},
 			drawing: {
 				shape: {
 					id: "play-again",
@@ -289,6 +248,9 @@ const ui = {
 			},
 		},
 		towerUpgrade: {
+			evalAvailable: function () {
+				return game.status === "active";
+			},
 			activeId: null,
 			drawing: {
 				shape: {
@@ -318,15 +280,89 @@ const ui = {
 	},
 	messages: {
 		gameOver: {
+			evalAvailable: function () {
+				return game.status === "gameover";
+			},
 			drawing: {
-				x: canvasCenter.x,
-				y: canvasCenter.y - 30,
-				fillStyle: "maroon",
-				font: "bold 24px sans-serif",
-				text: "THE GL😈😈PS ATE YOUR FACE!!",
-				textAlign: "center",
+				text: {
+					x: canvasCenter.x,
+					y: canvasCenter.y - 30,
+					fillStyle: "maroon",
+					font: "bold 24px sans-serif",
+					text: "THE GL😈😈PS ATE YOUR FACE!!",
+					textAlign: "center",
+				},
 			},
 		},
+		goldStash: {
+			evalAvailable: function () {
+				return game.status === "active" || game.status === "gameover";
+			},
+			drawing: {
+				text: {
+					x: 25,
+					y: 64,
+					fillStyle: "gold",
+					font: "bold 16px sans-serif",
+					textAlign: "center",
+					get text() {
+						return goldStash.total.toString();
+					},
+				},
+			},
+		},
+		playerHP: {
+			evalAvailable: function () {
+				return game.status === "active" || game.status === "gameover";
+			},
+			drawing: {
+				text: {
+					x: 25,
+					y: 64 + 18,
+					fillStyle: "#aaf0d1",
+					font: "bold 16px sans-serif",
+					textAlign: "center",
+					get text() {
+						return player.hp.toString();
+					},
+				},
+			},
+		},
+	},
+};
+
+const player = {
+	_hp: INITIAL_PLAYER_HP,
+	get hp() {
+		return this._hp;
+	},
+	set hp(value) {
+		this._hp = value;
+		if (this._hp <= 0) {
+			if (game.status !== "gameover") game.setStatus("gameover");
+		}
+	},
+	setHP(amount) {
+		if (amount < 0) {
+			return (this.hp = 0);
+		}
+		this.hp = this.convertToWhole(amount);
+	},
+	gainHP(amount) {
+		this.hp += this.convertToWhole(amount);
+	},
+	loseHP(amount) {
+		this.hp -= this.convertToWhole(amount);
+	},
+	convertToWhole(amount) {
+		return Math.floor(amount);
+	},
+	purchaseTowerUpgrade(tower) {
+		const purchaseSuccessful = goldStash.withdraw(tower.calculateUpgradeCost());
+		if (purchaseSuccessful) {
+			tower.upgrade();
+		}
+		return purchaseSuccessful;
 	},
 };
 
@@ -395,59 +431,9 @@ const summonTowers = (configSummon) => {
 	});
 };
 
-gameCanvas.addEventListener("click", (event) => {
-	const mousePosition = getMousePosition(event);
-	circles.forEach((circle) => {
-		if (isIntersectingCircle(mousePosition, circle)) {
-			const currentWaveGloops = gloops.filter(gloop => gloop.wave === configWave.currentWave);
-			const countGloops = currentWaveGloops.length;
-			if (countGloops > 0) {
-				const totalReward = configWave.earlyBonus * countGloops;
-				goldStash.deposit(totalReward)
-			}
-			nextWave();
-		}
-	});
-
-	roundRects.forEach((roundRect) => {
-		if (isIntersectingRect(mousePosition, roundRect)) {
-			if (roundRect.id === "start-game") {
-				game.setStatus("active");
-			}
-			if (roundRect.id === "play-again") {
-				game.setStatus("initial")
-			}
-		}
-	});
-
-	let wasTowerClicked = false;
-
-	for (const tower of towers) {
-		if (isIntersectingRect(mousePosition, tower)) {
-			wasTowerClicked = true;
-			const activeId = ui.buttons.towerUpgrade.activeId
-			const buttonIsActive = activeId !== null
-			if (buttonIsActive && activeId === tower.id) {
-				const purchaseCompleted = player.purchaseTowerUpgrade(tower)
-				break;
-			} else {
-					towers.map(tower => {
-						if (tower.id === activeId) {
-							tower.button = [];
-						}
-					})
-			}
-			tower.drawUpgradeButton()
-			ui.buttons.towerUpgrade.activeId = tower.id
-		}
-	}
-
-	if (!wasTowerClicked) clearTowerButtons() 
-});
-
 const clearTowerButtons = () => {
-	towers.forEach(tower => tower.button = [])
-}
+	towers.forEach((tower) => (tower.button = []));
+};
 
 const nextWave = () => {
 	if (configWave.nextWave > 1) {
@@ -480,70 +466,47 @@ const isWaveClear = (waveNumber) => {
 
 const populateCircles = () => {
 	if (circles.length === 0) {
-		const nextWaveButton = generateDrawing(
-			"Circle",
-			ui.buttons.nextWave.drawing.shape
-		);
-		circles.push(nextWaveButton);
+		if (ui.buttons.nextWave.evalAvailable()) {
+			const config = ui.buttons.nextWave.drawing.shape;
+			const drawing = generateDrawing("Circle", config);
+			circles.push(drawing);
+		}
 	}
 };
 
 const populateFillText = () => {
+	const elements = [
+		ui.messages.goldStash,
+		ui.messages.playerHP,
+		ui.buttons.start,
+		ui.messages.gameOver,
+		ui.buttons.playAgain,
+	];
+
 	fillText = [];
 	if (fillText.length === 0) {
-		if (game.status !== "initial") {
-			const drawingGoldStashText = generateDrawing(
-				"FillText",
-				goldStash.drawing
-			);
-			fillText.push(drawingGoldStashText);
-
-			const drawingPlayerHPText = generateDrawing("FillText", player.drawing);
-			fillText.push(drawingPlayerHPText);
-		}
-
-		if (game.status === "initial") {
-			const drawingStartButtonText = generateDrawing(
-				"FillText",
-				ui.buttons.start.drawing.text
-			);
-			fillText.push(drawingStartButtonText);
-		}
-
-		if (game.status === "gameover") {
-			const drawingGameOverText = generateDrawing(
-				"FillText",
-				ui.messages.gameOver.drawing
-			);
-			fillText.push(drawingGameOverText);
-
-			const drawingPlayAgainButtonText = generateDrawing(
-				"FillText",
-				ui.buttons.playAgain.drawing.text
-			);
-			fillText.push(drawingPlayAgainButtonText);
-		}
+		elements.forEach((element) => {
+			if (element.evalAvailable()) {
+				const config = element.drawing.text;
+				const drawing = generateDrawing("FillText", config);
+				fillText.push(drawing);
+			}
+		});
 	}
 };
 
 const populateRoundRects = () => {
+	const elements = [ui.buttons.start, ui.buttons.playAgain];
+
 	roundRects = [];
 	if (roundRects.length === 0) {
-		if (game.status === "initial") {
-			const drawingStartButton = generateDrawing(
-				"RoundRect",
-				ui.buttons.start.drawing.shape
-			);
-			roundRects.push(drawingStartButton);
-		}
-
-		if (game.status === "gameover") {
-			const drawingPlayAgainButton = generateDrawing(
-				"RoundRect",
-				ui.buttons.playAgain.drawing.shape
-			);
-			roundRects.push(drawingPlayAgainButton);
-		}
+		elements.forEach((element) => {
+			if (element.evalAvailable()) {
+				const config = element.drawing.shape;
+				const drawing = generateDrawing("RoundRect", config);
+				roundRects.push(drawing);
+			}
+		});
 	}
 };
 
@@ -599,3 +562,4 @@ const animationLoop = () => {
 };
 
 animationLoop();
+startEventListeners();
