@@ -63,6 +63,7 @@ const startEventListeners = () => {
 				if (buildButton) {
 					if (isIntersectingRect(mousePosition, buildButton)) {
 						const tower = { ...configTower };
+						goldStash.withdraw(tower.purchaseCost);
 						tower.x = location.position.x;
 						tower.y = location.position.y;
 						summonTower(tower);
