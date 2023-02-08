@@ -178,7 +178,7 @@ const summonTowers = (configSummon) => {
 };
 
 const generateTowerLocation = (configLocation) => {
-	const newLocation = new Rect(configLocation);
+	const newLocation = new TowerLocation(configLocation);
 	generatedTowerLocations.push(newLocation);
 };
 
@@ -189,9 +189,9 @@ const generateTowerLocations = (configGenerate) => {
 		const location = { ...configTowerLocation };
 		location.x = towerLocations[i].x;
 		location.y = towerLocations[i].y;
+		location.id = towerLocations[i].id;
 		newLocations.push(location);
 	}
-	// console.log(newLocations)
 	newLocations.forEach((location) => {
 		generateTowerLocation(location);
 	});

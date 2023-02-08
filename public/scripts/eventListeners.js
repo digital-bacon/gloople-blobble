@@ -55,6 +55,12 @@ const startEventListeners = () => {
 			}
 		}
 
+		for (const location of generatedTowerLocations) {
+			if (isIntersectingRect(mousePosition, location)) {
+				console.log(location.id, "was clicked")
+			}
+		}
+
 		if (!wasTowerClicked) clearTowerButtons();
 	});
 };
