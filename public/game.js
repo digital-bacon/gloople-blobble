@@ -218,6 +218,7 @@ const populateFillText = () => {
 		ui.buttons.start,
 		ui.messages.gameOver,
 		ui.buttons.playAgain,
+		ui.buttons.nextWave,
 	];
 
 	fillText = [];
