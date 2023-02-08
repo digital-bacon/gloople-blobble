@@ -91,7 +91,7 @@ class UserInterface {
 							height: 40,
 							radii: 10,
 							strokeStyle: "orange",
-							fillStyle: "#f06449",
+							fillStyle: "black",
 						},
 						text: {
 							x: 245 + 55,

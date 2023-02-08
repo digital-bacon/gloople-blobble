@@ -25,7 +25,7 @@ class TowerLocation {
 			}
 
 			if (canAffordUpgrade) {
-				configButton.fillStyle = "green"
+				configButton.fillStyle = "#f06449"
 			}
 			const button = new RoundRect(configButton);
 			this.button.push(button)
