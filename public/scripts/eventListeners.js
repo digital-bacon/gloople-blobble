@@ -63,12 +63,14 @@ const startEventListeners = () => {
 				if (buildButton) {
 					if (isIntersectingRect(mousePosition, buildButton)) {
 						const tower = { ...configTower };
-						goldStash.withdraw(tower.purchaseCost);
-						tower.x = location.position.x;
-						tower.y = location.position.y;
-						summonTower(tower);
-						location.towerId = tower.id;
-						clearBuildButtons();
+						if (goldStash.total >= tower.purchaseCost) {
+							goldStash.withdraw(tower.purchaseCost);
+							tower.x = location.position.x;
+							tower.y = location.position.y;
+							summonTower(tower);
+							location.towerId = tower.id;
+							clearBuildButtons();
+						}	
 					}
 				}
 				if (isIntersectingRect(mousePosition, location)) {
