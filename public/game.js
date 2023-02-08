@@ -82,6 +82,7 @@ const configTower = {
 	showRange: true,
 	projectileSize: 10,
 	attackDamage: 100,
+	purchaseCost: 50,
 	upgradeCost: 100,
 	level: INITIAL_TOWER_LEVEL,
 };

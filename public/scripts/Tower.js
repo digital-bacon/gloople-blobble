@@ -19,6 +19,7 @@ class Tower {
 		this.showRange = configObject.showRange;
 		this.button = configObject.button || [];
 		this.projectileSize = configObject.projectileSize;
+		this.purchaseCost = configObject.purchaseCost || 1;
 		this.target = null;
 		this.attackDamage = configObject.attackDamage || 1;
 		this.level = configObject.level || 1;
