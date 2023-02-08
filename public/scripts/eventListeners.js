@@ -62,11 +62,12 @@ const startEventListeners = () => {
 				const buildButton = location.button.length > 0 ? location.button[0] : null
 				if (buildButton) {
 					if (isIntersectingRect(mousePosition, buildButton)) {
-						console.log("button was clicked")
 						const tower = { ...configTower };
 						tower.x = location.position.x;
 						tower.y = location.position.y;
 						summonTower(tower);
+						location.towerId = tower.id;
+						clearBuildButtons();
 					}
 				}
 				if (isIntersectingRect(mousePosition, location)) {
