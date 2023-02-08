@@ -77,6 +77,37 @@ class UserInterface {
 						},
 					},
 				},
+				towerBuild: {
+					evalAvailable: function () {
+						return game.status === "active";
+					},
+					activeId: null,
+					drawing: {
+						shape: {
+							id: "tower-build",
+							x: 245,
+							y: 150,
+							width: 110,
+							height: 40,
+							radii: 10,
+							strokeStyle: "orange",
+							fillStyle: "black",
+						},
+						text: {
+							x: 245 + 55,
+							y: 150 + 25,
+							fillStyle: "black",
+							font: {
+								weight: "bold",
+								size: "14",
+								family: "sans-serif",
+							},
+							text: "Build⛏️🪚Tower",
+							textAlign: "center",
+							maxWidth: 106,
+						},
+					},
+				},
 				towerUpgrade: {
 					evalAvailable: function () {
 						return game.status === "active";

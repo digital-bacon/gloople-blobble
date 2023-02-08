@@ -54,7 +54,46 @@ const startEventListeners = () => {
 				}
 			}
 		}
-
 		if (!wasTowerClicked) clearTowerButtons();
+
+		let wasBuildLocationClicked = false;
+		if (ui.buttons.towerBuild.evalAvailable()) {
+			for (const location of generatedTowerLocations) {
+				const buildButton = location.button.length > 0 ? location.button[0] : null
+				if (buildButton) {
+					if (isIntersectingRect(mousePosition, buildButton)) {
+						const tower = { ...configTower };
+						if (goldStash.total >= tower.purchaseCost) {
+							goldStash.withdraw(tower.purchaseCost);
+							tower.x = location.position.x;
+							tower.y = location.position.y;
+							summonTower(tower);
+							location.towerId = tower.id;
+							clearBuildButtons();
+						}	
+					}
+				}
+				if (isIntersectingRect(mousePosition, location)) {
+					wasBuildLocationClicked = true;
+					const activeId = ui.buttons.towerBuild.activeId;
+					const buttonIsActive = activeId !== null;
+					if (buttonIsActive && activeId === location.id) {
+						// const purchaseCompleted = player.purchaseTowerUpgrade(tower);
+						break;
+					} else {
+						generatedTowerLocations.map((location) => {
+							if (location.id === activeId) {
+								location.button = [];
+							}
+						});
+					}
+					location.towerCost = configTower.purchaseCost;
+					location.drawBuildButton();
+					ui.buttons.towerBuild.activeId = location.id;
+					
+				}
+			}
+		}
+		if (!wasBuildLocationClicked) clearBuildButtons();
 	});
 };
