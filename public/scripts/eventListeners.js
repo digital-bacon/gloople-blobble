@@ -35,12 +35,23 @@ const startEventListeners = () => {
 
 		if (ui.buttons.towerUpgrade.evalAvailable()) {
 			for (const tower of towers) {
+				const upgradeButton = tower.button.length > 0 ? tower.button[0] : null
+				if (upgradeButton) {
+					if (isIntersectingRect(mousePosition, upgradeButton)) {
+						wasTowerClicked = true
+						const purchaseCompleted = player.purchaseTowerUpgrade(tower);
+						if (purchaseCompleted) {
+							clearTowerButtons();
+						}
+						break;
+					}
+				}
 				if (isIntersectingRect(mousePosition, tower)) {
 					wasTowerClicked = true;
 					const activeId = ui.buttons.towerUpgrade.activeId;
 					const buttonIsActive = activeId !== null;
 					if (buttonIsActive && activeId === tower.id) {
-						const purchaseCompleted = player.purchaseTowerUpgrade(tower);
+						// const purchaseCompleted = player.purchaseTowerUpgrade(tower);
 						break;
 					} else {
 						towers.map((tower) => {
