@@ -29,7 +29,6 @@ const waypoints = [
 const circles = [];
 const towers = [];
 let fillText = [];
-let buttons = [];
 let gloops = [];
 let projectiles = [];
 let rects = [];
@@ -290,6 +289,7 @@ const ui = {
 			},
 		},
 		towerUpgrade: {
+			activeId: null,
 			drawing: {
 				shape: {
 					id: "tower-upgrade",
@@ -298,14 +298,18 @@ const ui = {
 					width: 110,
 					height: 40,
 					radii: 10,
-					strokeStyle: "neon",
-					fillStyle: "neon",
+					strokeStyle: "red",
+					fillStyle: "black",
 				},
 				text: {
 					x: 0,
 					y: 200 + 10,
 					fillStyle: "black",
-					font: "bold 16px sans-serif",
+					font: {
+						weight: "bold",
+						size: "16",
+						family: "sans-serif",
+					},
 					text: "Upgrade!",
 					textAlign: "center",
 				},
@@ -416,26 +420,34 @@ gameCanvas.addEventListener("click", (event) => {
 		}
 	});
 
-	towers.forEach((tower) => {
-		if (isIntersectingRect(mousePosition, tower)) {
-			buttons = []
-			const towerUpgrade = {}
-			const button = generateDrawing(
-				"RoundRect",
-				ui.buttons.towerUpgrade.drawing.shape
-			);
-			towerUpgrade.button = button
-			const text = generateDrawing(
-				"FillText",
-				ui.buttons.towerUpgrade.drawing.text
-			);
-			towerUpgrade.text = text
-			buttons.push(towerUpgrade)
-			const purchaseCompleted = player.purchaseTowerUpgrade(tower)
-		}
-	});
+	let wasTowerClicked = false;
 
+	for (const tower of towers) {
+		if (isIntersectingRect(mousePosition, tower)) {
+			wasTowerClicked = true;
+			const activeId = ui.buttons.towerUpgrade.activeId
+			const buttonIsActive = activeId !== null
+			if (buttonIsActive && activeId === tower.id) {
+				const purchaseCompleted = player.purchaseTowerUpgrade(tower)
+				break;
+			} else {
+					towers.map(tower => {
+						if (tower.id === activeId) {
+							tower.button = [];
+						}
+					})
+			}
+			tower.drawUpgradeButton()
+			ui.buttons.towerUpgrade.activeId = tower.id
+		}
+	}
+
+	if (!wasTowerClicked) clearTowerButtons() 
 });
+
+const clearTowerButtons = () => {
+	towers.forEach(tower => tower.button = [])
+}
 
 const nextWave = () => {
 	if (configWave.nextWave > 1) {
@@ -573,10 +585,6 @@ const animationLoop = () => {
 		update(gloops);
 		update(projectiles);
 		update(fillText);
-		const towerButtons = buttons.map(button => button.button)
-		update(towerButtons);
-		const towerButtonsText = buttons.map(button => button.text)
-		update(towerButtonsText);
 	}
 
 	if (game.status === "gameover") {
