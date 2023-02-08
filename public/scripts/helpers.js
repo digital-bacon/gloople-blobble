@@ -78,9 +78,13 @@ const getGameStatusTypes = () => {
 
 const getTowerLocations = () => {
 	return [
-		{ x: 135, y: 135 },
-		{ x: 275, y: 150 },
-		{ x: 410, y: 210 },
+		{ id: 1, x: 40, y: 162},
+		{ id: 2, x: 125, y: 125},
+		{ id: 3, x: 163, y: 125},
+		{ id: 4, x: 243, y: 202},
+		{ id: 5, x: 284, y: 202},
+		{ id: 6, x: 325, y: 202},
+		{ id: 7, x: 410, y: 202},
 	];
 };
 

@@ -1,9 +1,10 @@
 const INITIAL_WAVE_GLOOPS = 1;
 const INITIAL_WAVE = 0;
-const INITIAL_GAME_STATUS = "initial";
+const INITIAL_GAME_STATUS = "active";
 const INITIAL_PLAYER_HP = 10;
 const INITIAL_GOLD_STASH_TOTAL = 0;
 const INITIAL_TOWER_LEVEL = 1;
+const TOWER_LOCATION_SIZE = 32;
 
 const gameCanvas = document.getElementById("gameCanvas");
 const ctx = gameCanvas.getContext("2d");
@@ -70,8 +71,8 @@ const configTower = {
 	ctx,
 	x: 135,
 	y: 135,
-	width: 50,
-	height: 50,
+	width: TOWER_LOCATION_SIZE,
+	height: TOWER_LOCATION_SIZE,
 	fillColor: "transparent",
 	strokeColor: "cyan",
 	towersIndex: towers.length,
@@ -158,9 +159,6 @@ const summonTowers = (configSummon) => {
 		const tower = { ...configTower };
 		tower.x = towerLocations[i].x;
 		tower.y = towerLocations[i].y;
-		if (i === 1) {
-			tower.attackRadius = 90;
-		}
 		newTowers.push(tower);
 	}
 	newTowers.forEach((tower) => {
