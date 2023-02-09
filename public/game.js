@@ -1,18 +1,17 @@
 const INITIAL_WAVE_GLOOPS = 1;
 const INITIAL_WAVE = 0;
-const INITIAL_GAME_STATUS = "active";
-const INITIAL_PLAYER_HP = 10;
-const INITIAL_GOLD_STASH_TOTAL = 0;
+const INITIAL_GAME_STATUS = "initial";
+const INITIAL_PLAYER_HP = 1000;
+const INITIAL_GOLD_STASH_TOTAL = 5000;
 const INITIAL_TOWER_LEVEL = 1;
-const TOWER_LOCATION_SIZE = 32;
+const TOWER_LOCATION_SIZE = 160;
 
 const gameCanvas = document.getElementById("gameCanvas");
 const ctx = gameCanvas.getContext("2d");
 
 const gameStatusTypes = getGameStatusTypes();
-const towerLocations = getTowerLocations();
+const towerLocations = getTowerLocations(TOWER_LOCATION_SIZE);
 const waypoints = getWayPoints();
-waypoints.reverse()
 const canvas = getCanvasProperties(gameCanvas);
 const screenCenter = getScreenCenter();
 
@@ -38,10 +37,9 @@ const configGloop = {
 	ctx,
 	x: waypoints[0].x,
 	y: waypoints[0].y,
-	// radius: 15,
 	img: imgGloop,
-	width: 30,
-	height: 30,
+	width: 70,
+	height: 70,
 	fillColor: "black",
 	strokeColor: "yellow",
 	waypointIndex: 0,
@@ -77,7 +75,7 @@ const configGloop = {
 };
 
 const imgTower = new Image();
-imgTower.src = "static/tower.png";
+imgTower.src = "static/tower_magic.png";
 
 const configTower = {
 	ctx,
@@ -89,7 +87,7 @@ const configTower = {
 	fillColor: "transparent",
 	strokeColor: "cyan",
 	towersIndex: towers.length,
-	attackRadius: 60,
+	attackRadius: 100,
 	attacksMultiple: false,
 	showRange: true,
 	projectileSize: 10,

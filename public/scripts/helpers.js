@@ -78,27 +78,18 @@ const getGameStatusTypes = () => {
 	return ["initial", "active", "gameover"];
 };
 
-const getTowerLocations = () => {
-	return [
-		{ towerID: null, id: 1, x: 40, y: 162 },
-		{ towerID: null, id: 2, x: 125, y: 125 },
-		{ towerID: null, id: 3, x: 163, y: 125 },
-		{ towerID: null, id: 4, x: 243, y: 202 },
-		{ towerID: null, id: 5, x: 284, y: 202 },
-		{ towerID: null, id: 6, x: 325, y: 202 },
-		{ towerID: null, id: 7, x: 410, y: 202 },
-	];
+const getTowerLocations = (locationSize) => {
+	const locations = [
+		{"x":278,"y":550},{"x":408,"y":335},{"x":566,"y":550},{"x":887,"y":390}]
+	const xOffset = locationSize / 2
+	const yOffset = locationSize
+	locations.map(location => {
+		location.x = location.x - xOffset
+		location.y = location.y - yOffset
+	})
+	return locations;
 };
 
 const getWayPoints = () => {
-	return [
-		{ x: 0, y: 217 },
-		{ x: 98, y: 217 },
-		{ x: 98, y: 97 },
-		{ x: 224, y: 97 },
-		{ x: 224, y: 254 },
-		{ x: 381, y: 254 },
-		{ x: 381, y: 181 },
-		{ x: 667, y: 181 },
-	];
+	return [{"x":-49,"y":403},{"x":747,"y":403},{"x":790,"y":445},{"x":825,"y":460},{"x":935,"y":464},{"x":973,"y":458},{"x":995,"y":449},{"x":1028,"y":417},{"x":1047,"y":354},{"x":1059,"y":303},{"x":1085,"y":270},{"x":1106,"y":249},{"x":1139,"y":242},{"x":1189,"y":237},{"x":1339,"y":234}]
 };

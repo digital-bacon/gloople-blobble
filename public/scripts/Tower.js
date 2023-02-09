@@ -5,7 +5,7 @@ class Tower {
 			y: configObject.y,
 			center: {
 				x: configObject.x + configObject.width / 2,
-				y: configObject.y + configObject.height / 2,
+				y: configObject.y + configObject.height / 2 + configObject.height / 4,
 			},
 		};
 		this.id = configObject.id || Math.random().toString(36).substr(2);
@@ -136,17 +136,19 @@ class Tower {
 		};
 
 		this.attack = function (gloop) {
-			gloop.loseHP(1);
+			gloop.loseHP(this.calculateAttackDamage());
 		};
 
 		this.canAttack = function (gloop) {
-			const xGloop = gloop.position.x;
-			const yGloop = gloop.position.y;
+			const xGloop = gloop.position.center.x - gloop.width / 2;
+			const yGloop = gloop.position.center.y - gloop.height / 2;
 			const xDelta = Math.abs(this.position.center.x - xGloop);
 			const yDelta = Math.abs(this.position.center.y - yGloop);
 
+			// const distance =
+			// 	Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloop.width / 4;
 			const distance =
-				Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloop.width / 4;
+				Math.sqrt(xDelta * xDelta + yDelta * yDelta);
 			// const distance =
 			// 	Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloop.radius;
 
