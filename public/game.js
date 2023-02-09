@@ -75,10 +75,14 @@ const configGloop = {
 	},
 };
 
+const imgTower = new Image();
+imgTower.src = "static/tower.png";
+
 const configTower = {
 	ctx,
 	x: 135,
 	y: 135,
+	img: imgTower,
 	width: TOWER_LOCATION_SIZE,
 	height: TOWER_LOCATION_SIZE,
 	fillColor: "transparent",
