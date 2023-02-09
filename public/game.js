@@ -12,7 +12,6 @@ const ctx = gameCanvas.getContext("2d");
 const gameStatusTypes = getGameStatusTypes();
 const towerLocations = getTowerLocations();
 const waypoints = getWayPoints();
-waypoints.reverse()
 const canvas = getCanvasProperties(gameCanvas);
 const screenCenter = getScreenCenter();
 
@@ -38,7 +37,6 @@ const configGloop = {
 	ctx,
 	x: waypoints[0].x,
 	y: waypoints[0].y,
-	// radius: 15,
 	img: imgGloop,
 	width: 30,
 	height: 30,
@@ -116,7 +114,7 @@ const configWave = {
 	hpDefault: 50,
 	hpMultiplier: 1.025,
 	nextWave: INITIAL_WAVE + 1,
-	speedDefault: 1,
+	speedDefault: 3,
 	speedMultiplier: 0.2,
 	totalGloopsMultiplier: 0.25,
 	_totalGloops: INITIAL_WAVE_GLOOPS,
@@ -135,7 +133,7 @@ const yOffset = 0; // because the canvas is at the top of the page
 const trackedArray = [];
 document.onclick = (event) => {
 	trackedArray.push(getMousePosition(event));
-	// console.log(JSON.stringify(trackedArray));
+	console.log(JSON.stringify(trackedArray));
 };
 
 const cleanupGloops = () => {
