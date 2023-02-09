@@ -32,7 +32,6 @@ const startEventListeners = () => {
 		});
 
 		let wasTowerClicked = false;
-
 		if (ui.buttons.towerUpgrade.evalAvailable()) {
 			for (const tower of towers) {
 				const upgradeButton = tower.button.length > 0 ? tower.button[0] : null
@@ -70,39 +69,41 @@ const startEventListeners = () => {
 		let wasBuildLocationClicked = false;
 		if (ui.buttons.towerBuild.evalAvailable()) {
 			for (const location of locations) {
-				const buildButton = location.button.length > 0 ? location.button[0] : null
-				if (buildButton) {
-					if (isIntersectingRect(mousePosition, buildButton)) {
-						const tower = { ...configTower };
-						if (goldStash.total >= tower.purchaseCost) {
-							goldStash.withdraw(tower.purchaseCost);
-							tower.x = location.position.x;
-							tower.y = location.position.y;
-							summonTower(tower);
-							location.towerId = tower.id;
-							location.destroyMe = true;
-							clearBuildButtons();
-						}	
+				if (location.towerId === null) {
+					const buildButton = location.button.length > 0 ? location.button[0] : null
+					if (buildButton) {
+						if (isIntersectingRect(mousePosition, buildButton)) {
+							const tower = { ...configTower };
+							if (goldStash.total >= tower.purchaseCost) {
+								goldStash.withdraw(tower.purchaseCost);
+								tower.x = location.position.x;
+								tower.y = location.position.y;
+								const newTower = summonTower(tower);
+								location.towerId = newTower.id;
+								clearBuildButtons();
+								break;
+							}	
+						}
 					}
-				}
-				if (isIntersectingRect(mousePosition, location)) {
-					wasBuildLocationClicked = true;
-					const activeId = ui.buttons.towerBuild.activeId;
-					const buttonIsActive = activeId !== null;
-					if (buttonIsActive && activeId === location.id) {
-						// const purchaseCompleted = player.purchaseTowerUpgrade(tower);
-						break;
-					} else {
-						locations.map((location) => {
-							if (location.id === activeId) {
-								location.button = [];
-							}
-						});
+					if (isIntersectingRect(mousePosition, location)) {
+						wasBuildLocationClicked = true;
+						const activeId = ui.buttons.towerBuild.activeId;
+						const buttonIsActive = activeId !== null;
+						if (buttonIsActive && activeId === location.id) {
+							// const purchaseCompleted = player.purchaseTowerUpgrade(tower);
+							break;
+						} else {
+							locations.map((location) => {
+								if (location.id === activeId) {
+									location.button = [];
+								}
+							});
+						}
+						location.towerCost = configTower.purchaseCost;
+						location.drawBuildButton();
+						ui.buttons.towerBuild.activeId = location.id;
+						
 					}
-					location.towerCost = configTower.purchaseCost;
-					location.drawBuildButton();
-					ui.buttons.towerBuild.activeId = location.id;
-					
 				}
 			}
 		}
