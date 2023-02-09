@@ -332,6 +332,17 @@ const animationLoop = () => {
 
 	requestAnimationFrame(animationLoop);
 
+	const img = new Image(); 
+	img.onload = () => {
+    ctx.drawImage(img, 200, 200);
+    ctx.beginPath();
+  };
+	img.src = "static/gloop.png"; 
+	//document.querySelector("#container").appendChild(img)
+
+	// console.log(img)
+
+
 	if (game.status === "initial") {
 		update(roundRects);
 		update(fillText);
