@@ -31,23 +31,31 @@ class Tower {
 		};
 
 		this.calculateAttackRadius = function () {
-			const total = Math.floor(this.attackRadius + ((this.level) * this.multiplier.attackRadius))
-			return total
-		}
+			const total = Math.floor(
+				this.attackRadius + this.level * this.multiplier.attackRadius
+			);
+			return total;
+		};
 
 		this.calculateAttackDamage = function () {
-			const total = Math.floor( this.attackDamage + (this.attackDamage * ((this.level) * this.multiplier.attackDamage)))
-			return total
-		}
+			const total = Math.floor(
+				this.attackDamage +
+					this.attackDamage * (this.level * this.multiplier.attackDamage)
+			);
+			return total;
+		};
 
 		this.calculateUpgradeCost = function () {
-			const total = Math.floor( this.upgradeCost + (this.upgradeCost * ((this.level) * this.multiplier.upgradeCost)))
-			return total
-		}
+			const total = Math.floor(
+				this.upgradeCost +
+					this.upgradeCost * (this.level * this.multiplier.upgradeCost)
+			);
+			return total;
+		};
 
 		this.upgrade = function () {
-			this.level++
-		}
+			this.level++;
+		};
 
 		this.createProjectile = function (target) {
 			const configProjectile = {
@@ -80,22 +88,26 @@ class Tower {
 		};
 
 		this.drawUpgradeButton = function () {
-			const canAffordUpgrade = goldStash.total >= this.calculateUpgradeCost()
+			const canAffordUpgrade = goldStash.total >= this.calculateUpgradeCost();
 			const configButton = {
 				...ui.buttons.towerUpgrade.drawing.shape,
-				x: this.position.center.x - ui.buttons.towerUpgrade.drawing.shape.width / 2,
-				y: this.position.center.y - ui.buttons.towerUpgrade.drawing.shape.height / 2,
-			}
+				x:
+					this.position.center.x -
+					ui.buttons.towerUpgrade.drawing.shape.width / 2,
+				y:
+					this.position.center.y -
+					ui.buttons.towerUpgrade.drawing.shape.height / 2,
+			};
 
 			if (canAffordUpgrade) {
-				configButton.fillStyle = "green"
+				configButton.fillStyle = "green";
 			}
 			const button = new RoundRect(configButton);
-			this.button.push(button)
+			this.button.push(button);
 			button.render();
 			const configFont = {
 				...ui.buttons.towerUpgrade.drawing.text.font,
-			}
+			};
 
 			const configText = {
 				...ui.buttons.towerUpgrade.drawing.text,
@@ -104,12 +116,11 @@ class Tower {
 				font: `${configFont.weight} ${configFont.size}px ${configFont.family}`,
 				fillStyle: "white",
 				text: `LVL. ${this.level + 1} 💰${this.calculateUpgradeCost()}`,
-			}
+			};
 
 			const text = new FillText(configText);
-			this.button.push(text)
+			this.button.push(text);
 			text.render();
-
 		};
 
 		this.detectGloop = function () {
@@ -134,7 +145,9 @@ class Tower {
 			const yDelta = Math.abs(this.position.center.y - yGloop);
 
 			const distance =
-				Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloop.radius;
+				Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloop.width / 4;
+			// const distance =
+			// 	Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloop.radius;
 
 			if (distance <= this.calculateAttackRadius()) {
 				return true;

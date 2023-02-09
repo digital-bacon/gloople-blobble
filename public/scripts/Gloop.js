@@ -3,8 +3,15 @@ class Gloop {
 		this.position = {
 			x: configObject.x,
 			y: configObject.y,
+			center: {
+				x: configObject.x + configObject.width / 2,
+				y: configObject.y + configObject.height / 2,
+			},
 		};
-		this.radius = configObject.radius;
+		// this.radius = configObject.radius;
+		this.width = configObject.width;
+		this.height = configObject.height;
+		this.img = configObject.img;
 		this.color = configObject.fillColor;
 		this.stroke = configObject.strokeColor;
 		this.speed = configObject.speed;
@@ -70,15 +77,23 @@ class Gloop {
 		};
 
 		this.render = function () {
-			if (this.radius > 0) {
-				ctx.beginPath();
-				ctx.strokeStyle = this.stroke;
-				ctx.fillStyle = this.color;
-				ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
-				ctx.fill();
-				ctx.stroke();
-				ctx.closePath();
-			}
+			// if (this.radius > 0) {
+			// 	ctx.beginPath();
+			// 	ctx.strokeStyle = this.stroke;
+			// 	ctx.fillStyle = this.color;
+			// 	ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
+			// 	ctx.fill();
+			// 	ctx.stroke();
+			// 	ctx.closePath();
+			// }
+			ctx.drawImage(
+				this.img,
+				this.position.x,
+				this.position.y,
+				this.width,
+				this.height
+			);
+			ctx.beginPath();
 		};
 		return this;
 	}

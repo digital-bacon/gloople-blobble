@@ -30,11 +30,17 @@ let rects = [];
 let roundRects = [];
 let towers = [];
 
+const imgGloop = new Image();
+imgGloop.src = "static/gloop.png";
+
 const configGloop = {
 	ctx,
 	x: waypoints[0].x,
 	y: waypoints[0].y,
-	radius: 15,
+	// radius: 15,
+	img: imgGloop,
+	width: 30,
+	height: 30,
 	fillColor: "black",
 	strokeColor: "yellow",
 	waypointIndex: 0,
@@ -102,7 +108,7 @@ const configWave = {
 	currentWave: INITIAL_WAVE,
 	earlyBonus: 100,
 	goldMultiplier: 2,
-	hpDefault: 5,
+	hpDefault: 50,
 	hpMultiplier: 1.025,
 	nextWave: INITIAL_WAVE + 1,
 	speedDefault: 1,
@@ -356,7 +362,6 @@ const animationLoop = () => {
 
 	requestAnimationFrame(animationLoop);
 
-	update(images);
 	if (game.status === "initial") {
 		update(roundRects);
 		update(fillText);

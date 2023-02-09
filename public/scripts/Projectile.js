@@ -17,8 +17,8 @@ class Projectile {
 			this.destroyMe = true;
 		};
 		this.update = function () {
-			let xMoveTo = this.target.position.x;
-			let yMoveTo = this.target.position.y;
+			let xMoveTo = this.target.position.x + this.target.width / 2;
+			let yMoveTo = this.target.position.y + this.target.height / 2;
 			let xDelta = xMoveTo - this.position.x;
 			let yDelta = yMoveTo - this.position.y;
 			const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
@@ -30,8 +30,8 @@ class Projectile {
 			this.render();
 
 			const reachedTarget = () => {
-				const distanceToTarget = distance - this.target.radius;
-				const reachedTarget = distanceToTarget <= this.target.radius;
+				const distanceToTarget = distance - this.target.width / 2;
+				const reachedTarget = distanceToTarget <= this.target.width / 2;
 				return reachedTarget;
 			};
 
