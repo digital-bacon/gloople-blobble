@@ -4,7 +4,7 @@ const INITIAL_GAME_STATUS = "active";
 const INITIAL_PLAYER_HP = 10;
 const INITIAL_GOLD_STASH_TOTAL = 0;
 const INITIAL_TOWER_LEVEL = 1;
-const TOWER_LOCATION_SIZE = 32;
+const TOWER_LOCATION_SIZE = 160;
 
 const gameCanvas = document.getElementById("gameCanvas");
 const ctx = gameCanvas.getContext("2d");
@@ -31,15 +31,15 @@ let roundRects = [];
 let towers = [];
 
 const imgGloop = new Image();
-imgGloop.src = "static/gloop_eyeball_bomb.png";
+imgGloop.src = "static/gloop_eyeball_bomb_reversed.png";
 
 const configGloop = {
 	ctx,
 	x: waypoints[0].x,
 	y: waypoints[0].y,
 	img: imgGloop,
-	width: 30,
-	height: 30,
+	width: 70,
+	height: 70,
 	fillColor: "black",
 	strokeColor: "yellow",
 	waypointIndex: 0,
@@ -75,7 +75,7 @@ const configGloop = {
 };
 
 const imgTower = new Image();
-imgTower.src = "static/tower.png";
+imgTower.src = "static/tower_magic.png";
 
 const configTower = {
 	ctx,
