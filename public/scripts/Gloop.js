@@ -61,6 +61,8 @@ class Gloop {
 				let yTravelDistance = (yMoveTo - this.position.y) / moves || 0;
 				this.position.x += xTravelDistance;
 				this.position.y += yTravelDistance;
+				this.position.center.x += xTravelDistance;
+				this.position.center.y += yTravelDistance;
 				this.render();
 
 				const reachedWaypoint = () => {
@@ -83,6 +85,12 @@ class Gloop {
 			ctx.beginPath();
 			ctx.drawImage(
 				this.img,
+				this.position.x,
+				this.position.y,
+				this.width,
+				this.height
+			);
+			ctx.strokeRect(
 				this.position.x,
 				this.position.y,
 				this.width,

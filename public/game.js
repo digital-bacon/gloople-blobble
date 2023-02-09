@@ -1,8 +1,8 @@
 const INITIAL_WAVE_GLOOPS = 1;
 const INITIAL_WAVE = 0;
-const INITIAL_GAME_STATUS = "active";
-const INITIAL_PLAYER_HP = 10;
-const INITIAL_GOLD_STASH_TOTAL = 0;
+const INITIAL_GAME_STATUS = "initial";
+const INITIAL_PLAYER_HP = 1000;
+const INITIAL_GOLD_STASH_TOTAL = 5000;
 const INITIAL_TOWER_LEVEL = 1;
 const TOWER_LOCATION_SIZE = 160;
 
@@ -31,7 +31,7 @@ let roundRects = [];
 let towers = [];
 
 const imgGloop = new Image();
-imgGloop.src = "static/gloop_eyeball_bomb_reversed.png";
+imgGloop.src = "static/gloop_eyeball_bomb.png";
 
 const configGloop = {
 	ctx,
@@ -87,7 +87,7 @@ const configTower = {
 	fillColor: "transparent",
 	strokeColor: "cyan",
 	towersIndex: towers.length,
-	attackRadius: 90,
+	attackRadius: 100,
 	attacksMultiple: false,
 	showRange: true,
 	projectileSize: 10,
@@ -114,7 +114,7 @@ const configWave = {
 	hpDefault: 50,
 	hpMultiplier: 1.025,
 	nextWave: INITIAL_WAVE + 1,
-	speedDefault: 3,
+	speedDefault: 1,
 	speedMultiplier: 0.2,
 	totalGloopsMultiplier: 0.25,
 	_totalGloops: INITIAL_WAVE_GLOOPS,
@@ -133,7 +133,7 @@ const yOffset = 0; // because the canvas is at the top of the page
 const trackedArray = [];
 document.onclick = (event) => {
 	trackedArray.push(getMousePosition(event));
-	console.log(JSON.stringify(trackedArray));
+	// console.log(JSON.stringify(trackedArray));
 };
 
 const cleanupGloops = () => {
