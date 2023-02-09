@@ -12,6 +12,7 @@ const ctx = gameCanvas.getContext("2d");
 const gameStatusTypes = getGameStatusTypes();
 const towerLocations = getTowerLocations();
 const waypoints = getWayPoints();
+waypoints.reverse()
 const canvas = getCanvasProperties(gameCanvas);
 const screenCenter = getScreenCenter();
 
@@ -31,7 +32,7 @@ let roundRects = [];
 let towers = [];
 
 const imgGloop = new Image();
-imgGloop.src = "static/gloop.png";
+imgGloop.src = "static/gloop_eyeball_bomb.png";
 
 const configGloop = {
 	ctx,
