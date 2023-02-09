@@ -180,6 +180,7 @@ const summonGloops = (configSummon) => {
 const summonTower = (configTower) => {
 	const newTower = new Tower(configTower);
 	towers.push(newTower);
+	return newTower
 };
 
 const summonTowers = (configSummon) => {
@@ -364,16 +365,14 @@ const animationLoop = () => {
 	populateTowerLocations();
 	populateImages();
 
-	requestAnimationFrame(animationLoop);
-
 	if (game.status === "initial") {
 		update(roundRects);
 		update(fillText);
 	}
 
 	if (game.status === "active") {
-		update(locations);
 		update(towers);
+		update(locations);
 		update(circles);
 		update(gloops);
 		update(projectiles);
@@ -386,6 +385,8 @@ const animationLoop = () => {
 		render(roundRects);
 		render(fillText);
 	}
+
+	requestAnimationFrame(animationLoop);
 
 	cleanupGloops();
 	cleanupTowerLocations();
