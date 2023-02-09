@@ -21,13 +21,14 @@ const goldStash = new GoldStash();
 const player = new Player();
 
 let circles = [];
-let towers = [];
 let fillText = [];
 let gloops = [];
+let images = [];
+let locations = [];
 let projectiles = [];
 let rects = [];
 let roundRects = [];
-let locations = [];
+let towers = [];
 
 const configGloop = {
 	ctx,
@@ -256,6 +257,24 @@ const populateCircles = () => {
 	}
 };
 
+const populateImages = () => {
+	if (images.length === 0) {
+		//if (ui.buttons.nextWave.evalAvailable()) {
+			// const config = ui.buttons.nextWave.drawing.shape;
+			const img = new Image(); 
+			img.src= "static/gloop.png";
+			const config = {
+				x: 200,
+				y: 200,
+				img: img,
+			}
+			const drawing = generateDrawing("Image", config);
+			images.push(drawing);
+			console.log(images)
+		//}
+	}
+};
+
 const populateFillText = () => {
 	const elements = [
 		ui.messages.goldStash,
@@ -329,19 +348,9 @@ const animationLoop = () => {
 	populateRoundRects();
 	populateTowers();
 	populateTowerLocations();
+	populateImages();
 
 	requestAnimationFrame(animationLoop);
-
-	const img = new Image(); 
-	img.onload = () => {
-    ctx.drawImage(img, 200, 200);
-    ctx.beginPath();
-  };
-	img.src = "static/gloop.png"; 
-	//document.querySelector("#container").appendChild(img)
-
-	// console.log(img)
-
 
 	if (game.status === "initial") {
 		update(roundRects);
@@ -367,7 +376,10 @@ const animationLoop = () => {
 	cleanupGloops();
 	cleanupTowerLocations();
 	cleanupProjectiles();
+
+	update(images)
 };
+
 
 animationLoop();
 startEventListeners();

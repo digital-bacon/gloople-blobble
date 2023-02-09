@@ -43,6 +43,8 @@ const generateDrawing = (drawingType, config) => {
 	switch (drawingType) {
 		case "Circle":
 			return new Circle(config);
+		case "Image":
+			return new CanvasImage(config);
 		case "FillText":
 			return new FillText(config);
 		case "Rect":
