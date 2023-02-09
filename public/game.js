@@ -30,11 +30,17 @@ let rects = [];
 let roundRects = [];
 let towers = [];
 
+const imgGloop = new Image();
+imgGloop.src = "static/gloop.png";
+
 const configGloop = {
 	ctx,
 	x: waypoints[0].x,
 	y: waypoints[0].y,
-	radius: 15,
+	// radius: 15,
+	img: imgGloop,
+	width: 30,
+	height: 30,
 	fillColor: "black",
 	strokeColor: "yellow",
 	waypointIndex: 0,
@@ -102,7 +108,7 @@ const configWave = {
 	currentWave: INITIAL_WAVE,
 	earlyBonus: 100,
 	goldMultiplier: 2,
-	hpDefault: 5,
+	hpDefault: 50,
 	hpMultiplier: 1.025,
 	nextWave: INITIAL_WAVE + 1,
 	speedDefault: 1,
@@ -133,7 +139,9 @@ const cleanupGloops = () => {
 };
 
 const cleanupTowerLocations = () => {
-	const survivingLocations = locations.filter((location) => location.destroyMe === false);
+	const survivingLocations = locations.filter(
+		(location) => location.destroyMe === false
+	);
 	locations = [...survivingLocations];
 };
 
@@ -206,14 +214,14 @@ const generateTowerLocations = (configGenerate) => {
 
 const clearBuildButtons = () => {
 	locations.forEach((location) => {
-		location.button = [] 
+		location.button = [];
 		ui.buttons.towerBuild.activeId = null;
 	});
 };
 
 const clearTowerButtons = () => {
 	towers.forEach((tower) => {
-		tower.button = []
+		tower.button = [];
 		ui.buttons.towerUpgrade.activeId = null;
 	});
 };
@@ -259,19 +267,17 @@ const populateCircles = () => {
 
 const populateImages = () => {
 	if (images.length === 0) {
-		//if (ui.buttons.nextWave.evalAvailable()) {
-			// const config = ui.buttons.nextWave.drawing.shape;
-			const img = new Image(); 
-			img.src= "static/gloop.png";
-			const config = {
-				x: 200,
-				y: 200,
-				img: img,
-			}
-			const drawing = generateDrawing("Image", config);
-			images.push(drawing);
-			console.log(images)
-		//}
+		const img = new Image();
+		img.src = "static/gloop.png";
+		const config = {
+			x: 200,
+			y: 200,
+			img: img,
+			width: 30,
+			height: 30,
+		};
+		const drawing = generateDrawing("Image", config);
+		images.push(drawing);
 	}
 };
 
@@ -313,7 +319,9 @@ const populateRoundRects = () => {
 
 const populateTowers = () => {
 	if (towers.length === 0) {
-		const initialTowers = towerLocations.filter(location => location.id === 2);
+		const initialTowers = towerLocations.filter(
+			(location) => location.id === 2
+		);
 		const configSummon = {
 			configTower,
 			towerLocations: initialTowers,
@@ -324,7 +332,9 @@ const populateTowers = () => {
 
 const populateTowerLocations = () => {
 	if (locations.length === 0) {
-		const initialLocations = towerLocations.filter(location => location.id !== 2);
+		const initialLocations = towerLocations.filter(
+			(location) => location.id !== 2
+		);
 		const configGenerate = {
 			configTowerLocation,
 			towerLocations: initialLocations,
@@ -376,10 +386,7 @@ const animationLoop = () => {
 	cleanupGloops();
 	cleanupTowerLocations();
 	cleanupProjectiles();
-
-	update(images)
 };
-
 
 animationLoop();
 startEventListeners();

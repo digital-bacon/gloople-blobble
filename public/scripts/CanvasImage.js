@@ -4,20 +4,23 @@ class CanvasImage {
 			x: configObject.x,
 			y: configObject.y,
 		};
-		// this.src = configObject.src;
 		this.img = configObject.img;
+		this.width = configObject.width;
+		this.height = configObject.height;
 
 		this.update = function () {
 			this.render();
 		};
 
 		this.render = function () {
-			// const img = new Image(); 
-			this.img.onload = () => {
-				ctx.drawImage(this.img, 0, 0);
-				ctx.beginPath();
-			};
-			// img.src = this.src; 
+			ctx.drawImage(
+				this.img,
+				this.position.x,
+				this.position.y,
+				this.width,
+				this.height
+			);
+			ctx.beginPath();
 		};
 		return this;
 	}
