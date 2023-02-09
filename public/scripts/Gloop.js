@@ -1,14 +1,17 @@
 class Gloop {
 	constructor(configObject) {
+		this.offset = {
+			x: configObject.width / 2,
+			y: configObject.height / 2,
+		};
 		this.position = {
-			x: configObject.x,
-			y: configObject.y,
+			x: configObject.x - this.offset.x,
+			y: configObject.y - this.offset.y,
 			center: {
-				x: configObject.x + configObject.width / 2,
-				y: configObject.y + configObject.height / 2,
+				x: configObject.x + this.offset.x,
+				y: configObject.y + this.offset.y,
 			},
 		};
-		// this.radius = configObject.radius;
 		this.width = configObject.width;
 		this.height = configObject.height;
 		this.img = configObject.img;
@@ -48,8 +51,8 @@ class Gloop {
 			}
 
 			if (this.waypointIndex < waypoints.length) {
-				let xMoveTo = waypoints[this.waypointIndex].x;
-				let yMoveTo = waypoints[this.waypointIndex].y;
+				let xMoveTo = waypoints[this.waypointIndex].x - this.offset.x;
+				let yMoveTo = waypoints[this.waypointIndex].y - this.offset.y;
 				let xDelta = xMoveTo - this.position.x;
 				let yDelta = yMoveTo - this.position.y;
 				const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
@@ -77,15 +80,6 @@ class Gloop {
 		};
 
 		this.render = function () {
-			// if (this.radius > 0) {
-			// 	ctx.beginPath();
-			// 	ctx.strokeStyle = this.stroke;
-			// 	ctx.fillStyle = this.color;
-			// 	ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
-			// 	ctx.fill();
-			// 	ctx.stroke();
-			// 	ctx.closePath();
-			// }
 			ctx.drawImage(
 				this.img,
 				this.position.x,
