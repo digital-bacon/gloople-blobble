@@ -10,7 +10,7 @@ const gameCanvas = document.getElementById("gameCanvas");
 const ctx = gameCanvas.getContext("2d");
 
 const gameStatusTypes = getGameStatusTypes();
-const towerLocations = getTowerLocations();
+const towerLocations = getTowerLocations(TOWER_LOCATION_SIZE);
 const waypoints = getWayPoints();
 const canvas = getCanvasProperties(gameCanvas);
 const screenCenter = getScreenCenter();
@@ -87,7 +87,7 @@ const configTower = {
 	fillColor: "transparent",
 	strokeColor: "cyan",
 	towersIndex: towers.length,
-	attackRadius: 60,
+	attackRadius: 90,
 	attacksMultiple: false,
 	showRange: true,
 	projectileSize: 10,

@@ -78,16 +78,16 @@ const getGameStatusTypes = () => {
 	return ["initial", "active", "gameover"];
 };
 
-const getTowerLocations = () => {
-	return [
-		{ towerID: null, id: 1, x: 40, y: 162 },
-		{ towerID: null, id: 2, x: 125, y: 125 },
-		{ towerID: null, id: 3, x: 163, y: 125 },
-		{ towerID: null, id: 4, x: 243, y: 202 },
-		{ towerID: null, id: 5, x: 284, y: 202 },
-		{ towerID: null, id: 6, x: 325, y: 202 },
-		{ towerID: null, id: 7, x: 410, y: 202 },
-	];
+const getTowerLocations = (locationSize) => {
+	const locations = [
+		{"x":278,"y":550},{"x":408,"y":335},{"x":566,"y":550},{"x":887,"y":390}]
+	const xOffset = locationSize / 2
+	const yOffset = locationSize
+	locations.map(location => {
+		location.x = location.x - xOffset
+		location.y = location.y - yOffset
+	})
+	return locations;
 };
 
 const getWayPoints = () => {
