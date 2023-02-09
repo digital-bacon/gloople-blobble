@@ -80,6 +80,7 @@ class Gloop {
 		};
 
 		this.render = function () {
+			ctx.beginPath();
 			ctx.drawImage(
 				this.img,
 				this.position.x,
@@ -87,7 +88,7 @@ class Gloop {
 				this.width,
 				this.height
 			);
-			ctx.beginPath();
+			ctx.closePath();
 		};
 		return this;
 	}

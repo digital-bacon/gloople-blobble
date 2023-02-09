@@ -26,6 +26,7 @@ class Game {
 				goldStash.setTotal(INITIAL_GOLD_STASH_TOTAL);
 				player.setHP(INITIAL_PLAYER_HP);
 				gloops = [];
+				locations = [];
 				projectiles = [];
 				towers = [];
 			},

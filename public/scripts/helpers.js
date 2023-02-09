@@ -80,25 +80,25 @@ const getGameStatusTypes = () => {
 
 const getTowerLocations = () => {
 	return [
-		{ towerID: null, id: 1, x: 40, y: 162},
-		{ towerID: null, id: 2, x: 125, y: 125},
-		{ towerID: null, id: 3, x: 163, y: 125},
-		{ towerID: null, id: 4, x: 243, y: 202},
-		{ towerID: null, id: 5, x: 284, y: 202},
-		{ towerID: null, id: 6, x: 325, y: 202},
-		{ towerID: null, id: 7, x: 410, y: 202},
+		{ towerID: null, id: 1, x: 40, y: 162 },
+		{ towerID: null, id: 2, x: 125, y: 125 },
+		{ towerID: null, id: 3, x: 163, y: 125 },
+		{ towerID: null, id: 4, x: 243, y: 202 },
+		{ towerID: null, id: 5, x: 284, y: 202 },
+		{ towerID: null, id: 6, x: 325, y: 202 },
+		{ towerID: null, id: 7, x: 410, y: 202 },
 	];
 };
 
 const getWayPoints = () => {
 	return [
 		{ x: 0, y: 217 },
-		{ x: 95, y: 215 },
+		{ x: 98, y: 217 },
 		{ x: 98, y: 97 },
-		{ x: 224, y: 103 },
-		{ x: 219, y: 254 },
+		{ x: 224, y: 97 },
+		{ x: 224, y: 254 },
 		{ x: 381, y: 254 },
-		{ x: 382, y: 181 },
-		{ x: 667, y: 176 },
+		{ x: 381, y: 181 },
+		{ x: 667, y: 181 },
 	];
 };

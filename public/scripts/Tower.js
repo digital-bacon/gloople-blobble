@@ -11,6 +11,7 @@ class Tower {
 		this.id = configObject.id || Math.random().toString(36).substr(2);
 		this.width = configObject.width;
 		this.height = configObject.height;
+		this.img = configObject.img;
 		this.color = configObject.fillColor;
 		this.stroke = configObject.strokeColor;
 		this.towersIndex = configObject.towersIndex;
@@ -180,12 +181,21 @@ class Tower {
 
 		this.render = function () {
 			if (this.width > 0 && this.height > 0) {
+				// ctx.beginPath();
+				// ctx.strokeStyle = this.stroke;
+				// ctx.fillStyle = this.color;
+				// ctx.rect(this.position.x, this.position.y, this.width, this.height);
+				// ctx.fill();
+				// ctx.stroke();
+				// ctx.closePath();
 				ctx.beginPath();
-				ctx.strokeStyle = this.stroke;
-				ctx.fillStyle = this.color;
-				ctx.rect(this.position.x, this.position.y, this.width, this.height);
-				ctx.fill();
-				ctx.stroke();
+				ctx.drawImage(
+					this.img,
+					this.position.x,
+					this.position.y,
+					this.width,
+					this.height
+				);
 				ctx.closePath();
 			}
 		};
