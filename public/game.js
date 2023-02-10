@@ -87,6 +87,17 @@ const configGloopSam = {
 	spritesheetReverse: true,
 };
 
+const imgGloopSmooch = new Image();
+imgGloopSmooch.src = "static/spritesheet_smooch.png";
+
+const configGloopSmooch = {
+	baseConfig: configGloop,
+	img: imgGloopSmooch,
+	width: 67,
+	height: 70,
+	spritesheetReverse: true,
+};
+
 const configTower = {
 	ctx,
 	x: 135,
