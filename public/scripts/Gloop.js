@@ -33,6 +33,7 @@ class Gloop {
 		this.animationSpeedInMilliseconds =
 			configObject.animationSpeedInMilliseconds || 80;
 		this.lastAnimateTimestamp = getNowAsMilliseconds();
+		this.immobile = configObject.immobile || false;
 
 		this.animationOffCooldown = function () {
 			return this.timestampCanAnimateAfter() <= getNowAsMilliseconds();
@@ -58,16 +59,8 @@ class Gloop {
 			return (this.color = "black");
 		};
 
-		this.update = function () {
-			this.underAttack();
-			this.isUnderAttack = false;
-			if (this.hp <= 0) {
-				goldStash.deposit(this.gold);
-				this.destroy();
-				return;
-			}
-
-			if (this.waypointIndex < waypoints.length) {
+		this.move = function () {
+			if (!this.immobile) {
 				let xMoveTo = waypoints[this.waypointIndex].x - this.offset.x;
 				let yMoveTo = waypoints[this.waypointIndex].y - this.offset.y;
 				let xDelta = xMoveTo - this.position.x;
@@ -80,6 +73,20 @@ class Gloop {
 				this.position.y += yTravelDistance;
 				this.position.center.x += xTravelDistance;
 				this.position.center.y += yTravelDistance;
+			}
+		};
+
+		this.update = function () {
+			this.underAttack();
+			this.isUnderAttack = false;
+			if (this.hp <= 0) {
+				goldStash.deposit(this.gold);
+				this.destroy();
+				return;
+			}
+
+			if (this.waypointIndex < waypoints.length) {
+				this.move();
 
 				let didAnimate = false;
 				if (this.animationOffCooldown()) {
@@ -117,17 +124,13 @@ class Gloop {
 					return xReached && yReached;
 				};
 
-				if (reachedWaypoint()) {
+				if (!this.immobile && reachedWaypoint()) {
 					this.waypointIndex++;
 				}
 			} else {
 				this.destroy();
 				player.loseHP(1);
 			}
-		};
-
-		this.getSpriteCropPosition = function () {
-			return 1;
 		};
 
 		this.render = function () {

@@ -66,6 +66,21 @@ const configGloop = {
 	},
 };
 
+const imgIdleFranklin = new Image();
+imgIdleFranklin.src = "static/spritesheet_franklin.png";
+
+const configGloopFranklin = {
+	baseConfig: configGloop,
+	img: imgIdleFranklin,
+	width: 144.165,
+	height: 55,
+	x: 430,
+	y: 600,
+	immobile: true,
+	totalFrames: 50,
+	animationSpeedInMilliseconds: 500,
+};
+
 const imgGloopBob = new Image();
 imgGloopBob.src = "static/gloop_bob.png";
 
@@ -174,7 +189,7 @@ const configWave = {
 	speedDefault: 1,
 	speedMultiplier: 0.2,
 	totalGloopsMultiplier: 0.25,
-	gloopSubSpecies: configGloopTom,
+	gloopSubSpecies: configGloopFranklin,
 	_totalGloops: INITIAL_WAVE_GLOOPS,
 	get totalGloops() {
 		const total = Math.floor(
