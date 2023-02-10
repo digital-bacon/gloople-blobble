@@ -20,6 +20,7 @@ const game = new Game();
 const goldStash = new GoldStash();
 const player = new Player();
 
+const gloopSpecies = [];
 let staticObjects = [];
 let circles = [];
 let fillText = [];
@@ -130,6 +131,12 @@ const configGloopTom = {
 	totalFrames: 40,
 	animationSpeedInMilliseconds: 100,
 };
+
+gloopSpecies.push(configGloopBob)
+gloopSpecies.push(configGloopSam)
+gloopSpecies.push(configGloopSmooch)
+gloopSpecies.push(configGloopTom)
+
 
 const configTower = {
 	ctx,
