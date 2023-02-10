@@ -80,16 +80,36 @@ const getGameStatusTypes = () => {
 
 const getTowerLocations = (locationSize) => {
 	const locations = [
-		{"x":278,"y":550},{"x":408,"y":335},{"x":566,"y":550},{"x":887,"y":390}]
-	const xOffset = locationSize / 2
-	const yOffset = locationSize
-	locations.map(location => {
-		location.x = location.x - xOffset
-		location.y = location.y - yOffset
-	})
+		{ x: 278, y: 550 },
+		{ x: 408, y: 335 },
+		{ x: 566, y: 550 },
+		{ x: 887, y: 390 },
+	];
+	const xOffset = locationSize / 2;
+	const yOffset = locationSize;
+	locations.map((location) => {
+		location.x = location.x - xOffset;
+		location.y = location.y - yOffset;
+	});
 	return locations;
 };
 
 const getWayPoints = () => {
-	return [{"x":-49,"y":403},{"x":747,"y":403},{"x":790,"y":445},{"x":825,"y":460},{"x":935,"y":464},{"x":973,"y":458},{"x":995,"y":449},{"x":1028,"y":417},{"x":1047,"y":354},{"x":1059,"y":303},{"x":1085,"y":270},{"x":1106,"y":249},{"x":1139,"y":242},{"x":1189,"y":237},{"x":1339,"y":234}]
+	return [
+		{ x: -49, y: 403 },
+		{ x: 747, y: 403 },
+		{ x: 790, y: 445 },
+		{ x: 825, y: 460 },
+		{ x: 935, y: 464 },
+		{ x: 973, y: 458 },
+		{ x: 995, y: 449 },
+		{ x: 1028, y: 417 },
+		{ x: 1047, y: 354 },
+		{ x: 1059, y: 303 },
+		{ x: 1085, y: 270 },
+		{ x: 1106, y: 249 },
+		{ x: 1139, y: 242 },
+		{ x: 1189, y: 237 },
+		{ x: 1339, y: 234 },
+	];
 };

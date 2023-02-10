@@ -41,7 +41,7 @@ class Tower {
 		this.calculateAttackDamage = function () {
 			const total = Math.floor(
 				this.attackDamage +
-				this.attackDamage * (this.level * this.multiplier.attackDamage)
+					this.attackDamage * (this.level * this.multiplier.attackDamage)
 			);
 			return total;
 		};
@@ -49,7 +49,7 @@ class Tower {
 		this.calculateUpgradeCost = function () {
 			const total = Math.floor(
 				this.upgradeCost +
-				this.upgradeCost * (this.level * this.multiplier.upgradeCost)
+					this.upgradeCost * (this.level * this.multiplier.upgradeCost)
 			);
 			return total;
 		};
@@ -152,8 +152,7 @@ class Tower {
 
 			// const distance =
 			// 	Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloop.width / 4;
-			const distance =
-				Math.sqrt(xDelta * xDelta + yDelta * yDelta);
+			const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
 			// const distance =
 			// 	Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloop.radius;
 
