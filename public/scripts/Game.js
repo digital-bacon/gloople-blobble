@@ -17,7 +17,7 @@ class Game {
 					player.setHP(0);
 				}
 				if (this.status === "active") {
-					this.timestampStart = nowAsMilliseconds();
+					this.timestampStart = getNowAsMilliseconds();
 					this.reset();
 				}
 			},

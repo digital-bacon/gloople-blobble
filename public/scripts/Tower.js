@@ -33,6 +33,14 @@ class Tower {
 			upgradeCost: configObject?.multiplier?.upgradeCost || 0.5,
 		};
 
+		this.timestampCanAttackAfter = function () {
+			return this.lastAttackTimestamp + this.attackSpeedInMilliseconds;
+		};
+
+		this.attackOffCooldown = function () {
+			return this.timestampCanAttackAfter() <= getNowAsMilliseconds();
+		};
+
 		this.calculateAttackRadius = function () {
 			const total = Math.floor(
 				this.attackRadius + this.level * this.multiplier.attackRadius
@@ -79,7 +87,7 @@ class Tower {
 			};
 			const projectile = new Projectile(configProjectile);
 			projectiles.push(projectile);
-			this.lastAttackTimestamp = nowAsMilliseconds();
+			this.lastAttackTimestamp = getNowAsMilliseconds();
 		};
 
 		this.visualizeRange = function () {
@@ -168,11 +176,12 @@ class Tower {
 				if (this.attacksMultiple) {
 					gloops.forEach((gloop) => {
 						if (this.canAttack(gloop)) this.attack(gloop);
-						lastAttackTimestamp = nowAsMilliseconds();
+						lastAttackTimestamp = getNowAsMilliseconds();
 					});
 				} else {
 					for (const gloop of gloops) {
 						if (this.canAttack(gloop)) {
+							console.log(this.attackOffCooldown());
 							if (this.target === null) {
 								this.target = gloop;
 								this.createProjectile(this.target);

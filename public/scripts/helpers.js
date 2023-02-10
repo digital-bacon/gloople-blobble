@@ -114,7 +114,7 @@ const getWayPoints = () => {
 	];
 };
 
-const nowAsMilliseconds = () => {
+const getNowAsMilliseconds = () => {
 	const now = Date.now();
 	return now;
 };
