@@ -77,6 +77,7 @@ const configGloopFranklin = {
 	x: 430,
 	y: 600,
 	immobile: true,
+	targettable: false,
 	totalFrames: 50,
 	animationSpeedInMilliseconds: 500,
 };
