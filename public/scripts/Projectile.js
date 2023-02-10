@@ -5,11 +5,11 @@ class Projectile {
 			y: configObject.height / 2,
 		};
 		this.position = {
-			x: configObject.x,
-			y: configObject.y,
+			x: configObject.x - this.offset.x,
+			y: configObject.y - this.offset.y,
 			center: {
-				x: configObject.x + this.offset.x,
-				y: configObject.y + this.offset.y,
+				x: configObject.x - this.offset.x + this.offset.x,
+				y: configObject.y - this.offset.y + this.offset.y,
 			},
 		};
 		this.radius = configObject.radius;
@@ -28,10 +28,10 @@ class Projectile {
 			this.destroyMe = true;
 		};
 		this.update = function () {
-			let xMoveTo = this.target.position.x - this.offset.x;
-			let yMoveTo = this.target.position.y - this.offset.y;
-			let xDelta = xMoveTo - this.position.x;
-			let yDelta = yMoveTo - this.position.y;
+			let xMoveTo = this.target.position.center.x;
+			let yMoveTo = this.target.position.center.y;
+			let xDelta = xMoveTo - this.position.center.x;
+			let yDelta = yMoveTo - this.position.center.y;
 			const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
 			const moves = Math.floor(distance / this.speed);
 			let xTravelDistance = (xMoveTo - this.position.x) / moves || 0;
@@ -43,8 +43,8 @@ class Projectile {
 			this.render();
 
 			const reachedTarget = () => {
-				const distanceToTarget = distance - this.target.width / 2;
-				const reachedTarget = distanceToTarget <= this.target.width / 2;
+				const hitBox = (this.target.height + this.target.width) / 4;
+				const reachedTarget = distance <= hitBox;
 				return reachedTarget;
 			};
 

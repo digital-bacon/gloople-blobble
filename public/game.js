@@ -124,8 +124,8 @@ const configTowerSplash = {
 };
 
 const towerTypes = [];
-towerTypes.push(configTowerMagic);
-// towerTypes.push(configTowerSplash);
+// towerTypes.push(configTowerMagic);
+towerTypes.push(configTowerSplash);
 
 const configTowerLocation = {
 	ctx,

@@ -8,8 +8,8 @@ class Gloop {
 			x: configObject.x - this.offset.x,
 			y: configObject.y - this.offset.y,
 			center: {
-				x: configObject.x + this.offset.x,
-				y: configObject.y + this.offset.y,
+				x: configObject.x - this.offset.x + this.offset.x,
+				y: configObject.y - this.offset.y + this.offset.y,
 			},
 		};
 		this.width = configObject.width;
