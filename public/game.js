@@ -155,6 +155,7 @@ const configTowerMagic = {
 	img: imgTowerMagic,
 	width: TOWER_LOCATION_SIZE,
 	height: TOWER_LOCATION_SIZE,
+	type: "magic",
 };
 
 const imgTowerSplash = new Image();
@@ -166,6 +167,7 @@ const configTowerSplash = {
 	width: TOWER_LOCATION_SIZE,
 	height: TOWER_LOCATION_SIZE,
 	attacksMultiple: true,
+	type: "splash",
 };
 
 const towerTypes = [];
