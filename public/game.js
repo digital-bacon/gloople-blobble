@@ -86,18 +86,10 @@ const configGloopSam = {
 	height: 70,
 }
 
-const imgTower = new Image();
-imgTower.src = "static/tower_magic.png";
-
 const configTower = {
 	ctx,
 	x: 135,
 	y: 135,
-	img: imgTower,
-	width: TOWER_LOCATION_SIZE,
-	height: TOWER_LOCATION_SIZE,
-	fillColor: "transparent",
-	strokeColor: "cyan",
 	towersIndex: towers.length,
 	attackRadius: 100,
 	attacksMultiple: false,
@@ -109,8 +101,34 @@ const configTower = {
 	level: INITIAL_TOWER_LEVEL,
 };
 
+const imgTowerMagic = new Image();
+imgTowerMagic.src = "static/tower_magic.png";
+
+const configTowerMagic = {
+	baseConfig: configTower,
+	img: imgTowerMagic,
+	width: TOWER_LOCATION_SIZE,
+	height: TOWER_LOCATION_SIZE,
+}
+
+const imgTowerSplash = new Image();
+imgTowerSplash.src = "static/tower_splash.png";
+
+const configTowerSplash = {
+	baseConfig: configTower,
+	img: imgTowerSplash,
+	width: TOWER_LOCATION_SIZE,
+	height: TOWER_LOCATION_SIZE,
+	attacksMultiple: true,
+}
+
+const towerTypes = [];
+// towerTypes.push(configTowerMagic);
+towerTypes.push(configTowerSplash);
+
 const configTowerLocation = {
 	ctx,
+	towerTypes,
 	x: 0,
 	y: 0,
 	width: TOWER_LOCATION_SIZE,
@@ -129,6 +147,7 @@ const configWave = {
 	speedDefault: 1,
 	speedMultiplier: 0.2,
 	totalGloopsMultiplier: 0.25,
+	gloopSubSpecies: configGloopSam,
 	_totalGloops: INITIAL_WAVE_GLOOPS,
 	get totalGloops() {
 		const total = Math.floor(
@@ -173,8 +192,9 @@ const summonGloop = (configGloop) => {
 };
 
 const summonGloops = (configSummon) => {
-	const { totalGloops, configGloop, configSubSpecies, xOffset, wave } = configSummon;
+	const { totalGloops, configGloop, xOffset, wave } = configSummon;
 	const newGloops = [];
+	const configSubSpecies = { ...configWave.gloopSubSpecies }
 	for (let i = 0; i < totalGloops; i++) {
 		const gloop = { ...configGloop, ...configSubSpecies };
 		gloop.wave = wave;
@@ -195,10 +215,10 @@ const summonTower = (configTower) => {
 };
 
 const summonTowers = (configSummon) => {
-	const { configTower, towerLocations } = configSummon;
+	const { configTower, configTowerType, towerLocations } = configSummon;
 	const newTowers = [];
 	for (let i = 0; i < towerLocations.length; i++) {
-		const tower = { ...configTower };
+		const tower = { ...configTower, ...configTowerType };
 		tower.x = towerLocations[i].x;
 		tower.y = towerLocations[i].y;
 		newTowers.push(tower);
@@ -214,10 +234,11 @@ const generateTowerLocation = (configLocation) => {
 };
 
 const generateTowerLocations = (configGenerate) => {
-	const { configTowerLocation, towerLocations } = configGenerate;
+	const { configTowerLocation, configTowerTypes, towerLocations } = configGenerate;
 	const newLocations = [];
 	for (let i = 0; i < towerLocations.length; i++) {
 		const location = { ...configTowerLocation };
+		location.towerTypes = configTowerTypes;
 		location.x = towerLocations[i].x;
 		location.y = towerLocations[i].y;
 		location.id = towerLocations[i].id;
@@ -242,7 +263,7 @@ const clearTowerButtons = () => {
 	});
 };
 
-const nextWave = (configSubSpecies) => {
+const nextWave = () => {
 	if (configWave.nextWave > 1) {
 		configGloop.speed =
 			configWave.speedDefault +
@@ -259,7 +280,6 @@ const nextWave = (configSubSpecies) => {
 	configWave.nextWave++;
 	const configSummon = {
 		configGloop,
-		configSubSpecies,
 		totalGloops: configWave.totalGloops,
 		xOffset: 40,
 		wave: configWave.currentWave,
@@ -334,26 +354,29 @@ const populateRoundRects = () => {
 	}
 };
 
-const populateTowers = () => {
+const populateTowers = (configTowerType) => {
 	if (towers.length === 0) {
 		const initialTowers = towerLocations.filter(
 			(location) => location.id === 2
 		);
 		const configSummon = {
 			configTower,
+			configTowerType,
 			towerLocations: initialTowers,
 		};
 		summonTowers(configSummon);
 	}
 };
 
-const populateTowerLocations = () => {
+const populateTowerLocations = (configTowerTypes) => {
 	if (locations.length === 0) {
 		const initialLocations = towerLocations.filter(
 			(location) => location.id !== 2
 		);
 		const configGenerate = {
 			configTowerLocation,
+			configTower,
+			configTowerTypes,
 			towerLocations: initialLocations,
 		};
 		generateTowerLocations(configGenerate);
@@ -373,8 +396,8 @@ const animationLoop = () => {
 	populateFillText();
 	populateGloops(configGloopSam);
 	populateRoundRects();
-	populateTowers();
-	populateTowerLocations();
+	populateTowers(configTowerMagic);
+	populateTowerLocations(towerTypes);
 	populateImages();
 
 	if (game.status === "initial") {
