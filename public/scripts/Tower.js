@@ -121,16 +121,25 @@ class Tower {
 			text.render();
 		};
 
-		this.fireProjectile = function (target) {
+		this.fireAtTarget = function (target) {
 			const projectile = this.loadProjectile(target);
 			projectiles.push(projectile);
 		};
 
 		this.getTarget = function () {
-			if (gloops.length === 0) {
-				return false;
+			if (this.target && this.canReachTarget(this.target)) {
+				return this.target;
 			}
-			return true;
+			return this.findNextTarget();
+		};
+
+		this.findNextTarget = function () {
+			for (const gloop of gloops) {
+				if (this.canReachTarget(gloop)) {
+					return gloop;
+				}
+			}
+			return null;
 		};
 
 		this.loadProjectile = function (target) {
@@ -158,33 +167,48 @@ class Tower {
 			return this.lastAttackTimestamp + this.attackSpeedInMilliseconds;
 		};
 
-		this.update = function () {
+		this.doAttack = function () {
 			let didAttack = false;
-			if (gloops.length > 0) {
+			if (this.attackOffCooldown()) {
 				if (this.attacksMultiple) {
-					gloops.forEach((gloop) => {
-						if (this.canReachTarget(gloop) && this.attackOffCooldown()) {
-							this.damage(gloop);
-							didAttack = true;
-						}
-					});
+					didAttack = this.doAttackSplash();
 				} else {
-					for (const gloop of gloops) {
-						if (this.canReachTarget(gloop) && this.attackOffCooldown()) {
-							if (this.target === null) {
-								this.target = gloop;
-								this.fireProjectile(this.target);
-								didAttack = true;
-							}
-							break;
-						}
-					}
+					didAttack = this.doAttackSingle();
 				}
 			}
+			return didAttack;
+		};
+
+		this.doAttackSplash = function () {
+			let didAttack = false;
+			gloops.forEach((gloop) => {
+				if (this.canReachTarget(gloop)) {
+					this.damage(gloop);
+					didAttack = true;
+				}
+			});
+			return didAttack;
+		};
+
+		this.doAttackSingle = function () {
+			let didAttack = false;
+			this.target = this.getTarget();
+			if (this.target) {
+				this.fireAtTarget(this.target);
+				didAttack = true;
+			}
+			return didAttack;
+		};
+
+		this.update = function () {
+			const didAttack = this.doAttack();
+
 			if (didAttack) {
 				this.lastAttackTimestamp = getNowAsMilliseconds();
 			}
+
 			if (this.showRange) this.visualizeRange();
+
 			this.render();
 			if (this.button.length > 0) this.drawUpgradeButton();
 		};
@@ -209,13 +233,6 @@ class Tower {
 
 		this.render = function () {
 			if (this.width > 0 && this.height > 0) {
-				// ctx.beginPath();
-				// ctx.strokeStyle = this.stroke;
-				// ctx.fillStyle = this.color;
-				// ctx.rect(this.position.x, this.position.y, this.width, this.height);
-				// ctx.fill();
-				// ctx.stroke();
-				// ctx.closePath();
 				ctx.beginPath();
 				ctx.drawImage(
 					this.img,
