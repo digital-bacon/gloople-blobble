@@ -168,6 +168,7 @@ class Tower {
 				if (this.attacksMultiple) {
 					gloops.forEach((gloop) => {
 						if (this.canAttack(gloop)) this.attack(gloop);
+						lastAttackTimestamp = nowAsMilliseconds();
 					});
 				} else {
 					for (const gloop of gloops) {
