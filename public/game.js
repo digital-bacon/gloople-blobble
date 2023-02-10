@@ -119,6 +119,7 @@ const configTowerSplash = {
 	img: imgTowerSplash,
 	width: TOWER_LOCATION_SIZE,
 	height: TOWER_LOCATION_SIZE,
+	attacksMultiple: true,
 }
 
 const towerTypes = [];
@@ -146,6 +147,7 @@ const configWave = {
 	speedDefault: 1,
 	speedMultiplier: 0.2,
 	totalGloopsMultiplier: 0.25,
+	gloopSubSpecies: configGloopSam,
 	_totalGloops: INITIAL_WAVE_GLOOPS,
 	get totalGloops() {
 		const total = Math.floor(
@@ -190,8 +192,9 @@ const summonGloop = (configGloop) => {
 };
 
 const summonGloops = (configSummon) => {
-	const { totalGloops, configGloop, configSubSpecies, xOffset, wave } = configSummon;
+	const { totalGloops, configGloop, xOffset, wave } = configSummon;
 	const newGloops = [];
+	const configSubSpecies = { ...configWave.gloopSubSpecies }
 	for (let i = 0; i < totalGloops; i++) {
 		const gloop = { ...configGloop, ...configSubSpecies };
 		gloop.wave = wave;
@@ -260,7 +263,7 @@ const clearTowerButtons = () => {
 	});
 };
 
-const nextWave = (configSubSpecies) => {
+const nextWave = () => {
 	if (configWave.nextWave > 1) {
 		configGloop.speed =
 			configWave.speedDefault +
@@ -277,7 +280,6 @@ const nextWave = (configSubSpecies) => {
 	configWave.nextWave++;
 	const configSummon = {
 		configGloop,
-		configSubSpecies,
 		totalGloops: configWave.totalGloops,
 		xOffset: 40,
 		wave: configWave.currentWave,
