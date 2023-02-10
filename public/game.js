@@ -20,6 +20,7 @@ const game = new Game();
 const goldStash = new GoldStash();
 const player = new Player();
 
+const staticObjects = [];
 let circles = [];
 let fillText = [];
 let gloops = [];
@@ -192,7 +193,7 @@ const configWave = {
 	speedDefault: 1,
 	speedMultiplier: 0.2,
 	totalGloopsMultiplier: 0.25,
-	gloopSubSpecies: configGloopFranklin,
+	gloopSubSpecies: configGloopSmooch,
 	_totalGloops: INITIAL_WAVE_GLOOPS,
 	get totalGloops() {
 		const total = Math.floor(
@@ -416,9 +417,7 @@ const populateTowers = (configTowerType) => {
 
 const populateTowerLocations = (configTowerTypes) => {
 	if (locations.length === 0) {
-		const initialLocations = towerLocations.filter(
-			(location) => location.id !== 2
-		);
+		const initialLocations = towerLocations;
 		const configGenerate = {
 			configTowerLocation,
 			configTower,
@@ -426,6 +425,17 @@ const populateTowerLocations = (configTowerTypes) => {
 			towerLocations: initialLocations,
 		};
 		generateTowerLocations(configGenerate);
+	}
+};
+
+const populateStaticObjects = () => {
+	if (staticObjects.length === 0) {
+		const configGenerate = {
+			...configGloop,
+			...configGloopFranklin,
+		};
+		const newGloop = new Gloop(configGenerate);
+		staticObjects.push(newGloop);
 	}
 };
 
@@ -439,11 +449,12 @@ const animationLoop = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	populateCircles();
 	populateFillText();
-	populateGloops(configGloopSam);
+	populateGloops();
+	populateImages();
 	populateRoundRects();
+	populateStaticObjects();
 	populateTowers(configTowerMagic);
 	populateTowerLocations(towerTypes);
-	populateImages();
 
 	if (game.status === "initial") {
 		update(roundRects);
@@ -451,6 +462,7 @@ const animationLoop = () => {
 	}
 
 	if (game.status === "active") {
+		update(staticObjects);
 		update(towers);
 		update(locations);
 		update(circles);

@@ -60,23 +60,6 @@ class Gloop {
 			return (this.color = "black");
 		};
 
-		this.move = function () {
-			if (!this.immobile) {
-				let xMoveTo = waypoints[this.waypointIndex].x - this.offset.x;
-				let yMoveTo = waypoints[this.waypointIndex].y - this.offset.y;
-				let xDelta = xMoveTo - this.position.x;
-				let yDelta = yMoveTo - this.position.y;
-				const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
-				const moves = Math.floor(distance / this.speed);
-				let xTravelDistance = (xMoveTo - this.position.x) / moves || 0;
-				let yTravelDistance = (yMoveTo - this.position.y) / moves || 0;
-				this.position.x += xTravelDistance;
-				this.position.y += yTravelDistance;
-				this.position.center.x += xTravelDistance;
-				this.position.center.y += yTravelDistance;
-			}
-		};
-
 		this.update = function () {
 			this.underAttack();
 			this.isUnderAttack = false;
@@ -87,7 +70,20 @@ class Gloop {
 			}
 
 			if (this.waypointIndex < waypoints.length) {
-				this.move();
+				let xMoveTo = waypoints[this.waypointIndex].x - this.offset.x;
+				let yMoveTo = waypoints[this.waypointIndex].y - this.offset.y;
+				let xDelta = xMoveTo - this.position.x;
+				let yDelta = yMoveTo - this.position.y;
+				const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
+				const moves = Math.floor(distance / this.speed);
+				let xTravelDistance = (xMoveTo - this.position.x) / moves || 0;
+				let yTravelDistance = (yMoveTo - this.position.y) / moves || 0;
+				if (!this.immobile) {
+					this.position.x += xTravelDistance;
+					this.position.y += yTravelDistance;
+					this.position.center.x += xTravelDistance;
+					this.position.center.y += yTravelDistance;
+				}
 
 				let didAnimate = false;
 				if (this.animationOffCooldown()) {
