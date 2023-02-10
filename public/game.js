@@ -84,7 +84,7 @@ const configGloopSam = {
 	img: imgGloopSam,
 	width: 175,
 	height: 70,
-	spritesheetReverse: true
+	spritesheetReverse: true,
 };
 
 const configTower = {
@@ -394,7 +394,6 @@ const populateGloops = (configSubSpecies) => {
 
 const animationLoop = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-
 	populateCircles();
 	populateFillText();
 	populateGloops(configGloopSam);

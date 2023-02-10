@@ -30,6 +30,17 @@ class Gloop {
 		this.currentFrame = 0;
 		this.xCropImgStart = 0;
 		this.yCropImgStart = 0;
+		this.animationSpeedInMilliseconds =
+			configObject.animationSpeedInMilliseconds || 80;
+		this.lastAnimateTimestamp = getNowAsMilliseconds();
+
+		this.animationOffCooldown = function () {
+			return this.timestampCanAnimateAfter() <= getNowAsMilliseconds();
+		};
+
+		this.timestampCanAnimateAfter = function () {
+			return this.lastAnimateTimestamp + this.animationSpeedInMilliseconds;
+		};
 
 		this.destroy = function () {
 			this.destroyMe = true;
@@ -70,23 +81,31 @@ class Gloop {
 				this.position.center.x += xTravelDistance;
 				this.position.center.y += yTravelDistance;
 
-
-				if (!this.spritesheetReverse) {
-					this.shift++
-					if (this.shift > this.totalFrames) {
-						this.shift = 0
+				let didAnimate = false;
+				if (this.animationOffCooldown()) {
+					didAnimate = true;
+					if (!this.spritesheetReverse) {
+						this.shift++;
+						if (this.shift >= this.totalFrames) {
+							this.shift = 0;
+						}
+					} else {
+						this.shift--;
+						if (this.shift <= 0) {
+							this.shift = this.totalFrames;
+						}
 					}
-				} else {
-					if (this.shift < 0) {
-						this.shift = this.totalFrames
-					}
-					this.shift--
 				}
-					this.render();
-				if (!this.spritesheetReverse) {
-					this.shift++
-				} else {
-					this.shift--
+
+				this.render();
+
+				if (didAnimate) {
+					this.lastAnimateTimestamp = getNowAsMilliseconds();
+					if (!this.spritesheetReverse) {
+						this.shift++;
+					} else {
+						this.shift--;
+					}
 				}
 
 				this.xCropImgStart = this.frameWidth * this.shift;
@@ -106,10 +125,10 @@ class Gloop {
 				player.loseHP(1);
 			}
 		};
-		
+
 		this.getSpriteCropPosition = function () {
 			return 1;
-		} 
+		};
 
 		this.render = function () {
 			ctx.beginPath();
@@ -135,4 +154,3 @@ class Gloop {
 		return this;
 	}
 }
-
