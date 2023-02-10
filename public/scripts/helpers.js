@@ -118,3 +118,8 @@ const getNowAsMilliseconds = () => {
 	const now = Date.now();
 	return now;
 };
+
+const randomFromArray = (array) => {
+	const randomElement = array[Math.floor(Math.random() * array.length)];
+	return randomElement;
+}
