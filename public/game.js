@@ -67,13 +67,15 @@ const configGloop = {
 };
 
 const imgGloopBob = new Image();
-imgGloopBob.src = "static/gloop_bob.png";
+imgGloopBob.src = "static/spritesheet_bob.png";
 
 const configGloopBob = {
 	baseConfig: configGloop,
 	img: imgGloopBob,
-	width: 70,
+	width: 192,
 	height: 70,
+	spritesheetReverse: true,
+	animationSpeedInMilliseconds: 100,
 };
 
 const imgGloopSam = new Image();
@@ -396,7 +398,7 @@ const animationLoop = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	populateCircles();
 	populateFillText();
-	populateGloops(configGloopSam);
+	populateGloops(configGloopBob);
 	populateRoundRects();
 	populateTowers(configTowerMagic);
 	populateTowerLocations(towerTypes);
