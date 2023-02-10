@@ -64,12 +64,7 @@ class Projectile {
 				this.width,
 				this.height
 			);
-			ctx.strokeRect(
-				this.position.x,
-				this.position.y,
-				this.width,
-				this.height
-			);
+			ctx.strokeRect(this.position.x, this.position.y, this.width, this.height);
 			ctx.closePath();
 		};
 		return this;

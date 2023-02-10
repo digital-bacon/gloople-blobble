@@ -74,7 +74,7 @@ const configGloopBob = {
 	img: imgGloopBob,
 	width: 70,
 	height: 70,
-}
+};
 
 const imgGloopSam = new Image();
 imgGloopSam.src = "static/gloop_sam.png";
@@ -84,7 +84,7 @@ const configGloopSam = {
 	img: imgGloopSam,
 	width: 70,
 	height: 70,
-}
+};
 
 const configTower = {
 	ctx,
@@ -109,7 +109,7 @@ const configTowerMagic = {
 	img: imgTowerMagic,
 	width: TOWER_LOCATION_SIZE,
 	height: TOWER_LOCATION_SIZE,
-}
+};
 
 const imgTowerSplash = new Image();
 imgTowerSplash.src = "static/tower_splash.png";
@@ -120,7 +120,7 @@ const configTowerSplash = {
 	width: TOWER_LOCATION_SIZE,
 	height: TOWER_LOCATION_SIZE,
 	attacksMultiple: true,
-}
+};
 
 const towerTypes = [];
 // towerTypes.push(configTowerMagic);
@@ -194,7 +194,7 @@ const summonGloop = (configGloop) => {
 const summonGloops = (configSummon) => {
 	const { totalGloops, configGloop, xOffset, wave } = configSummon;
 	const newGloops = [];
-	const configSubSpecies = { ...configWave.gloopSubSpecies }
+	const configSubSpecies = { ...configWave.gloopSubSpecies };
 	for (let i = 0; i < totalGloops; i++) {
 		const gloop = { ...configGloop, ...configSubSpecies };
 		gloop.wave = wave;
@@ -211,7 +211,7 @@ const summonGloops = (configSummon) => {
 const summonTower = (configTower) => {
 	const newTower = new Tower(configTower);
 	towers.push(newTower);
-	return newTower
+	return newTower;
 };
 
 const summonTowers = (configSummon) => {
@@ -234,7 +234,8 @@ const generateTowerLocation = (configLocation) => {
 };
 
 const generateTowerLocations = (configGenerate) => {
-	const { configTowerLocation, configTowerTypes, towerLocations } = configGenerate;
+	const { configTowerLocation, configTowerTypes, towerLocations } =
+		configGenerate;
 	const newLocations = [];
 	for (let i = 0; i < towerLocations.length; i++) {
 		const location = { ...configTowerLocation };
