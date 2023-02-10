@@ -20,6 +20,7 @@ const game = new Game();
 const goldStash = new GoldStash();
 const player = new Player();
 
+const gloopSubSpecies = [];
 let staticObjects = [];
 let circles = [];
 let fillText = [];
@@ -86,13 +87,15 @@ const configGloopFranklin = {
 };
 
 const imgGloopBob = new Image();
-imgGloopBob.src = "static/gloop_bob.png";
+imgGloopBob.src = "static/spritesheet_bob.png";
 
 const configGloopBob = {
 	baseConfig: configGloop,
 	img: imgGloopBob,
-	width: 70,
+	width: 192,
 	height: 70,
+	totalFrames: 19,
+	animationSpeedInMilliseconds: 250,
 };
 
 const imgGloopSam = new Image();
@@ -130,6 +133,11 @@ const configGloopTom = {
 	totalFrames: 40,
 	animationSpeedInMilliseconds: 100,
 };
+
+gloopSubSpecies.push(configGloopBob)
+gloopSubSpecies.push(configGloopSam)
+gloopSubSpecies.push(configGloopSmooch)
+gloopSubSpecies.push(configGloopTom)
 
 const configTower = {
 	ctx,
@@ -186,6 +194,7 @@ const configTowerLocation = {
 };
 
 const configWave = {
+	gloopSubSpecies,
 	currentWave: INITIAL_WAVE,
 	earlyBonus: 100,
 	goldMultiplier: 2,
@@ -195,7 +204,6 @@ const configWave = {
 	speedDefault: 1,
 	speedMultiplier: 0.2,
 	totalGloopsMultiplier: 0.25,
-	gloopSubSpecies: configGloopSmooch,
 	_totalGloops: INITIAL_WAVE_GLOOPS,
 	get totalGloops() {
 		const total = Math.floor(
@@ -242,8 +250,9 @@ const summonGloop = (configGloop) => {
 const summonGloops = (configSummon) => {
 	const { totalGloops, configGloop, xOffset, wave } = configSummon;
 	const newGloops = [];
-	const configSubSpecies = { ...configWave.gloopSubSpecies };
 	for (let i = 0; i < totalGloops; i++) {
+		// const configSubSpecies = configWave.gloopSubSpecies[Math.floor(Math.random()*configWave.gloopSubSpecies.length)];
+		const configSubSpecies = randomFromArray(configWave.gloopSubSpecies)
 		const gloop = { ...configGloop, ...configSubSpecies };
 		gloop.wave = wave;
 		newGloops.push(gloop);
