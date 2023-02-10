@@ -77,12 +77,12 @@ const configGloopBob = {
 };
 
 const imgGloopSam = new Image();
-imgGloopSam.src = "static/gloop_sam.png";
+imgGloopSam.src = "static/spritesheet_sam.png";
 
 const configGloopSam = {
 	baseConfig: configGloop,
 	img: imgGloopSam,
-	width: 70,
+	width: 140,
 	height: 70,
 };
 

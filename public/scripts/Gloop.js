@@ -81,12 +81,17 @@ class Gloop {
 
 		this.render = function () {
 			ctx.beginPath();
+			// drawImage(image, sourceX, sourceY, sWidth, sHeight, offsetCanvasX, offsetCanvasY, dWidth, dHeight)
 			ctx.drawImage(
 				this.img,
+				0,
+				0,
+				this.width,
+				this.height,
 				this.position.x,
 				this.position.y,
 				this.width,
-				this.height
+				this.height,
 			);
 			ctx.strokeRect(this.position.x, this.position.y, this.width, this.height);
 			ctx.closePath();
