@@ -371,7 +371,7 @@ const animationLoop = () => {
 
 	populateCircles();
 	populateFillText();
-	populateGloops(configGloopBob);
+	populateGloops(configGloopSam);
 	populateRoundRects();
 	populateTowers();
 	populateTowerLocations();
