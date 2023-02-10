@@ -15,10 +15,8 @@ class Gloop {
 		this.width = configObject.width;
 		this.height = configObject.height;
 		this.img = configObject.img;
-		this.color = configObject.fillColor;
-		this.stroke = configObject.strokeColor;
-		this.speed = configObject.speed;
-		this.hp = configObject.hp;
+		this.speed = configObject.baseConfig.speed;
+		this.hp = configObject.baseConfig.hp;
 		this.gold = configObject.gold;
 		this.wave = configObject.wave;
 		this.waypointIndex = configObject.waypointIndex;

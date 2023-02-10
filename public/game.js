@@ -30,18 +30,10 @@ let rects = [];
 let roundRects = [];
 let towers = [];
 
-const imgGloop = new Image();
-imgGloop.src = "static/gloop_eyeball_bomb.png";
-
 const configGloop = {
 	ctx,
 	x: waypoints[0].x,
 	y: waypoints[0].y,
-	img: imgGloop,
-	width: 70,
-	height: 70,
-	fillColor: "black",
-	strokeColor: "yellow",
 	waypointIndex: 0,
 	wave: 0,
 	_gold: 10,
@@ -73,6 +65,26 @@ const configGloop = {
 		this._speed = value;
 	},
 };
+
+const imgGloopBob = new Image();
+imgGloopBob.src = "static/gloop_bob.png";
+
+const configGloopBob = {
+	baseConfig: configGloop,
+	img: imgGloopBob,
+	width: 70,
+	height: 70,
+}
+
+const imgGloopSam = new Image();
+imgGloopSam.src = "static/gloop_sam.png";
+
+const configGloopSam = {
+	baseConfig: configGloop,
+	img: imgGloopSam,
+	width: 70,
+	height: 70,
+}
 
 const imgTower = new Image();
 imgTower.src = "static/tower_magic.png";
@@ -161,10 +173,10 @@ const summonGloop = (configGloop) => {
 };
 
 const summonGloops = (configSummon) => {
-	const { totalGloops, configGloop, xOffset, wave } = configSummon;
+	const { totalGloops, configGloop, configSubSpecies, xOffset, wave } = configSummon;
 	const newGloops = [];
 	for (let i = 0; i < totalGloops; i++) {
-		const gloop = { ...configGloop };
+		const gloop = { ...configGloop, ...configSubSpecies };
 		gloop.wave = wave;
 		newGloops.push(gloop);
 	}
@@ -230,7 +242,7 @@ const clearTowerButtons = () => {
 	});
 };
 
-const nextWave = () => {
+const nextWave = (configSubSpecies) => {
 	if (configWave.nextWave > 1) {
 		configGloop.speed =
 			configWave.speedDefault +
@@ -247,6 +259,7 @@ const nextWave = () => {
 	configWave.nextWave++;
 	const configSummon = {
 		configGloop,
+		configSubSpecies,
 		totalGloops: configWave.totalGloops,
 		xOffset: 40,
 		wave: configWave.currentWave,
@@ -347,9 +360,9 @@ const populateTowerLocations = () => {
 	}
 };
 
-const populateGloops = () => {
+const populateGloops = (configSubSpecies) => {
 	if (gloops.length === 0 || isWaveClear(configWave.currentWave)) {
-		nextWave();
+		nextWave(configSubSpecies);
 	}
 };
 
@@ -358,7 +371,7 @@ const animationLoop = () => {
 
 	populateCircles();
 	populateFillText();
-	populateGloops();
+	populateGloops(configGloopBob);
 	populateRoundRects();
 	populateTowers();
 	populateTowerLocations();
