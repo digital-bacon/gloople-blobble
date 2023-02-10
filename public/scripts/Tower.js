@@ -19,7 +19,8 @@ class Tower {
 		this.attackDamage = configObject.attackDamage || 1;
 		this.lastAttackTimestamp = null;
 		this.attackRadius = configObject.attackRadius;
-		this.attackSpeedInMilliseconds = configObject?.attack?.speed || 0;
+		this.attackSpeedInMilliseconds =
+			configObject.attackSpeedInMilliseconds || 0;
 		this.attacksMultiple = configObject.attacksMultiple;
 		this.projectileSize = configObject.projectileSize;
 		this.purchaseCost = configObject.purchaseCost || 1;
@@ -87,7 +88,6 @@ class Tower {
 			};
 			const projectile = new Projectile(configProjectile);
 			projectiles.push(projectile);
-			this.lastAttackTimestamp = getNowAsMilliseconds();
 		};
 
 		this.visualizeRange = function () {
@@ -155,7 +155,7 @@ class Tower {
 			gloop.loseHP(this.calculateAttackDamage());
 		};
 
-		this.canAttack = function (gloop) {
+		this.canReachTarget = function (gloop) {
 			const xGloop = gloop.position.center.x - gloop.width / 2;
 			const yGloop = gloop.position.center.y - gloop.height / 2;
 			const xDelta = Math.abs(this.position.center.x - xGloop);
@@ -172,24 +172,30 @@ class Tower {
 		};
 
 		this.update = function () {
+			let didAttack = false;
 			if (gloops.length > 0) {
 				if (this.attacksMultiple) {
 					gloops.forEach((gloop) => {
-						if (this.canAttack(gloop)) this.attack(gloop);
-						lastAttackTimestamp = getNowAsMilliseconds();
+						if (this.canReachTarget(gloop) && this.attackOffCooldown()) {
+							this.attack(gloop);
+							didAttack = true;
+						}
 					});
 				} else {
 					for (const gloop of gloops) {
-						if (this.canAttack(gloop)) {
-							console.log(this.attackOffCooldown());
+						if (this.canReachTarget(gloop) && this.attackOffCooldown()) {
 							if (this.target === null) {
 								this.target = gloop;
 								this.createProjectile(this.target);
+								didAttack = true;
 							}
 							break;
 						}
 					}
 				}
+			}
+			if (didAttack) {
+				this.lastAttackTimestamp = getNowAsMilliseconds();
 			}
 			if (this.showRange) this.visualizeRange();
 			this.render();
