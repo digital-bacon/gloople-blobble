@@ -113,3 +113,9 @@ const getWayPoints = () => {
 		{ x: 1339, y: 234 },
 	];
 };
+
+const nowAsMilliseconds = () => {
+	const now = Date.now();
+	return now;
+};
+console.log(nowAsMilliseconds());
