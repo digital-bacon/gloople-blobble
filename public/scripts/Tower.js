@@ -12,18 +12,19 @@ class Tower {
 		this.width = configObject.width;
 		this.height = configObject.height;
 		this.img = configObject.img;
+		this.button = configObject.button || [];
 		this.color = configObject.fillColor;
 		this.stroke = configObject.strokeColor;
 		this.towersIndex = configObject.towersIndex;
+		this.attackDamage = configObject.attackDamage || 1;
 		this.attackRadius = configObject.attackRadius;
 		this.attacksMultiple = configObject.attacksMultiple;
-		this.showRange = configObject.showRange;
-		this.button = configObject.button || [];
+		this.attackSpeedInMilliseconds = configObject?.attack?.speed || 0;
 		this.projectileSize = configObject.projectileSize;
 		this.purchaseCost = configObject.purchaseCost || 1;
-		this.target = null;
-		this.attackDamage = configObject.attackDamage || 1;
+		this.showRange = configObject.showRange;
 		this.level = configObject.level || 1;
+		this.target = null;
 		this.upgradeCost = configObject.upgradeCost || 1;
 		this.multiplier = {
 			attackRadius: configObject?.multiplier?.attackRadius || 10,
@@ -150,8 +151,6 @@ class Tower {
 			const xDelta = Math.abs(this.position.center.x - xGloop);
 			const yDelta = Math.abs(this.position.center.y - yGloop);
 
-			// const distance =
-			// 	Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloop.width / 4;
 			const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
 			// const distance =
 			// 	Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloop.radius;

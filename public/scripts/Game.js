@@ -1,6 +1,7 @@
 class Game {
 	constructor() {
 		return {
+			timestampStart: null,
 			status: INITIAL_GAME_STATUS || "",
 			setStatus(status) {
 				const match = gameStatusTypes.filter((gameType) => gameType === status);
@@ -16,6 +17,7 @@ class Game {
 					player.setHP(0);
 				}
 				if (this.status === "active") {
+					this.timestampStart = nowAsMilliseconds();
 					this.reset();
 				}
 			},
