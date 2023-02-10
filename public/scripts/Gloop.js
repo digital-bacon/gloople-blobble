@@ -28,6 +28,8 @@ class Gloop {
 		this.frameHeight = configObject.height;
 		this.totalFrames = 20;
 		this.currentFrame = 0;
+		this.xCropImgStart = 0;
+		this.yCropImgStart = 0;
 
 		this.destroy = function () {
 			this.destroyMe = true;
@@ -67,7 +69,14 @@ class Gloop {
 				this.position.y += yTravelDistance;
 				this.position.center.x += xTravelDistance;
 				this.position.center.y += yTravelDistance;
+
+				if (this.shift > this.totalFrames) {
+					this.shift = 0
+				}
+
 				this.render();
+				this.shift++
+				this.xCropImgStart = this.frameWidth * this.shift;
 
 				const reachedWaypoint = () => {
 					const xReached = Math.round(this.position.x) === Math.round(xMoveTo);
@@ -84,17 +93,13 @@ class Gloop {
 				player.loseHP(1);
 			}
 		};
+		
+		this.getSpriteCropPosition = function () {
+			return 1;
+		} 
 
 		this.render = function () {
 			ctx.beginPath();
-			// drawImage(image, sourceX, sourceY, sWidth, sHeight, offsetCanvasX, offsetCanvasY, dWidth, dHeight)
-			// this.shift = 0;
-			// this.frameWidth = configObject.width;
-			// this.frameHeight = configObject.height;
-			// this.totalFrames = 20;
-			// this.currentFrame = 0;
-			const xCropImgStart = 0;
-			const yCropImgStart = 0;
 			const widthCrop = this.frameWidth;
 			const heightCrop = this.frameHeight;
 			const xCanvasPosition = this.position.x;
@@ -103,8 +108,8 @@ class Gloop {
 			const heightDraw = heightCrop;
 			ctx.drawImage(
 				this.img,
-				xCropImgStart,
-				yCropImgStart,
+				this.xCropImgStart,
+				this.yCropImgStart,
 				widthCrop,
 				heightCrop,
 				xCanvasPosition,
