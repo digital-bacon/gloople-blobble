@@ -84,7 +84,7 @@ const configGloopSam = {
 	img: imgGloopSam,
 	width: 175,
 	height: 70,
-	spritesheetReverse: true
+	spritesheetReverse: true,
 };
 
 const configTower = {
