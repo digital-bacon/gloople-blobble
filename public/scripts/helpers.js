@@ -80,10 +80,10 @@ const getGameStatusTypes = () => {
 
 const getTowerLocations = (locationSize) => {
 	const locations = [
-		{ x: 278, y: 550 },
-		{ x: 408, y: 335 },
-		{ x: 566, y: 550 },
-		{ x: 887, y: 390 },
+		{ type: "magic", x: 278, y: 550 },
+		{ type: "magic", x: 408, y: 335 },
+		{ type: "magic", x: 566, y: 550 },
+		{ type: "splash", x: 887, y: 390 },
 	];
 	const xOffset = locationSize / 2;
 	const yOffset = locationSize;

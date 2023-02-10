@@ -33,6 +33,7 @@ class Tower {
 			attackDamage: configObject?.multiplier?.attackDamage || 0.25,
 			upgradeCost: configObject?.multiplier?.upgradeCost || 0.5,
 		};
+		this.type = configObject.type || "unspecified"
 
 		this.attackOffCooldown = function () {
 			return this.timestampCanAttackAfter() <= getNowAsMilliseconds();
@@ -136,7 +137,6 @@ class Tower {
 		this.findNextTarget = function () {
 			for (const gloop of gloops) {
 				if (this.canReachTarget(gloop) && gloop.targettable) {
-					console.log(gloop);
 					return gloop;
 				}
 			}
