@@ -74,13 +74,13 @@ const startEventListeners = () => {
 						location.button.length > 0 ? location.button[0] : null;
 					if (buildButton) {
 						if (isIntersectingRect(mousePosition, buildButton)) {
-							const towerType = location.towerTypes[0];
-							const tower = { ...configTower, ...towerType };
+							// const towerType = location.towerTypes[0];
+							const towerType = location.towerTypes.filter(towerType => towerType.type === location.towerType);
+							const tower = { ...configTower, ...towerType[0]};
 							if (goldStash.total >= tower.purchaseCost) {
 								goldStash.withdraw(tower.purchaseCost);
 								tower.x = location.position.x;
 								tower.y = location.position.y;
-								console.log(locations)
 								const newTower = summonTower(tower);
 								location.towerId = newTower.id;
 								clearBuildButtons();
