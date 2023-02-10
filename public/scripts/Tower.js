@@ -12,23 +12,30 @@ class Tower {
 		this.width = configObject.width;
 		this.height = configObject.height;
 		this.img = configObject.img;
+		this.button = configObject.button || [];
 		this.color = configObject.fillColor;
 		this.stroke = configObject.strokeColor;
 		this.towersIndex = configObject.towersIndex;
+		this.attackDamage = configObject.attackDamage || 1;
+		this.lastAttackTimestamp = null;
 		this.attackRadius = configObject.attackRadius;
+		this.attackSpeedInMilliseconds =
+			configObject.attackSpeedInMilliseconds || 0;
 		this.attacksMultiple = configObject.attacksMultiple;
-		this.showRange = configObject.showRange;
-		this.button = configObject.button || [];
 		this.projectileSize = configObject.projectileSize;
 		this.purchaseCost = configObject.purchaseCost || 1;
-		this.target = null;
-		this.attackDamage = configObject.attackDamage || 1;
+		this.showRange = configObject.showRange;
 		this.level = configObject.level || 1;
+		this.target = null;
 		this.upgradeCost = configObject.upgradeCost || 1;
 		this.multiplier = {
 			attackRadius: configObject?.multiplier?.attackRadius || 10,
 			attackDamage: configObject?.multiplier?.attackDamage || 0.25,
 			upgradeCost: configObject?.multiplier?.upgradeCost || 0.5,
+		};
+
+		this.attackOffCooldown = function () {
+			return this.timestampCanAttackAfter() <= getNowAsMilliseconds();
 		};
 
 		this.calculateAttackRadius = function () {
@@ -54,43 +61,28 @@ class Tower {
 			return total;
 		};
 
-		this.upgrade = function () {
-			this.level++;
+		this.canReachTarget = function (gloop) {
+			const xGloop = gloop.position.center.x - gloop.width / 2;
+			const yGloop = gloop.position.center.y - gloop.height / 2;
+			const xDelta = Math.abs(this.position.center.x - xGloop);
+			const yDelta = Math.abs(this.position.center.y - yGloop);
+
+			const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
+			// const distance =
+			// 	Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloop.radius;
+
+			if (distance <= this.calculateAttackRadius()) {
+				return true;
+			}
+			return false;
 		};
 
-		this.createProjectile = function (target) {
-			const img = new Image();
-			img.src = "static/projectile_magic_tower.png";
-			const configProjectile = {
-				ctx,
-				target,
-				img,
-				width: 32,
-				height: 32,
-				x: this.position.center.x,
-				y: this.position.center.y,
-				radius: this.projectileSize / 2,
-				fillColor: "pink",
-				strokeColor: "blue",
-				speed: 2,
-				tower: this,
-			};
-			const projectile = new Projectile(configProjectile);
-			projectiles.push(projectile);
+		this.damage = function (gloop) {
+			gloop.loseHP(this.calculateAttackDamage());
 		};
 
-		this.visualizeRange = function () {
-			const configRange = {
-				ctx,
-				x: this.position.center.x,
-				y: this.position.center.y,
-				radius: this.calculateAttackRadius(),
-				fillColor: "rgba(255,0,0,0.25)",
-				strokeColor: "red",
-			};
-
-			const range = new RangeVisual(configRange);
-			range.render();
+		this.destroy = function () {
+			towers.splice(this.towersIndex, 1);
 		};
 
 		this.drawUpgradeButton = function () {
@@ -129,71 +121,118 @@ class Tower {
 			text.render();
 		};
 
-		this.detectGloop = function () {
-			if (gloops.length === 0) {
-				return false;
+		this.fireAtTarget = function (target) {
+			const projectile = this.loadProjectile(target);
+			projectiles.push(projectile);
+		};
+
+		this.getTarget = function () {
+			if (this.target && this.canReachTarget(this.target)) {
+				return this.target;
 			}
-			return true;
+			return this.findNextTarget();
 		};
 
-		this.destroy = function () {
-			towers.splice(this.towersIndex, 1);
-		};
-
-		this.attack = function (gloop) {
-			gloop.loseHP(this.calculateAttackDamage());
-		};
-
-		this.canAttack = function (gloop) {
-			const xGloop = gloop.position.center.x - gloop.width / 2;
-			const yGloop = gloop.position.center.y - gloop.height / 2;
-			const xDelta = Math.abs(this.position.center.x - xGloop);
-			const yDelta = Math.abs(this.position.center.y - yGloop);
-
-			// const distance =
-			// 	Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloop.width / 4;
-			const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
-			// const distance =
-			// 	Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloop.radius;
-
-			if (distance <= this.calculateAttackRadius()) {
-				return true;
+		this.findNextTarget = function () {
+			for (const gloop of gloops) {
+				if (this.canReachTarget(gloop)) {
+					return gloop;
+				}
 			}
-			return false;
+			return null;
+		};
+
+		this.loadProjectile = function (target) {
+			const img = new Image();
+			img.src = "static/projectile_magic_tower.png";
+			const configProjectile = {
+				ctx,
+				target,
+				img,
+				width: 32,
+				height: 32,
+				x: this.position.center.x,
+				y: this.position.center.y,
+				radius: this.projectileSize / 2,
+				fillColor: "pink",
+				strokeColor: "blue",
+				speed: 2,
+				tower: this,
+			};
+			const projectile = new Projectile(configProjectile);
+			return projectile;
+		};
+
+		this.timestampCanAttackAfter = function () {
+			return this.lastAttackTimestamp + this.attackSpeedInMilliseconds;
+		};
+
+		this.doAttack = function () {
+			let didAttack = false;
+			if (this.attackOffCooldown()) {
+				if (this.attacksMultiple) {
+					didAttack = this.doAttackSplash();
+				} else {
+					didAttack = this.doAttackSingle();
+				}
+			}
+			return didAttack;
+		};
+
+		this.doAttackSplash = function () {
+			let didAttack = false;
+			gloops.forEach((gloop) => {
+				if (this.canReachTarget(gloop)) {
+					this.damage(gloop);
+					didAttack = true;
+				}
+			});
+			return didAttack;
+		};
+
+		this.doAttackSingle = function () {
+			let didAttack = false;
+			this.target = this.getTarget();
+			if (this.target) {
+				this.fireAtTarget(this.target);
+				didAttack = true;
+			}
+			return didAttack;
 		};
 
 		this.update = function () {
-			if (gloops.length > 0) {
-				if (this.attacksMultiple) {
-					gloops.forEach((gloop) => {
-						if (this.canAttack(gloop)) this.attack(gloop);
-					});
-				} else {
-					for (const gloop of gloops) {
-						if (this.canAttack(gloop)) {
-							if (this.target === null) {
-								this.target = gloop;
-								this.createProjectile(this.target);
-							}
-							break;
-						}
-					}
-				}
+			const didAttack = this.doAttack();
+
+			if (didAttack) {
+				this.lastAttackTimestamp = getNowAsMilliseconds();
 			}
+
 			if (this.showRange) this.visualizeRange();
+
 			this.render();
 			if (this.button.length > 0) this.drawUpgradeButton();
 		};
 
+		this.upgrade = function () {
+			this.level++;
+		};
+
+		this.visualizeRange = function () {
+			const configRange = {
+				ctx,
+				x: this.position.center.x,
+				y: this.position.center.y,
+				radius: this.calculateAttackRadius(),
+				fillColor: "rgba(255,0,0,0.25)",
+				strokeColor: "red",
+			};
+
+			const range = new RangeVisual(configRange);
+			range.render();
+		};
+
 		this.render = function () {
 			if (this.width > 0 && this.height > 0) {
-				// ctx.beginPath();
-				// ctx.strokeStyle = this.stroke;
-				// ctx.fillStyle = this.color;
-				// ctx.rect(this.position.x, this.position.y, this.width, this.height);
-				// ctx.fill();
-				// ctx.stroke();
-				// ctx.closePath();
 				ctx.beginPath();
 				ctx.drawImage(
 					this.img,

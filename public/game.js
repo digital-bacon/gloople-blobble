@@ -1,7 +1,7 @@
 const INITIAL_WAVE_GLOOPS = 1;
 const INITIAL_WAVE = 0;
 const INITIAL_GAME_STATUS = "initial";
-const INITIAL_PLAYER_HP = 1000;
+const INITIAL_PLAYER_HP = 10;
 const INITIAL_GOLD_STASH_TOTAL = 5000;
 const INITIAL_TOWER_LEVEL = 1;
 const TOWER_LOCATION_SIZE = 160;
@@ -96,6 +96,7 @@ const configTower = {
 	showRange: true,
 	projectileSize: 10,
 	attackDamage: 100,
+	attackSpeedInMilliseconds: 1000,
 	purchaseCost: 50,
 	upgradeCost: 100,
 	level: INITIAL_TOWER_LEVEL,
