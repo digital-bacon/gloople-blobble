@@ -36,6 +36,8 @@ const configGloop = {
 	y: waypoints[0].y,
 	waypointIndex: 0,
 	wave: 0,
+	immobile: false,
+	targettable: true,
 	_gold: 10,
 	get gold() {
 		return this._gold;

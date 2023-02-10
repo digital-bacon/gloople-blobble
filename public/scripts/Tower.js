@@ -135,7 +135,8 @@ class Tower {
 
 		this.findNextTarget = function () {
 			for (const gloop of gloops) {
-				if (this.canReachTarget(gloop)) {
+				if (this.canReachTarget(gloop) && gloop.targettable) {
+					console.log(gloop);
 					return gloop;
 				}
 			}

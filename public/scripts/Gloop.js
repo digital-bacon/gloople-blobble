@@ -33,8 +33,8 @@ class Gloop {
 		this.animationSpeedInMilliseconds =
 			configObject.animationSpeedInMilliseconds || 80;
 		this.lastAnimateTimestamp = getNowAsMilliseconds();
-		this.immobile = configObject.immobile || false;
-		this.targettable = configObject.targettable || true;
+		this.immobile = configObject.immobile;
+		this.targettable = configObject.targettable;
 
 		this.animationOffCooldown = function () {
 			return this.timestampCanAnimateAfter() <= getNowAsMilliseconds();
