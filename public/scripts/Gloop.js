@@ -26,7 +26,7 @@ class Gloop {
 		this.shift = 0;
 		this.frameWidth = configObject.width;
 		this.frameHeight = configObject.height;
-		this.totalFrames = 20;
+		this.totalFrames = configObject.totalFrames || 20;
 		this.currentFrame = 0;
 		this.xCropImgStart = 0;
 		this.yCropImgStart = 0;

@@ -87,6 +87,18 @@ const configGloopSam = {
 	spritesheetReverse: true,
 };
 
+const imgGloopSmooch = new Image();
+imgGloopSmooch.src = "static/spritesheet_smooch.png";
+
+const configGloopSmooch = {
+	baseConfig: configGloop,
+	img: imgGloopSmooch,
+	width: 67,
+	height: 70,
+	spritesheetReverse: true,
+	totalFrames: 18,
+};
+
 const configTower = {
 	ctx,
 	x: 135,
@@ -149,7 +161,7 @@ const configWave = {
 	speedDefault: 1,
 	speedMultiplier: 0.2,
 	totalGloopsMultiplier: 0.25,
-	gloopSubSpecies: configGloopSam,
+	gloopSubSpecies: configGloopSmooch,
 	_totalGloops: INITIAL_WAVE_GLOOPS,
 	get totalGloops() {
 		const total = Math.floor(
