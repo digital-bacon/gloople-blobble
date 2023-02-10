@@ -33,6 +33,14 @@ class Gloop {
 		this.animationSpeedInMilliseconds =
 			configObject.animationSpeedInMilliseconds || 16.67;
 
+		this.animationOffCooldown = function () {
+			return this.timestampCanAnimateAfter() <= getNowAsMilliseconds();
+		};
+
+		this.timestampCanAnimateAfter = function () {
+			return this.lastAnimateTimestamp + this.animateSpeedInMilliseconds;
+		};
+
 		this.destroy = function () {
 			this.destroyMe = true;
 		};

@@ -394,7 +394,6 @@ const populateGloops = (configSubSpecies) => {
 
 const animationLoop = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-
 	populateCircles();
 	populateFillText();
 	populateGloops(configGloopSam);
