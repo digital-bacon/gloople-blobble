@@ -31,6 +31,7 @@ class Game {
 				locations = [];
 				projectiles = [];
 				towers = [];
+				staticObjects = [];
 			},
 		};
 	}

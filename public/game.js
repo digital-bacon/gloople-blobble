@@ -20,7 +20,7 @@ const game = new Game();
 const goldStash = new GoldStash();
 const player = new Player();
 
-const staticObjects = [];
+let staticObjects = [];
 let circles = [];
 let fillText = [];
 let gloops = [];
