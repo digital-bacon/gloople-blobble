@@ -172,7 +172,7 @@ const configTowerSplash = {
 
 const towerTypes = [];
 towerTypes.push(configTowerMagic);
-// towerTypes.push(configTowerSplash);
+towerTypes.push(configTowerSplash);
 
 const configTowerLocation = {
 	ctx,
@@ -290,7 +290,7 @@ const generateTowerLocations = (configGenerate) => {
 		location.towerTypes = configTowerTypes;
 		location.x = towerLocations[i].x;
 		location.y = towerLocations[i].y;
-		location.id = towerLocations[i].id;
+		location.type = towerLocations[i].type; //tower type
 		newLocations.push(location);
 	}
 	newLocations.forEach((location) => {
