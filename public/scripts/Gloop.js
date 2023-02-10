@@ -22,7 +22,7 @@ class Gloop {
 		this.waypointIndex = configObject.waypointIndex;
 		this.isUnderAttack = false;
 		this.destroyMe = false;
-
+		this.spritesheetReverse = configObject.spritesheetReverse || false;
 		this.shift = 0;
 		this.frameWidth = configObject.width;
 		this.frameHeight = configObject.height;
@@ -70,12 +70,25 @@ class Gloop {
 				this.position.center.x += xTravelDistance;
 				this.position.center.y += yTravelDistance;
 
-				if (this.shift > this.totalFrames) {
-					this.shift = 0
+
+				if (!this.spritesheetReverse) {
+					this.shift++
+					if (this.shift > this.totalFrames) {
+						this.shift = 0
+					}
+				} else {
+					if (this.shift < 0) {
+						this.shift = this.totalFrames
+					}
+					this.shift--
+				}
+					this.render();
+				if (!this.spritesheetReverse) {
+					this.shift++
+				} else {
+					this.shift--
 				}
 
-				this.render();
-				this.shift++
 				this.xCropImgStart = this.frameWidth * this.shift;
 
 				const reachedWaypoint = () => {
