@@ -109,6 +109,7 @@ const configGloopTom = {
 	height: 100,
 	spritesheetReverse: true,
 	totalFrames: 40,
+	animationSpeedInMilliseconds: 100,
 };
 
 const configTower = {
@@ -173,7 +174,7 @@ const configWave = {
 	speedDefault: 1,
 	speedMultiplier: 0.2,
 	totalGloopsMultiplier: 0.25,
-	gloopSubSpecies: configGloopSmooch,
+	gloopSubSpecies: configGloopTom,
 	_totalGloops: INITIAL_WAVE_GLOOPS,
 	get totalGloops() {
 		const total = Math.floor(
