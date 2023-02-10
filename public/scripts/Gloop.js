@@ -23,6 +23,14 @@ class Gloop {
 		this.isUnderAttack = false;
 		this.destroyMe = false;
 
+		this.shift = 0;
+		this.frameWidth = configObject.width;
+		this.frameHeight = configObject.height;
+		this.totalFrames = 20;
+		this.currentFrame = 0;
+		this.xCropImgStart = 0;
+		this.yCropImgStart = 0;
+
 		this.destroy = function () {
 			this.destroyMe = true;
 		};
@@ -61,11 +69,18 @@ class Gloop {
 				this.position.y += yTravelDistance;
 				this.position.center.x += xTravelDistance;
 				this.position.center.y += yTravelDistance;
+
+				if (this.shift > this.totalFrames) {
+					this.shift = 0
+				}
+
 				this.render();
+				this.shift++
+				this.xCropImgStart = this.frameWidth * this.shift;
 
 				const reachedWaypoint = () => {
-					const xReached = Math.round(this.position.x) === xMoveTo;
-					const yReached = Math.round(this.position.y) === yMoveTo;
+					const xReached = Math.round(this.position.x) === Math.round(xMoveTo);
+					const yReached = Math.round(this.position.y) === Math.round(yMoveTo);
 
 					return xReached && yReached;
 				};
@@ -78,19 +93,33 @@ class Gloop {
 				player.loseHP(1);
 			}
 		};
+		
+		this.getSpriteCropPosition = function () {
+			return 1;
+		} 
 
 		this.render = function () {
 			ctx.beginPath();
+			const widthCrop = this.frameWidth;
+			const heightCrop = this.frameHeight;
+			const xCanvasPosition = this.position.x;
+			const yCanvasPosition = this.position.y;
+			const widthDraw = widthCrop;
+			const heightDraw = heightCrop;
 			ctx.drawImage(
 				this.img,
-				this.position.x,
-				this.position.y,
-				this.width,
-				this.height
+				this.xCropImgStart,
+				this.yCropImgStart,
+				widthCrop,
+				heightCrop,
+				xCanvasPosition,
+				yCanvasPosition,
+				widthDraw,
+				heightDraw
 			);
-			ctx.strokeRect(this.position.x, this.position.y, this.width, this.height);
 			ctx.closePath();
 		};
 		return this;
 	}
 }
+

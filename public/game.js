@@ -1,6 +1,6 @@
 const INITIAL_WAVE_GLOOPS = 1;
 const INITIAL_WAVE = 0;
-const INITIAL_GAME_STATUS = "initial";
+const INITIAL_GAME_STATUS = "active";
 const INITIAL_PLAYER_HP = 10;
 const INITIAL_GOLD_STASH_TOTAL = 5000;
 const INITIAL_TOWER_LEVEL = 1;
@@ -77,12 +77,12 @@ const configGloopBob = {
 };
 
 const imgGloopSam = new Image();
-imgGloopSam.src = "static/gloop_sam.png";
+imgGloopSam.src = "static/spritesheet_sam.png";
 
 const configGloopSam = {
 	baseConfig: configGloop,
 	img: imgGloopSam,
-	width: 70,
+	width: 175,
 	height: 70,
 };
 
