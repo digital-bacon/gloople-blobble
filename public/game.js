@@ -90,8 +90,6 @@ const configTower = {
 	ctx,
 	x: 135,
 	y: 135,
-	fillColor: "transparent",
-	strokeColor: "cyan",
 	towersIndex: towers.length,
 	attackRadius: 100,
 	attacksMultiple: false,
@@ -113,8 +111,23 @@ const configTowerMagic = {
 	height: TOWER_LOCATION_SIZE,
 }
 
+const imgTowerSplash = new Image();
+imgTowerSplash.src = "static/tower_splash.png";
+
+const configTowerSplash = {
+	baseConfig: configTower,
+	img: imgTowerSplash,
+	width: TOWER_LOCATION_SIZE,
+	height: TOWER_LOCATION_SIZE,
+}
+
+const towerTypes = [];
+// towerTypes.push(configTowerMagic);
+towerTypes.push(configTowerSplash);
+
 const configTowerLocation = {
 	ctx,
+	towerTypes,
 	x: 0,
 	y: 0,
 	width: TOWER_LOCATION_SIZE,
@@ -382,8 +395,6 @@ const animationLoop = () => {
 	populateGloops(configGloopSam);
 	populateRoundRects();
 	populateTowers(configTowerMagic);
-	const towerTypes = [];
-	towerTypes.push(configTowerMagic);
 	populateTowerLocations(towerTypes);
 	populateImages();
 
