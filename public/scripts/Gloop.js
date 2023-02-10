@@ -23,6 +23,12 @@ class Gloop {
 		this.isUnderAttack = false;
 		this.destroyMe = false;
 
+		this.shift = 0;
+		this.frameWidth = configObject.width;
+		this.frameHeight = configObject.height;
+		this.totalFrames = 20;
+		this.currentFrame = 0;
+
 		this.destroy = function () {
 			this.destroyMe = true;
 		};
@@ -64,8 +70,8 @@ class Gloop {
 				this.render();
 
 				const reachedWaypoint = () => {
-					const xReached = Math.round(this.position.x) === xMoveTo;
-					const yReached = Math.round(this.position.y) === yMoveTo;
+					const xReached = Math.round(this.position.x) === Math.round(xMoveTo);
+					const yReached = Math.round(this.position.y) === Math.round(yMoveTo);
 
 					return xReached && yReached;
 				};
@@ -82,20 +88,33 @@ class Gloop {
 		this.render = function () {
 			ctx.beginPath();
 			// drawImage(image, sourceX, sourceY, sWidth, sHeight, offsetCanvasX, offsetCanvasY, dWidth, dHeight)
+			// this.shift = 0;
+			// this.frameWidth = configObject.width;
+			// this.frameHeight = configObject.height;
+			// this.totalFrames = 20;
+			// this.currentFrame = 0;
+			const xCropImgStart = 0;
+			const yCropImgStart = 0;
+			const widthCrop = this.frameWidth;
+			const heightCrop = this.frameHeight;
+			const xCanvasPosition = this.position.x;
+			const yCanvasPosition = this.position.y;
+			const widthDraw = widthCrop;
+			const heightDraw = heightCrop;
 			ctx.drawImage(
 				this.img,
-				0,
-				0,
-				this.width,
-				this.height,
-				this.position.x,
-				this.position.y,
-				this.width,
-				this.height,
+				xCropImgStart,
+				yCropImgStart,
+				widthCrop,
+				heightCrop,
+				xCanvasPosition,
+				yCanvasPosition,
+				widthDraw,
+				heightDraw
 			);
-			ctx.strokeRect(this.position.x, this.position.y, this.width, this.height);
 			ctx.closePath();
 		};
 		return this;
 	}
 }
+
