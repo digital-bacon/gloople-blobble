@@ -62,8 +62,8 @@ class Tower {
 		};
 
 		this.canReachTarget = function (gloop) {
-			const xGloop = gloop.position.center.x - gloop.width / 2;
-			const yGloop = gloop.position.center.y - gloop.height / 2;
+			const xGloop = gloop.position.center.x;
+			const yGloop = gloop.position.center.y;
 			const xDelta = Math.abs(this.position.center.x - xGloop);
 			const yDelta = Math.abs(this.position.center.y - yGloop);
 
