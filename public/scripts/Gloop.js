@@ -33,6 +33,8 @@ class Gloop {
 		this.animationSpeedInMilliseconds =
 			configObject.animationSpeedInMilliseconds || 80;
 		this.lastAnimateTimestamp = getNowAsMilliseconds();
+		this.immobile = configObject.immobile;
+		this.targettable = configObject.targettable;
 
 		this.animationOffCooldown = function () {
 			return this.timestampCanAnimateAfter() <= getNowAsMilliseconds();
@@ -76,10 +78,12 @@ class Gloop {
 				const moves = Math.floor(distance / this.speed);
 				let xTravelDistance = (xMoveTo - this.position.x) / moves || 0;
 				let yTravelDistance = (yMoveTo - this.position.y) / moves || 0;
-				this.position.x += xTravelDistance;
-				this.position.y += yTravelDistance;
-				this.position.center.x += xTravelDistance;
-				this.position.center.y += yTravelDistance;
+				if (!this.immobile) {
+					this.position.x += xTravelDistance;
+					this.position.y += yTravelDistance;
+					this.position.center.x += xTravelDistance;
+					this.position.center.y += yTravelDistance;
+				}
 
 				let didAnimate = false;
 				if (this.animationOffCooldown()) {
@@ -117,17 +121,13 @@ class Gloop {
 					return xReached && yReached;
 				};
 
-				if (reachedWaypoint()) {
+				if (!this.immobile && reachedWaypoint()) {
 					this.waypointIndex++;
 				}
 			} else {
 				this.destroy();
 				player.loseHP(1);
 			}
-		};
-
-		this.getSpriteCropPosition = function () {
-			return 1;
 		};
 
 		this.render = function () {

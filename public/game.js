@@ -20,6 +20,7 @@ const game = new Game();
 const goldStash = new GoldStash();
 const player = new Player();
 
+let staticObjects = [];
 let circles = [];
 let fillText = [];
 let gloops = [];
@@ -36,6 +37,8 @@ const configGloop = {
 	y: waypoints[0].y,
 	waypointIndex: 0,
 	wave: 0,
+	immobile: false,
+	targettable: true,
 	_gold: 10,
 	get gold() {
 		return this._gold;
@@ -64,6 +67,22 @@ const configGloop = {
 		}
 		this._speed = value;
 	},
+};
+
+const imgIdleFranklin = new Image();
+imgIdleFranklin.src = "static/spritesheet_franklin.png";
+
+const configGloopFranklin = {
+	baseConfig: configGloop,
+	img: imgIdleFranklin,
+	width: 144.165,
+	height: 55,
+	x: 430,
+	y: 600,
+	immobile: true,
+	targettable: false,
+	totalFrames: 50,
+	animationSpeedInMilliseconds: 500,
 };
 
 const imgGloopBob = new Image();
@@ -174,7 +193,7 @@ const configWave = {
 	speedDefault: 1,
 	speedMultiplier: 0.2,
 	totalGloopsMultiplier: 0.25,
-	gloopSubSpecies: configGloopTom,
+	gloopSubSpecies: configGloopSmooch,
 	_totalGloops: INITIAL_WAVE_GLOOPS,
 	get totalGloops() {
 		const total = Math.floor(
@@ -398,9 +417,7 @@ const populateTowers = (configTowerType) => {
 
 const populateTowerLocations = (configTowerTypes) => {
 	if (locations.length === 0) {
-		const initialLocations = towerLocations.filter(
-			(location) => location.id !== 2
-		);
+		const initialLocations = towerLocations;
 		const configGenerate = {
 			configTowerLocation,
 			configTower,
@@ -408,6 +425,17 @@ const populateTowerLocations = (configTowerTypes) => {
 			towerLocations: initialLocations,
 		};
 		generateTowerLocations(configGenerate);
+	}
+};
+
+const populateStaticObjects = () => {
+	if (staticObjects.length === 0) {
+		const configGenerate = {
+			...configGloop,
+			...configGloopFranklin,
+		};
+		const newGloop = new Gloop(configGenerate);
+		staticObjects.push(newGloop);
 	}
 };
 
@@ -421,11 +449,12 @@ const animationLoop = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	populateCircles();
 	populateFillText();
-	populateGloops(configGloopSam);
+	populateGloops();
+	populateImages();
 	populateRoundRects();
+	populateStaticObjects();
 	populateTowers(configTowerMagic);
 	populateTowerLocations(towerTypes);
-	populateImages();
 
 	if (game.status === "initial") {
 		update(roundRects);
@@ -433,6 +462,7 @@ const animationLoop = () => {
 	}
 
 	if (game.status === "active") {
+		update(staticObjects);
 		update(towers);
 		update(locations);
 		update(circles);
@@ -442,6 +472,7 @@ const animationLoop = () => {
 	}
 
 	if (game.status === "gameover") {
+		render(staticObjects);
 		render(towers);
 		render(projectiles);
 		render(roundRects);
