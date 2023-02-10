@@ -472,6 +472,7 @@ const animationLoop = () => {
 	}
 
 	if (game.status === "gameover") {
+		render(staticObjects);
 		render(towers);
 		render(projectiles);
 		render(roundRects);
