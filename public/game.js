@@ -96,6 +96,7 @@ const configTower = {
 	showRange: true,
 	projectileSize: 10,
 	attackDamage: 100,
+	attackSpeedInMilliseconds: 1000,
 	purchaseCost: 50,
 	upgradeCost: 100,
 	level: INITIAL_TOWER_LEVEL,
@@ -123,8 +124,8 @@ const configTowerSplash = {
 };
 
 const towerTypes = [];
-// towerTypes.push(configTowerMagic);
-towerTypes.push(configTowerSplash);
+towerTypes.push(configTowerMagic);
+// towerTypes.push(configTowerSplash);
 
 const configTowerLocation = {
 	ctx,

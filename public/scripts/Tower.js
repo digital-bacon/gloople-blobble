@@ -17,9 +17,10 @@ class Tower {
 		this.stroke = configObject.strokeColor;
 		this.towersIndex = configObject.towersIndex;
 		this.attackDamage = configObject.attackDamage || 1;
+		this.lastAttackTimestamp = null;
 		this.attackRadius = configObject.attackRadius;
-		this.attacksMultiple = configObject.attacksMultiple;
 		this.attackSpeedInMilliseconds = configObject?.attack?.speed || 0;
+		this.attacksMultiple = configObject.attacksMultiple;
 		this.projectileSize = configObject.projectileSize;
 		this.purchaseCost = configObject.purchaseCost || 1;
 		this.showRange = configObject.showRange;
@@ -78,6 +79,7 @@ class Tower {
 			};
 			const projectile = new Projectile(configProjectile);
 			projectiles.push(projectile);
+			this.lastAttackTimestamp = nowAsMilliseconds();
 		};
 
 		this.visualizeRange = function () {

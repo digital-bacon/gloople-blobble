@@ -118,4 +118,3 @@ const nowAsMilliseconds = () => {
 	const now = Date.now();
 	return now;
 };
-console.log(nowAsMilliseconds());
