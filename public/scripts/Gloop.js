@@ -32,6 +32,7 @@ class Gloop {
 		this.yCropImgStart = 0;
 		this.animationSpeedInMilliseconds =
 			configObject.animationSpeedInMilliseconds || 16.67;
+		this.lastAnimateTimestamp = null;
 
 		this.animationOffCooldown = function () {
 			return this.timestampCanAnimateAfter() <= getNowAsMilliseconds();
