@@ -12,9 +12,6 @@ class Projectile {
 				y: configObject.y - this.offset.y + this.offset.y,
 			},
 		};
-		this.radius = configObject.radius;
-		this.color = configObject.fillColor;
-		this.stroke = configObject.strokeColor;
 		this.speed = configObject.speed;
 		this.destroyMe = false;
 		this.target = configObject.target;
