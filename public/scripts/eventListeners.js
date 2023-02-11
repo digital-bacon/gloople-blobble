@@ -12,6 +12,10 @@ const startEventListeners = () => {
 			player.attack(targetSuperPower, "acidrain");
 			player.sayNextMouseClick = false;
 			player.superPowers.acidrain.uiButton.src = "static/button_superpower_acidrain_off.png"
+			const timeOut = player.superPowers.acidrain.canCallAfterTimeStamp - getNowAsMilliseconds()
+			setTimeout(() => {
+				player.superPowers.acidrain.uiButton.src = "static/button_superpower_acidrain.png"
+			}, timeOut)
 		}
 
 		if (ui.buttons.superPowerAcidRain.evalAvailable()) {
@@ -20,7 +24,6 @@ const startEventListeners = () => {
 				if (isIntersectingRect(mousePosition, uiElement[0])) {
 					player.sayNextMouseClick = true;
 					player.superPowers.acidrain.uiButton = uiElement[0];
-					console.log(player.superPowers.acidrain.uiButton)
 				}
 			}
 		}
