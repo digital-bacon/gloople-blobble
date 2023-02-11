@@ -21,7 +21,6 @@ const game = new Game();
 const goldStash = new GoldStash();
 
 const gloopSubSpecies = [];
-let staticObjects = [];
 let circles = [];
 let fillText = [];
 let gloops = [];
@@ -30,9 +29,13 @@ let locations = [];
 let projectiles = [];
 let rects = [];
 let roundRects = [];
-let towers = [];
+let staticObjects = [];
 let superPowers = [];
+let towers = [];
+let uiElements = [];
 
+const buttonSuperPower = new CanvasImage(ui.buttons.superPowerAcidRain.drawing.image);
+uiElements.push(buttonSuperPower);
 const configGloop = {
 	ctx,
 	x: waypoints[0].x,
@@ -509,6 +512,7 @@ const animationLoop = () => {
 		update(towers);
 		update(projectiles);
 		update(fillText);
+		update(uiElements);
 	}
 
 	if (game.status === "gameover") {

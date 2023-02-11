@@ -139,6 +139,21 @@ class UserInterface {
 						},
 					},
 				},
+				superPowerAcidRain: {
+					evalAvailable: function () {
+						return game.status === "active";
+					},
+					drawing: {
+						image: {
+							src: "static/button_superpower_acidrain.png",
+							id: "superpower-acidrain",
+							x: canvas.center.x - 100 / 2,
+							y: canvas.height - 104,
+							width: 100,
+							height: 104,
+						},
+					},
+				},
 			},
 			messages: {
 				gameOver: {
