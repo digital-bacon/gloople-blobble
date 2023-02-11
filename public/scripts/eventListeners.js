@@ -19,7 +19,16 @@ const startEventListeners = () => {
 			const uiElement = uiElements.filter((uiElement) => uiElement.id === "superpower-acidrain")
 			if (uiElement.length > 0) {
 				if (isIntersectingRect(mousePosition, uiElement[0])) {
-					console.log("superpower button was clicked")
+					const targetSuperPower = {
+						position: {
+							x: mousePosition.x,
+							y: mousePosition.y,
+						},
+					};
+					const superPower = player.loadSuperPower(targetSuperPower);
+					targetSuperPower.position.x -= superPower.offset.x;
+					targetSuperPower.position.y -= superPower.height - superPower.width / 8;
+					superPowers.push(superPower);
 				}
 			}
 		}
