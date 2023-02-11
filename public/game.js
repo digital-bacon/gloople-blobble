@@ -134,10 +134,10 @@ const configGloopTom = {
 	animationSpeedInMilliseconds: 100,
 };
 
-gloopSubSpecies.push(configGloopBob)
-gloopSubSpecies.push(configGloopSam)
-gloopSubSpecies.push(configGloopSmooch)
-gloopSubSpecies.push(configGloopTom)
+gloopSubSpecies.push(configGloopBob);
+gloopSubSpecies.push(configGloopSam);
+gloopSubSpecies.push(configGloopSmooch);
+gloopSubSpecies.push(configGloopTom);
 
 const configPlayer = {
 	ctx,
@@ -211,6 +211,7 @@ const configWave = {
 	hpMultiplier: 1.025,
 	nextWave: INITIAL_WAVE + 1,
 	speedDefault: 1,
+	speedMaximum: 2.5,
 	speedMultiplier: 0.2,
 	totalGloopsMultiplier: 0.25,
 	_totalGloops: INITIAL_WAVE_GLOOPS,
@@ -260,7 +261,7 @@ const summonGloops = (configSummon) => {
 	const { totalGloops, configGloop, xOffset, wave } = configSummon;
 	const newGloops = [];
 	for (let i = 0; i < totalGloops; i++) {
-		const configSubSpecies = randomFromArray(configWave.gloopSubSpecies)
+		const configSubSpecies = randomFromArray(configWave.gloopSubSpecies);
 		const gloop = { ...configGloop, ...configSubSpecies };
 		gloop.wave = wave;
 		newGloops.push(gloop);
@@ -329,17 +330,27 @@ const clearTowerButtons = () => {
 	});
 };
 
-const nextWave = () => {
+const calculateGloopSpeed = (configWave) => {
+	let result = configWave.speedDefault;
 	if (configWave.nextWave > 1) {
-		configGloop.speed =
+		result =
 			configWave.speedDefault +
 			configWave.currentWave * configWave.speedMultiplier;
+	}
+	if (result >= configWave.speedMaximum) {
+		result = configWave.speedMaximum;
+	}
+	return result;
+};
+
+const nextWave = () => {
+	configGloop.speed = calculateGloopSpeed(configWave);
+	if (configWave.nextWave > 1) {
 		configGloop.hp =
 			configWave.hpDefault + configWave.currentWave * configWave.hpMultiplier;
 		configGloop.gold =
 			configGloop.gold + configWave.currentWave * configWave.goldMultiplier;
 	} else {
-		configGloop.speed = configWave.speedDefault;
 		configGloop.hp = configWave.hpDefault;
 	}
 	configWave.currentWave = configWave.nextWave;
@@ -483,10 +494,10 @@ const animationLoop = () => {
 	if (game.status === "active") {
 		update(staticObjects);
 		update(superPowers);
-		update(towers);
 		update(locations);
 		update(circles);
 		update(gloops);
+		update(towers);
 		update(projectiles);
 		update(fillText);
 	}
