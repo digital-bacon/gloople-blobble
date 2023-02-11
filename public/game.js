@@ -5,7 +5,7 @@ const INITIAL_PLAYER_HP = 10;
 const INITIAL_GOLD_STASH_TOTAL = 5000;
 const INITIAL_TOWER_LEVEL = 1;
 const TOWER_SIZE = { width: 160, height: 160 };
-const TOWER_LOCATION_SIZE = { width: 160, height: 160 };
+const TOWER_LOCATION_SIZE = { width: 160, height: 70 };
 
 const gameCanvas = document.getElementById("gameCanvas");
 const ctx = gameCanvas.getContext("2d");
