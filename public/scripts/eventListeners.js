@@ -97,7 +97,7 @@ const startEventListeners = () => {
 								tower.x = location.position.x;
 								tower.y =
 									location.position.y - location.height + location.yTowerOffset;
-								console.log(location.yTowerOffset);
+								console.log(location);
 								const newTower = summonTower(tower);
 								location.towerId = newTower.id;
 								clearBuildButtons();

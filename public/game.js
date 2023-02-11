@@ -280,19 +280,19 @@ const summonTower = (configTower) => {
 	return newTower;
 };
 
-const summonTowers = (configSummon) => {
-	const { configTower, configTowerType, towerLocations } = configSummon;
-	const newTowers = [];
-	for (let i = 0; i < towerLocations.length; i++) {
-		const tower = { ...configTower, ...configTowerType };
-		tower.x = towerLocations[i].x;
-		tower.y = towerLocations[i].y;
-		newTowers.push(tower);
-	}
-	newTowers.forEach((tower) => {
-		summonTower(tower);
-	});
-};
+// const summonTowers = (configSummon) => {
+// 	const { configTower, configTowerType, towerLocations } = configSummon;
+// 	const newTowers = [];
+// 	for (let i = 0; i < towerLocations.length; i++) {
+// 		const tower = { ...configTower, ...configTowerType };
+// 		tower.x = towerLocations[i].x + towerLocations[i].xTowerOffset;
+// 		tower.y = towerLocations[i].y + towerLocations[i].yTowerOffset;
+// 		newTowers.push(tower);
+// 	}
+// 	newTowers.forEach((tower) => {
+// 		summonTower(tower);
+// 	});
+// };
 
 const generateTowerLocation = (configLocation) => {
 	const newLocation = new TowerLocation(configLocation);
@@ -309,6 +309,8 @@ const generateTowerLocations = (configGenerate) => {
 		location.x = towerLocations[i].x;
 		location.y = towerLocations[i].y;
 		location.type = towerLocations[i].type; //tower type
+		location.xTowerOffset = towerLocations[i].xTowerOffset;
+		location.yTowerOffset = towerLocations[i].yTowerOffset;
 		newLocations.push(location);
 	}
 	newLocations.forEach((location) => {
@@ -483,7 +485,7 @@ const animationLoop = () => {
 	populateImages();
 	populateRoundRects();
 	populateStaticObjects();
-	populateTowers(configTowerMagic);
+	// populateTowers(configTowerMagic);
 	populateTowerLocations(towerTypes);
 
 	if (game.status === "initial") {
