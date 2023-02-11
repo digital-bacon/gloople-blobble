@@ -92,7 +92,7 @@ class SuperPower {
 				if (this.attacksMultiple) {
 					didAttack = this.doAttackSplash();
 				} else {
-			// 		didAttack = this.doAttackSingle();
+					didAttack = this.doAttackSingle();
 				}
 			}
 

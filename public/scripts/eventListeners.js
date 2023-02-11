@@ -1,6 +1,19 @@
 const startEventListeners = () => {
 	gameCanvas.addEventListener("click", (event) => {
 		const mousePosition = getMousePosition(event);
+		let callSuperPower = true
+		if (callSuperPower) {
+			const targetSuperPower = {
+				position: {
+						x: mousePosition.x,
+						y: mousePosition.y,
+				},
+			}
+			const superPower = player.loadSuperPower(targetSuperPower);
+			targetSuperPower.position.x -= superPower.offset.x
+			targetSuperPower.position.y -= superPower.height - (superPower.width / 8)
+			superPowers.push(superPower)
+		}
 		if (ui.buttons.nextWave.evalAvailable()) {
 			circles.forEach((circle) => {
 				if (isIntersectingCircle(mousePosition, circle)) {

@@ -147,15 +147,6 @@ const configPlayer = {
 };
 
 const player = new Player(configPlayer);
-const targetSuperPower = {
-	position: {
-			x: 500,
-			y: 200,
-	},
-	
-}
-const superPower = player.loadSuperPower(targetSuperPower);
-superPowers.push(superPower)
 
 const configTower = {
 	ctx,
@@ -238,7 +229,7 @@ const yOffset = 0; // because the canvas is at the top of the page
 const trackedArray = [];
 document.onclick = (event) => {
 	trackedArray.push(getMousePosition(event));
-	console.log(JSON.stringify(trackedArray));
+	// console.log(JSON.stringify(trackedArray));
 };
 
 const cleanupGloops = () => {
