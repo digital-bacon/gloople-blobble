@@ -16,7 +16,16 @@ const startEventListeners = () => {
 		// }
 
 		if (player.sayNextMouseClick) {
-			console.log(mousePosition)
+			const targetSuperPower = {
+				position: {
+					x: mousePosition.x,
+					y: mousePosition.y,
+				},
+			};
+			const superPower = player.loadSuperPower(targetSuperPower);
+			targetSuperPower.position.x -= superPower.offset.x;
+			targetSuperPower.position.y -= superPower.height - superPower.width / 8;
+			superPowers.push(superPower);
 			player.sayNextMouseClick = false;
 		}
 
@@ -25,17 +34,6 @@ const startEventListeners = () => {
 			if (uiElement.length > 0) {
 				if (isIntersectingRect(mousePosition, uiElement[0])) {
 					player.sayNextMouseClick = true;
-					console.log(player.sayNextMouseClick)
-					const targetSuperPower = {
-						position: {
-							x: mousePosition.x,
-							y: mousePosition.y,
-						},
-					};
-					const superPower = player.loadSuperPower(targetSuperPower);
-					targetSuperPower.position.x -= superPower.offset.x;
-					targetSuperPower.position.y -= superPower.height - superPower.width / 8;
-					superPowers.push(superPower);
 				}
 			}
 		}
