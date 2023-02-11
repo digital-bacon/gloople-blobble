@@ -1,5 +1,25 @@
 class Player {
-	constructor() {
+	constructor(configObject) {
+		this.position = {
+			x: configObject.x,
+			y: configObject.y,
+			center: {
+				x: configObject.x + configObject.width / 2,
+				y: configObject.y + configObject.height / 2 + configObject.height / 4,
+			},
+		};
+
+		this.hp = configObject.hp || 1,
+
+		this.getHP = function () {
+			return this.hp;
+		};
+
+		this.setHP = function (value) {
+			this.hp = value;
+
+		};
+
 		this.loadSuperPower = function (target) {
 			const img = new Image();
 			img.src = "static/spritesheet_superpower_rain.png";
@@ -11,49 +31,51 @@ class Player {
 				height: 256,
 				totalFrames: 39,
 				animationSpeedInMilliseconds: 100,
-				x: this.position.center.x,
-				y: this.position.center.y,
+				x: canvas.width,
+				y: 0,
 				player: this,
 			};
 
 			const superPower = new SuperPower(configSuperPower);
 			return superPower;
 		};
-		return {
-			_hp: INITIAL_PLAYER_HP || 1,
-			get hp() {
-				return this._hp;
-			},
-			set hp(value) {
-				this._hp = value;
-				if (this._hp <= 0) {
-					if (game.status !== "gameover") game.setStatus("gameover");
-				}
-			},
-			setHP(amount) {
-				if (amount < 0) {
-					return (this.hp = 0);
-				}
-				this.hp = this.convertToWhole(amount);
-			},
-			gainHP(amount) {
-				this.hp += this.convertToWhole(amount);
-			},
-			loseHP(amount) {
-				this.hp -= this.convertToWhole(amount);
-			},
-			convertToWhole(amount) {
-				return Math.floor(amount);
-			},
-			purchaseTowerUpgrade(tower) {
-				const purchaseSuccessful = goldStash.withdraw(
-					tower.calculateUpgradeCost()
-				);
-				if (purchaseSuccessful) {
-					tower.upgrade();
-				}
-				return purchaseSuccessful;
-			},
+
+		// this.setHP = function (amount) {
+		// 	if (amount < 0) {
+		// 		return (this.hp = 0);
+		// 	}
+		// 	this.hp = this.convertToWhole(amount);
+		// };
+
+		this.gainHP = function (amount) {
+			this.hp += this.convertToWhole(amount);
 		};
+
+		this.playerIsAlive = function () {
+			return this.hp > 0;
+		}
+
+		this.loseHP = function (amount) {
+			this.hp -= this.convertToWhole(amount);
+			if (!this.playerIsAlive()) {
+				game.setStatus("gameover")
+			}
+		};
+
+		this.convertToWhole = function (amount) {
+			return Math.floor(amount);
+		};
+
+		this.purchaseTowerUpgrade = function (tower) {
+			const purchaseSuccessful = goldStash.withdraw(
+				tower.calculateUpgradeCost()
+			);
+			if (purchaseSuccessful) {
+				tower.upgrade();
+			}
+			return purchaseSuccessful;
+		};
+
+		return this;
 	}
 }

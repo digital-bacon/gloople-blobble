@@ -18,7 +18,6 @@ const screenCenter = getScreenCenter();
 const ui = new UserInterface();
 const game = new Game();
 const goldStash = new GoldStash();
-const player = new Player();
 
 const gloopSubSpecies = [];
 let staticObjects = [];
@@ -139,6 +138,17 @@ gloopSubSpecies.push(configGloopBob)
 gloopSubSpecies.push(configGloopSam)
 gloopSubSpecies.push(configGloopSmooch)
 gloopSubSpecies.push(configGloopTom)
+
+const configPlayer = {
+	ctx,
+	x: canvas.width,
+	y: 0,
+	hp: INITIAL_PLAYER_HP,
+};
+
+const player = new Player(configPlayer);
+console.log(player.loadSuperPower());
+console.log(superPowers)
 
 const configTower = {
 	ctx,

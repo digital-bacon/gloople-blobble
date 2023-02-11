@@ -14,7 +14,7 @@ class Game {
 					circles = [];
 					gloops = [];
 					towers.forEach((tower) => (tower.target = null));
-					player.setHP(0);
+					player.hp = 0;
 				}
 				if (this.status === "active") {
 					this.timestampStart = getNowAsMilliseconds();
@@ -26,7 +26,7 @@ class Game {
 				configWave.currentWave = INITIAL_WAVE;
 				configWave.nextWave = INITIAL_WAVE + 1;
 				goldStash.setTotal(INITIAL_GOLD_STASH_TOTAL);
-				player.setHP(INITIAL_PLAYER_HP);
+				player.hp = INITIAL_PLAYER_HP;
 				gloops = [];
 				locations = [];
 				projectiles = [];
