@@ -31,6 +31,7 @@ let projectiles = [];
 let rects = [];
 let roundRects = [];
 let towers = [];
+let superPowers = [];
 
 const configGloop = {
 	ctx,
@@ -190,7 +191,7 @@ const configTowerLocation = {
 	width: TOWER_LOCATION_SIZE,
 	height: TOWER_LOCATION_SIZE,
 	fillColor: "transparent",
-	strokeColor: "yellow",
+	strokeColor: "transparent",
 };
 
 const configWave = {
@@ -251,7 +252,6 @@ const summonGloops = (configSummon) => {
 	const { totalGloops, configGloop, xOffset, wave } = configSummon;
 	const newGloops = [];
 	for (let i = 0; i < totalGloops; i++) {
-		// const configSubSpecies = configWave.gloopSubSpecies[Math.floor(Math.random()*configWave.gloopSubSpecies.length)];
 		const configSubSpecies = randomFromArray(configWave.gloopSubSpecies)
 		const gloop = { ...configGloop, ...configSubSpecies };
 		gloop.wave = wave;

@@ -149,8 +149,8 @@ class UserInterface {
 						text: {
 							x: canvas.center.x,
 							y: canvas.center.y - 30,
-							fillStyle: "maroon",
-							font: "bold 24px sans-serif",
+							fillStyle: "#D85678",
+							font: "bold 48px sans-serif",
 							text: "THE GL😈😈PS ATE YOUR FACE!!",
 							textAlign: "center",
 							maxWidth: canvas.width - 4,
