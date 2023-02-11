@@ -252,6 +252,13 @@ const cleanupProjectiles = () => {
 	projectiles = [...activeProjectiles];
 };
 
+const cleanupSuperPowers = () => {
+	const activeSuperPowers = superPowers.filter(
+		(superPower) => superPower.destroyMe === false
+	);
+	superPowers = [...activeSuperPowers];
+};
+
 const summonGloop = (configGloop) => {
 	const newGloop = new Gloop(configGloop);
 	gloops.push(newGloop);
@@ -517,6 +524,7 @@ const animationLoop = () => {
 	cleanupGloops();
 	cleanupTowerLocations();
 	cleanupProjectiles();
+	cleanupSuperPowers();
 };
 
 animationLoop();
