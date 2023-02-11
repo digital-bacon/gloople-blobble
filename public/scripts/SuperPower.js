@@ -22,10 +22,31 @@ class SuperPower {
 		this.width = configObject.width;
 		this.height = configObject.height;
 		this.img = configObject.img;
+		this.lastUsedTimestamp = null;
+		this.spritesheetReverse = configObject.spritesheetReverse || false;
+		this.shift = 0;
+		this.frameWidth = configObject.width;
+		this.frameHeight = configObject.height;
+		this.totalFrames = configObject.totalFrames || 20;
+		this.currentFrame = 0;
+		this.xCropImgStart = 0;
+		this.yCropImgStart = 0;
+		this.animationSpeedInMilliseconds =
+			configObject.animationSpeedInMilliseconds || 80;
+		this.lastAnimateTimestamp = getNowAsMilliseconds();
+
+		this.animationOffCooldown = function () {
+			return this.timestampCanAnimateAfter() <= getNowAsMilliseconds();
+		};
+
+		this.timestampCanAnimateAfter = function () {
+			return this.lastAnimateTimestamp + this.animationSpeedInMilliseconds;
+		};
 
 		this.destroy = function () {
 			this.destroyMe = true;
 		};
+		
 		this.update = function () {
 			let xMoveTo = this.target.position.center.x;
 			let yMoveTo = this.target.position.center.y;
@@ -39,7 +60,36 @@ class SuperPower {
 			this.position.y += yTravelDistance;
 			this.position.center.x += xTravelDistance;
 			this.position.center.y += yTravelDistance;
-			this.render();
+			let didAnimate = false;
+				if (this.animationOffCooldown()) {
+					didAnimate = true;
+					if (!this.spritesheetReverse) {
+						this.shift++;
+						if (this.shift >= this.totalFrames) {
+							this.shift = 0;
+						}
+					} else {
+						this.shift--;
+						if (this.shift <= 0) {
+							this.shift = this.totalFrames;
+						}
+					}
+				}
+
+				this.render();
+
+				if (didAnimate) {
+					this.lastAnimateTimestamp = getNowAsMilliseconds();
+					if (!this.spritesheetReverse) {
+						this.shift++;
+					} else {
+						this.shift--;
+					}
+				}
+
+				this.xCropImgStart = this.frameWidth * this.shift;
+
+			
 
 			const reachedTarget = () => {
 				const hitBox = (this.target.height + this.target.width) / 4;
@@ -57,12 +107,22 @@ class SuperPower {
 
 		this.render = function () {
 			ctx.beginPath();
+			const widthCrop = this.frameWidth;
+			const heightCrop = this.frameHeight;
+			const xCanvasPosition = this.position.x;
+			const yCanvasPosition = this.position.y;
+			const widthDraw = widthCrop;
+			const heightDraw = heightCrop;
 			ctx.drawImage(
 				this.img,
-				this.position.x,
-				this.position.y,
-				this.width,
-				this.height
+				this.xCropImgStart,
+				this.yCropImgStart,
+				widthCrop,
+				heightCrop,
+				xCanvasPosition,
+				yCanvasPosition,
+				widthDraw,
+				heightDraw
 			);
 			ctx.closePath();
 		};

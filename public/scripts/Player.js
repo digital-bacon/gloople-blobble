@@ -2,23 +2,22 @@ class Player {
 	constructor() {
 		this.loadSuperPower = function (target) {
 			const img = new Image();
-			img.src = "static/projectile_magic_tower.png";
-			const configProjectile = {
+			img.src = "static/spritesheet_superpower_rain.png";
+			const configSuperPower = {
 				ctx,
 				target,
 				img,
-				width: 32,
-				height: 32,
+				width: 253,
+				height: 256,
+				totalFrames: 39,
+				animationSpeedInMilliseconds: 100,
 				x: this.position.center.x,
 				y: this.position.center.y,
-				radius: this.projectileSize / 2,
-				fillColor: "pink",
-				strokeColor: "blue",
-				speed: 2,
-				tower: this,
+				player: this,
 			};
-			const projectile = new Projectile(configProjectile);
-			return projectile;
+
+			const superPower = new SuperPower(configSuperPower);
+			return superPower;
 		};
 		return {
 			_hp: INITIAL_PLAYER_HP || 1,
