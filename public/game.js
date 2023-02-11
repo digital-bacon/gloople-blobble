@@ -4,7 +4,8 @@ const INITIAL_GAME_STATUS = "active";
 const INITIAL_PLAYER_HP = 10;
 const INITIAL_GOLD_STASH_TOTAL = 5000;
 const INITIAL_TOWER_LEVEL = 1;
-const TOWER_LOCATION_SIZE = 160;
+const TOWER_SIZE = { width: 160, height: 160 };
+const TOWER_LOCATION_SIZE = { width: 160, height: 160 };
 
 const gameCanvas = document.getElementById("gameCanvas");
 const ctx = gameCanvas.getContext("2d");
@@ -162,6 +163,8 @@ const configTower = {
 	purchaseCost: 50,
 	upgradeCost: 100,
 	level: INITIAL_TOWER_LEVEL,
+	width: TOWER_SIZE.width,
+	height: TOWER_SIZE.height,
 };
 
 const imgTowerMagic = new Image();
@@ -170,8 +173,6 @@ imgTowerMagic.src = "static/tower_magic.png";
 const configTowerMagic = {
 	baseConfig: configTower,
 	img: imgTowerMagic,
-	width: TOWER_LOCATION_SIZE,
-	height: TOWER_LOCATION_SIZE,
 	type: "magic",
 };
 
@@ -181,8 +182,6 @@ imgTowerSplash.src = "static/tower_splash.png";
 const configTowerSplash = {
 	baseConfig: configTower,
 	img: imgTowerSplash,
-	width: TOWER_LOCATION_SIZE,
-	height: TOWER_LOCATION_SIZE,
 	attacksMultiple: true,
 	type: "splash",
 };
@@ -196,10 +195,11 @@ const configTowerLocation = {
 	towerTypes,
 	x: 0,
 	y: 0,
-	width: TOWER_LOCATION_SIZE,
-	height: TOWER_LOCATION_SIZE,
+	width: TOWER_LOCATION_SIZE.width,
+	height: TOWER_LOCATION_SIZE.height,
 	fillColor: "transparent",
-	strokeColor: "transparent",
+	strokeColor: "yellow",
+	// strokeColor: "transparent",
 };
 
 const configWave = {

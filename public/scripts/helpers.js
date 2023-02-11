@@ -85,8 +85,8 @@ const getTowerLocations = (locationSize) => {
 		{ type: "magic", x: 566, y: 550 },
 		{ type: "splash", x: 887, y: 390 },
 	];
-	const xOffset = locationSize / 2;
-	const yOffset = locationSize;
+	const xOffset = locationSize.width / 2;
+	const yOffset = locationSize.height;
 	locations.map((location) => {
 		location.x = location.x - xOffset;
 		location.y = location.y - yOffset;
@@ -122,4 +122,4 @@ const getNowAsMilliseconds = () => {
 const randomFromArray = (array) => {
 	const randomElement = array[Math.floor(Math.random() * array.length)];
 	return randomElement;
-}
+};
