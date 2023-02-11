@@ -80,13 +80,13 @@ const getGameStatusTypes = () => {
 
 const getTowerLocations = (locationSize) => {
 	const locations = [
-		{ type: "magic", x: 278, y: 550 },
-		{ type: "magic", x: 408, y: 335 },
-		{ type: "magic", x: 566, y: 550 },
-		{ type: "splash", x: 887, y: 390 },
+		{ type: "magic", x: 278, y: 547, yTowerOffset: -18 },
+		{ type: "magic", x: 408, y: 332, yTowerOffset: -7 },
+		{ type: "magic", x: 566, y: 547, yTowerOffset: -18 },
+		{ type: "splash", x: 887, y: 387, yTowerOffset: 0 },
 	];
-	const xOffset = locationSize / 2;
-	const yOffset = locationSize;
+	const xOffset = locationSize.width / 2;
+	const yOffset = locationSize.height;
 	locations.map((location) => {
 		location.x = location.x - xOffset;
 		location.y = location.y - yOffset;
@@ -122,4 +122,4 @@ const getNowAsMilliseconds = () => {
 const randomFromArray = (array) => {
 	const randomElement = array[Math.floor(Math.random() * array.length)];
 	return randomElement;
-}
+};

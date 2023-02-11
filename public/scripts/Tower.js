@@ -232,7 +232,7 @@ class Tower {
 				y: this.position.center.y,
 				radius: this.calculateAttackRadius(),
 				fillColor: "rgba(255,0,0,0.25)",
-				strokeColor: "red",
+				strokeColor: "transparent",
 			};
 
 			const range = new RangeVisual(configRange);

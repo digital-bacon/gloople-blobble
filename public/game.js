@@ -4,7 +4,8 @@ const INITIAL_GAME_STATUS = "active";
 const INITIAL_PLAYER_HP = 10;
 const INITIAL_GOLD_STASH_TOTAL = 5000;
 const INITIAL_TOWER_LEVEL = 1;
-const TOWER_LOCATION_SIZE = 160;
+const TOWER_SIZE = { width: 160, height: 160 };
+const TOWER_LOCATION_SIZE = { width: 160, height: 70 };
 
 const gameCanvas = document.getElementById("gameCanvas");
 const ctx = gameCanvas.getContext("2d");
@@ -162,6 +163,8 @@ const configTower = {
 	purchaseCost: 50,
 	upgradeCost: 100,
 	level: INITIAL_TOWER_LEVEL,
+	width: TOWER_SIZE.width,
+	height: TOWER_SIZE.height,
 };
 
 const imgTowerMagic = new Image();
@@ -170,8 +173,6 @@ imgTowerMagic.src = "static/tower_magic.png";
 const configTowerMagic = {
 	baseConfig: configTower,
 	img: imgTowerMagic,
-	width: TOWER_LOCATION_SIZE,
-	height: TOWER_LOCATION_SIZE,
 	type: "magic",
 };
 
@@ -181,8 +182,6 @@ imgTowerSplash.src = "static/tower_splash.png";
 const configTowerSplash = {
 	baseConfig: configTower,
 	img: imgTowerSplash,
-	width: TOWER_LOCATION_SIZE,
-	height: TOWER_LOCATION_SIZE,
 	attacksMultiple: true,
 	type: "splash",
 };
@@ -196,10 +195,11 @@ const configTowerLocation = {
 	towerTypes,
 	x: 0,
 	y: 0,
-	width: TOWER_LOCATION_SIZE,
-	height: TOWER_LOCATION_SIZE,
+	width: TOWER_LOCATION_SIZE.width,
+	height: TOWER_LOCATION_SIZE.height,
 	fillColor: "transparent",
-	strokeColor: "transparent",
+	strokeColor: "yellow",
+	// strokeColor: "transparent",
 };
 
 const configWave = {
@@ -280,19 +280,19 @@ const summonTower = (configTower) => {
 	return newTower;
 };
 
-const summonTowers = (configSummon) => {
-	const { configTower, configTowerType, towerLocations } = configSummon;
-	const newTowers = [];
-	for (let i = 0; i < towerLocations.length; i++) {
-		const tower = { ...configTower, ...configTowerType };
-		tower.x = towerLocations[i].x;
-		tower.y = towerLocations[i].y;
-		newTowers.push(tower);
-	}
-	newTowers.forEach((tower) => {
-		summonTower(tower);
-	});
-};
+// const summonTowers = (configSummon) => {
+// 	const { configTower, configTowerType, towerLocations } = configSummon;
+// 	const newTowers = [];
+// 	for (let i = 0; i < towerLocations.length; i++) {
+// 		const tower = { ...configTower, ...configTowerType };
+// 		tower.x = towerLocations[i].x + towerLocations[i].xTowerOffset;
+// 		tower.y = towerLocations[i].y + towerLocations[i].yTowerOffset;
+// 		newTowers.push(tower);
+// 	}
+// 	newTowers.forEach((tower) => {
+// 		summonTower(tower);
+// 	});
+// };
 
 const generateTowerLocation = (configLocation) => {
 	const newLocation = new TowerLocation(configLocation);
@@ -309,6 +309,8 @@ const generateTowerLocations = (configGenerate) => {
 		location.x = towerLocations[i].x;
 		location.y = towerLocations[i].y;
 		location.type = towerLocations[i].type; //tower type
+		location.xTowerOffset = towerLocations[i].xTowerOffset;
+		location.yTowerOffset = towerLocations[i].yTowerOffset;
 		newLocations.push(location);
 	}
 	newLocations.forEach((location) => {
@@ -483,7 +485,7 @@ const animationLoop = () => {
 	populateImages();
 	populateRoundRects();
 	populateStaticObjects();
-	populateTowers(configTowerMagic);
+	// populateTowers(configTowerMagic);
 	populateTowerLocations(towerTypes);
 
 	if (game.status === "initial") {
