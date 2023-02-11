@@ -13,6 +13,10 @@ class Tower {
 				x: this.position.center.x,
 				y: this.position.center.y - 50,
 			},
+			src: "static/projectile_magic_tower.png",
+			width: 32,
+			height: 32,
+			speed: 3,
 		};
 		this.id = configObject.id || Math.random().toString(36).substr(2);
 		this.width = configObject.width;
@@ -151,19 +155,16 @@ class Tower {
 
 		this.loadProjectile = function (target) {
 			const img = new Image();
-			img.src = "static/projectile_magic_tower.png";
+			img.src = this.projectile.src;
 			const configProjectile = {
 				ctx,
 				target,
 				img,
-				width: 32,
-				height: 32,
 				x: this.projectile.position.x,
 				y: this.projectile.position.y,
-				radius: this.projectileSize / 2,
-				fillColor: "pink",
-				strokeColor: "blue",
-				speed: 2,
+				width: this.projectile.width,
+				height: this.projectile.height,
+				speed: this.projectile.speed,
 				tower: this,
 			};
 			const projectile = new Projectile(configProjectile);
