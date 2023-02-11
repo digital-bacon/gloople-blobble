@@ -94,10 +94,9 @@ const startEventListeners = () => {
 							const tower = { ...configTower, ...towerType[0] };
 							if (goldStash.total >= tower.purchaseCost) {
 								goldStash.withdraw(tower.purchaseCost);
-								tower.x = location.position.x;
+								tower.x = location.position.x + location.xTowerOffset;
 								tower.y =
 									location.position.y - location.height + location.yTowerOffset;
-								console.log(location);
 								const newTower = summonTower(tower);
 								location.towerId = newTower.id;
 								clearBuildButtons();
