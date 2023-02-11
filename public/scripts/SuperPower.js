@@ -15,7 +15,7 @@ class SuperPower {
 		this.radius = configObject.radius;
 		this.color = configObject.fillColor;
 		this.stroke = configObject.strokeColor;
-		this.speed = configObject.speed;
+		this.speed = configObject.speed || 1;
 		this.destroyMe = false;
 		this.target = configObject.target;
 		this.targetReached = false;
@@ -46,10 +46,10 @@ class SuperPower {
 		this.destroy = function () {
 			this.destroyMe = true;
 		};
-		
+
 		this.update = function () {
-			let xMoveTo = this.target.position.center.x;
-			let yMoveTo = this.target.position.center.y;
+			let xMoveTo = this.target.position.x;
+			let yMoveTo = this.target.position.y;
 			let xDelta = xMoveTo - this.position.center.x;
 			let yDelta = yMoveTo - this.position.center.y;
 			const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
@@ -89,11 +89,9 @@ class SuperPower {
 
 				this.xCropImgStart = this.frameWidth * this.shift;
 
-			
-
 			const reachedTarget = () => {
-				const hitBox = (this.target.height + this.target.width) / 4;
-				const reachedTarget = distance <= hitBox;
+				const hitBox = this.offset.x
+				const reachedTarget = distance - hitBox <= hitBox
 				return reachedTarget;
 			};
 

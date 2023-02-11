@@ -149,13 +149,10 @@ const configPlayer = {
 const player = new Player(configPlayer);
 const targetSuperPower = {
 	position: {
-		center: {
-			x: player.position.center.x,
-			y: player.position.center.y,
-		},
+			x: 500,
+			y: 200,
 	},
-	height: 100,
-	width: 100,
+	
 }
 const superPower = player.loadSuperPower(targetSuperPower);
 superPowers.push(superPower)
@@ -241,7 +238,7 @@ const yOffset = 0; // because the canvas is at the top of the page
 const trackedArray = [];
 document.onclick = (event) => {
 	trackedArray.push(getMousePosition(event));
-	// console.log(JSON.stringify(trackedArray));
+	console.log(JSON.stringify(trackedArray));
 };
 
 const cleanupGloops = () => {
@@ -494,7 +491,6 @@ const animationLoop = () => {
 
 	if (game.status === "active") {
 		update(staticObjects);
-		console.log(superPowers)
 		update(superPowers);
 		update(towers);
 		update(locations);
