@@ -1,7 +1,7 @@
 const startEventListeners = () => {
 	gameCanvas.addEventListener("click", (event) => {
 		const mousePosition = getMousePosition(event);
-		let callSuperPower = true;
+		let callSuperPower = false;
 		if (callSuperPower) {
 			const targetSuperPower = {
 				position: {
