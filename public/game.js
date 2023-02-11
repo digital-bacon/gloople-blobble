@@ -134,10 +134,10 @@ const configGloopTom = {
 	animationSpeedInMilliseconds: 100,
 };
 
-gloopSubSpecies.push(configGloopBob)
-gloopSubSpecies.push(configGloopSam)
-gloopSubSpecies.push(configGloopSmooch)
-gloopSubSpecies.push(configGloopTom)
+gloopSubSpecies.push(configGloopBob);
+gloopSubSpecies.push(configGloopSam);
+gloopSubSpecies.push(configGloopSmooch);
+gloopSubSpecies.push(configGloopTom);
 
 const configPlayer = {
 	ctx,
@@ -211,6 +211,7 @@ const configWave = {
 	hpMultiplier: 1.025,
 	nextWave: INITIAL_WAVE + 1,
 	speedDefault: 1,
+	speedMaximum: 2.5,
 	speedMultiplier: 0.2,
 	totalGloopsMultiplier: 0.25,
 	_totalGloops: INITIAL_WAVE_GLOOPS,
@@ -260,7 +261,7 @@ const summonGloops = (configSummon) => {
 	const { totalGloops, configGloop, xOffset, wave } = configSummon;
 	const newGloops = [];
 	for (let i = 0; i < totalGloops; i++) {
-		const configSubSpecies = randomFromArray(configWave.gloopSubSpecies)
+		const configSubSpecies = randomFromArray(configWave.gloopSubSpecies);
 		const gloop = { ...configGloop, ...configSubSpecies };
 		gloop.wave = wave;
 		newGloops.push(gloop);
