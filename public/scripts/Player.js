@@ -19,6 +19,7 @@ class Player {
 				x: canvas.width,
 				y: 0,
 				canCallAfterTimeStamp: getNowAsMilliseconds(),
+				uiButton: null,
 			},
 		}
 		this.sayNextMouseClick =false;

@@ -1,19 +1,6 @@
 const startEventListeners = () => {
 	gameCanvas.addEventListener("click", (event) => {
 		const mousePosition = getMousePosition(event);
-		// let callSuperPower = false;
-		// if (callSuperPower) {
-		// 	const targetSuperPower = {
-		// 		position: {
-		// 			x: mousePosition.x,
-		// 			y: mousePosition.y,
-		// 		},
-		// 	};
-		// 	const superPower = player.loadSuperPower(targetSuperPower);
-		// 	targetSuperPower.position.x -= superPower.offset.x;
-		// 	targetSuperPower.position.y -= superPower.height - superPower.width / 8;
-		// 	superPowers.push(superPower);
-		// }
 
 		if (player.sayNextMouseClick) {
 			const targetSuperPower = {
@@ -24,6 +11,11 @@ const startEventListeners = () => {
 			};
 			player.attack(targetSuperPower, "acidrain");
 			player.sayNextMouseClick = false;
+			player.superPowers.acidrain.uiButton.src = "static/button_superpower_acidrain_off.png"
+			const timeOut = player.superPowers.acidrain.canCallAfterTimeStamp - getNowAsMilliseconds()
+			setTimeout(() => {
+				player.superPowers.acidrain.uiButton.src = "static/button_superpower_acidrain.png"
+			}, timeOut)
 		}
 
 		if (ui.buttons.superPowerAcidRain.evalAvailable()) {
@@ -31,6 +23,7 @@ const startEventListeners = () => {
 			if (uiElement.length > 0) {
 				if (isIntersectingRect(mousePosition, uiElement[0])) {
 					player.sayNextMouseClick = true;
+					player.superPowers.acidrain.uiButton = uiElement[0];
 				}
 			}
 		}
@@ -84,7 +77,6 @@ const startEventListeners = () => {
 					const activeId = ui.buttons.towerUpgrade.activeId;
 					const buttonIsActive = activeId !== null;
 					if (buttonIsActive && activeId === tower.id) {
-						// const purchaseCompleted = player.purchaseTowerUpgrade(tower);
 						break;
 					} else {
 						towers.map((tower) => {

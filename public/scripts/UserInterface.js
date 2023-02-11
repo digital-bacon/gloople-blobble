@@ -148,7 +148,7 @@ class UserInterface {
 							src: "static/button_superpower_acidrain.png",
 							id: "superpower-acidrain",
 							x: canvas.center.x - 100 / 2,
-							y: canvas.height - 104,
+							y: canvas.height - 104 - 10,
 							width: 100,
 							height: 104,
 						},
