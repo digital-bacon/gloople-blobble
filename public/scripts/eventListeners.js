@@ -1,19 +1,19 @@
 const startEventListeners = () => {
 	gameCanvas.addEventListener("click", (event) => {
 		const mousePosition = getMousePosition(event);
-		let callSuperPower = true
-		if (callSuperPower) {
-			const targetSuperPower = {
-				position: {
-						x: mousePosition.x,
-						y: mousePosition.y,
-				},
-			}
-			const superPower = player.loadSuperPower(targetSuperPower);
-			targetSuperPower.position.x -= superPower.offset.x
-			targetSuperPower.position.y -= superPower.height - (superPower.width / 8)
-			superPowers.push(superPower)
-		}
+		// let callSuperPower = true;
+		// if (callSuperPower) {
+		// 	const targetSuperPower = {
+		// 		position: {
+		// 			x: mousePosition.x,
+		// 			y: mousePosition.y,
+		// 		},
+		// 	};
+		// 	const superPower = player.loadSuperPower(targetSuperPower);
+		// 	targetSuperPower.position.x -= superPower.offset.x;
+		// 	targetSuperPower.position.y -= superPower.height - superPower.width / 8;
+		// 	superPowers.push(superPower);
+		// }
 		if (ui.buttons.nextWave.evalAvailable()) {
 			circles.forEach((circle) => {
 				if (isIntersectingCircle(mousePosition, circle)) {
@@ -88,8 +88,10 @@ const startEventListeners = () => {
 					if (buildButton) {
 						if (isIntersectingRect(mousePosition, buildButton)) {
 							// const towerType = location.towerTypes[0];
-							const towerType = location.towerTypes.filter(towerType => towerType.type === location.towerType);
-							const tower = { ...configTower, ...towerType[0]};
+							const towerType = location.towerTypes.filter(
+								(towerType) => towerType.type === location.towerType
+							);
+							const tower = { ...configTower, ...towerType[0] };
 							if (goldStash.total >= tower.purchaseCost) {
 								goldStash.withdraw(tower.purchaseCost);
 								tower.x = location.position.x;

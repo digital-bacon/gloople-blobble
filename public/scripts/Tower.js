@@ -8,6 +8,12 @@ class Tower {
 				y: configObject.y + configObject.height / 2 + configObject.height / 4,
 			},
 		};
+		this.projectile = {
+			position: {
+				x: this.position.center.x,
+				y: this.position.center.y - 50,
+			},
+		};
 		this.id = configObject.id || Math.random().toString(36).substr(2);
 		this.width = configObject.width;
 		this.height = configObject.height;
@@ -33,7 +39,7 @@ class Tower {
 			attackDamage: configObject?.multiplier?.attackDamage || 0.25,
 			upgradeCost: configObject?.multiplier?.upgradeCost || 0.5,
 		};
-		this.type = configObject.type || "unspecified"
+		this.type = configObject.type || "unspecified";
 
 		this.attackOffCooldown = function () {
 			return this.timestampCanAttackAfter() <= getNowAsMilliseconds();
@@ -152,8 +158,8 @@ class Tower {
 				img,
 				width: 32,
 				height: 32,
-				x: this.position.center.x,
-				y: this.position.center.y,
+				x: this.projectile.position.x,
+				y: this.projectile.position.y,
 				radius: this.projectileSize / 2,
 				fillColor: "pink",
 				strokeColor: "blue",
