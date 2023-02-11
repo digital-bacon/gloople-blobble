@@ -18,7 +18,6 @@ const screenCenter = getScreenCenter();
 const ui = new UserInterface();
 const game = new Game();
 const goldStash = new GoldStash();
-const player = new Player();
 
 const gloopSubSpecies = [];
 let staticObjects = [];
@@ -31,6 +30,7 @@ let projectiles = [];
 let rects = [];
 let roundRects = [];
 let towers = [];
+let superPowers = [];
 
 const configGloop = {
 	ctx,
@@ -139,6 +139,15 @@ gloopSubSpecies.push(configGloopSam)
 gloopSubSpecies.push(configGloopSmooch)
 gloopSubSpecies.push(configGloopTom)
 
+const configPlayer = {
+	ctx,
+	x: canvas.width,
+	y: 0,
+	hp: INITIAL_PLAYER_HP,
+};
+
+const player = new Player(configPlayer);
+
 const configTower = {
 	ctx,
 	x: 135,
@@ -190,7 +199,7 @@ const configTowerLocation = {
 	width: TOWER_LOCATION_SIZE,
 	height: TOWER_LOCATION_SIZE,
 	fillColor: "transparent",
-	strokeColor: "yellow",
+	strokeColor: "transparent",
 };
 
 const configWave = {
@@ -251,7 +260,6 @@ const summonGloops = (configSummon) => {
 	const { totalGloops, configGloop, xOffset, wave } = configSummon;
 	const newGloops = [];
 	for (let i = 0; i < totalGloops; i++) {
-		// const configSubSpecies = configWave.gloopSubSpecies[Math.floor(Math.random()*configWave.gloopSubSpecies.length)];
 		const configSubSpecies = randomFromArray(configWave.gloopSubSpecies)
 		const gloop = { ...configGloop, ...configSubSpecies };
 		gloop.wave = wave;
@@ -474,6 +482,7 @@ const animationLoop = () => {
 
 	if (game.status === "active") {
 		update(staticObjects);
+		update(superPowers);
 		update(towers);
 		update(locations);
 		update(circles);
