@@ -38,7 +38,9 @@ class SuperPower {
 		this.yCropImgStart = 0;
 		this.animationSpeedInMilliseconds =
 			configObject.animationSpeedInMilliseconds || 29;
+		this.createdTimestamp = getNowAsMilliseconds();
 		this.lastAnimateTimestamp = getNowAsMilliseconds();
+		this.durationInMilliseconds = configObject.durationInMilliseconds || 5000;
 
 		this.animationOffCooldown = function () {
 			return this.timestampCanAnimateAfter() <= getNowAsMilliseconds();
@@ -121,6 +123,10 @@ class SuperPower {
 			return didAttack;
 		};
 
+		this.isDurationExpired = function () {
+			return this.timestampSuperPowerEndAfter() <= getNowAsMilliseconds();
+		};
+
 		this.timestampCanAnimateAfter = function () {
 			return this.lastAnimateTimestamp + this.animationSpeedInMilliseconds;
 		};
@@ -129,7 +135,15 @@ class SuperPower {
 			return this.lastAttackTimestamp + this.attackSpeedInMilliseconds;
 		};
 
+		this.timestampSuperPowerEndAfter = function () {
+			return this.createdTimestamp + this.durationInMilliseconds;
+		};
+
 		this.update = function () {
+			if (this.isDurationExpired()) {
+				this.destroy()
+				return;
+			}
 			let xMoveTo = this.target.position.x;
 			let yMoveTo = this.target.position.y;
 			let xDelta = xMoveTo - this.position.center.x;
@@ -186,7 +200,6 @@ class SuperPower {
 					this.lastAttackTimestamp = getNowAsMilliseconds();
 				}
 
-				this.destroy();
 			}
 		};
 
