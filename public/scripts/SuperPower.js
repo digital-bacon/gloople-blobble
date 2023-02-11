@@ -23,10 +23,11 @@ class SuperPower {
 		this.height = configObject.height;
 		this.img = configObject.img;
 		this.attackDamage = 10;
-		this.attackWidth = configObject.width;
+		this.attackWidth = configObject.width - 100;
 		this.attacksMultiple = true;
 		this.lastAttackTimestamp = null;
-		this.attackSpeedInMilliseconds = configObject.attackSpeedInMilliseconds || 200;
+		this.attackSpeedInMilliseconds =
+			configObject.attackSpeedInMilliseconds || 0;
 		this.spritesheetReverse = configObject.spritesheetReverse || false;
 		this.shift = 0;
 		this.frameWidth = configObject.width;
@@ -36,7 +37,7 @@ class SuperPower {
 		this.xCropImgStart = 0;
 		this.yCropImgStart = 0;
 		this.animationSpeedInMilliseconds =
-			configObject.animationSpeedInMilliseconds || 80;
+			configObject.animationSpeedInMilliseconds || 29;
 		this.lastAnimateTimestamp = getNowAsMilliseconds();
 
 		this.animationOffCooldown = function () {
@@ -52,7 +53,7 @@ class SuperPower {
 			// 	this.attackDamage +
 			// 		this.attackDamage * (this.level * this.multiplier.attackDamage)
 			// );
-			const total = this.attackDamage
+			const total = this.attackDamage;
 			return total;
 		};
 
@@ -60,7 +61,7 @@ class SuperPower {
 			// const total = Math.floor(
 			// 	this.attackRadius + this.level * this.multiplier.attackRadius
 			// );
-			const total = this.attackWidth
+			const total = this.attackWidth;
 			return total;
 		};
 
@@ -142,37 +143,37 @@ class SuperPower {
 			this.position.center.x += xTravelDistance;
 			this.position.center.y += yTravelDistance;
 			let didAnimate = false;
-				if (this.animationOffCooldown()) {
-					didAnimate = true;
-					if (!this.spritesheetReverse) {
-						this.shift++;
-						if (this.shift >= this.totalFrames) {
-							this.shift = 0;
-						}
-					} else {
-						this.shift--;
-						if (this.shift <= 0) {
-							this.shift = this.totalFrames;
-						}
+			if (this.animationOffCooldown()) {
+				didAnimate = true;
+				if (!this.spritesheetReverse) {
+					this.shift++;
+					if (this.shift >= this.totalFrames) {
+						this.shift = 0;
+					}
+				} else {
+					this.shift--;
+					if (this.shift <= 0) {
+						this.shift = this.totalFrames;
 					}
 				}
+			}
 
-				this.render();
+			this.render();
 
-				if (didAnimate) {
-					this.lastAnimateTimestamp = getNowAsMilliseconds();
-					if (!this.spritesheetReverse) {
-						this.shift++;
-					} else {
-						this.shift--;
-					}
+			if (didAnimate) {
+				this.lastAnimateTimestamp = getNowAsMilliseconds();
+				if (!this.spritesheetReverse) {
+					this.shift++;
+				} else {
+					this.shift--;
 				}
+			}
 
-				this.xCropImgStart = this.frameWidth * this.shift;
+			this.xCropImgStart = this.frameWidth * this.shift;
 
 			const reachedTarget = () => {
-				const hitBox = this.offset.x
-				const reachedTarget = distance - hitBox <= hitBox
+				const hitBox = this.offset.x;
+				const reachedTarget = distance - hitBox <= hitBox;
 				return reachedTarget;
 			};
 
