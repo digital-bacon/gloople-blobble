@@ -4,20 +4,28 @@ class Player {
 			x: configObject.x,
 			y: configObject.y,
 			center: {
-				x: configObject.x + configObject.width / 2,
-				y: configObject.y + configObject.height / 2 + configObject.height / 4,
+				x: configObject.x,
+				y: configObject.y,
 			},
 		};
 
 		this.hp = configObject.hp || 1,
 
-		this.getHP = function () {
-			return this.hp;
+		this.convertToWhole = function (amount) {
+			return Math.floor(amount);
 		};
 
-		this.setHP = function (value) {
-			this.hp = value;
+		this.fireAtTarget = function (target) {
+			const superPower = this.loadSuperPower(target);
+			superPowers.push(superPower);
+		};
 
+		this.gainHP = function (amount) {
+			this.hp += this.convertToWhole(amount);
+		};
+
+		this.getHP = function () {
+			return this.hp;
 		};
 
 		this.loadSuperPower = function (target) {
@@ -40,21 +48,6 @@ class Player {
 			return superPower;
 		};
 
-		// this.setHP = function (amount) {
-		// 	if (amount < 0) {
-		// 		return (this.hp = 0);
-		// 	}
-		// 	this.hp = this.convertToWhole(amount);
-		// };
-
-		this.gainHP = function (amount) {
-			this.hp += this.convertToWhole(amount);
-		};
-
-		this.playerIsAlive = function () {
-			return this.hp > 0;
-		}
-
 		this.loseHP = function (amount) {
 			this.hp -= this.convertToWhole(amount);
 			if (!this.playerIsAlive()) {
@@ -62,9 +55,9 @@ class Player {
 			}
 		};
 
-		this.convertToWhole = function (amount) {
-			return Math.floor(amount);
-		};
+		this.playerIsAlive = function () {
+			return this.hp > 0;
+		}
 
 		this.purchaseTowerUpgrade = function (tower) {
 			const purchaseSuccessful = goldStash.withdraw(
@@ -74,6 +67,11 @@ class Player {
 				tower.upgrade();
 			}
 			return purchaseSuccessful;
+		};
+
+		this.setHP = function (value) {
+			this.hp = value;
+
 		};
 
 		return this;

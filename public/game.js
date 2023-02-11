@@ -147,8 +147,18 @@ const configPlayer = {
 };
 
 const player = new Player(configPlayer);
-console.log(player.loadSuperPower());
-console.log(superPowers)
+const targetSuperPower = {
+	position: {
+		center: {
+			x: player.position.center.x,
+			y: player.position.center.y,
+		},
+	},
+	height: 100,
+	width: 100,
+}
+const superPower = player.loadSuperPower(targetSuperPower);
+superPowers.push(superPower)
 
 const configTower = {
 	ctx,
@@ -484,6 +494,8 @@ const animationLoop = () => {
 
 	if (game.status === "active") {
 		update(staticObjects);
+		console.log(superPowers)
+		update(superPowers);
 		update(towers);
 		update(locations);
 		update(circles);
