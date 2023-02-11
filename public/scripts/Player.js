@@ -8,7 +8,7 @@ class Player {
 				y: configObject.y,
 			},
 		};
-
+		this.sayNextMouseClick =false;
 		this.hp = configObject.hp || 1,
 
 		this.convertToWhole = function (amount) {

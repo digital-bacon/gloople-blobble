@@ -15,10 +15,17 @@ const startEventListeners = () => {
 		// 	superPowers.push(superPower);
 		// }
 
+		if (player.sayNextMouseClick) {
+			console.log(mousePosition)
+			player.sayNextMouseClick = false;
+		}
+
 		if (ui.buttons.superPowerAcidRain.evalAvailable()) {
 			const uiElement = uiElements.filter((uiElement) => uiElement.id === "superpower-acidrain")
 			if (uiElement.length > 0) {
 				if (isIntersectingRect(mousePosition, uiElement[0])) {
+					player.sayNextMouseClick = true;
+					console.log(player.sayNextMouseClick)
 					const targetSuperPower = {
 						position: {
 							x: mousePosition.x,
