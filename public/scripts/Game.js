@@ -32,6 +32,7 @@ class Game {
 				projectiles = [];
 				towers = [];
 				staticObjects = [];
+				superPowers = [];
 			},
 		};
 	}
