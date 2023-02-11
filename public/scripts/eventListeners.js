@@ -22,10 +22,7 @@ const startEventListeners = () => {
 					y: mousePosition.y,
 				},
 			};
-			const superPower = player.loadSuperPower(targetSuperPower);
-			targetSuperPower.position.x -= superPower.offset.x;
-			targetSuperPower.position.y -= superPower.height - superPower.width / 8;
-			superPowers.push(superPower);
+			player.attack(targetSuperPower, "acidrain");
 			player.sayNextMouseClick = false;
 		}
 

@@ -41,6 +41,7 @@ class SuperPower {
 		this.createdTimestamp = getNowAsMilliseconds();
 		this.lastAnimateTimestamp = getNowAsMilliseconds();
 		this.durationInMilliseconds = configObject.durationInMilliseconds || 5000;
+		this.cooldownInMilliseconds = configObject.cooldownInMilliseconds || 10000;
 
 		this.animationOffCooldown = function () {
 			return this.timestampCanAnimateAfter() <= getNowAsMilliseconds();
@@ -125,6 +126,14 @@ class SuperPower {
 
 		this.isDurationExpired = function () {
 			return this.timestampSuperPowerEndAfter() <= getNowAsMilliseconds();
+		};
+
+		this.superPowerOffCooldown = function () {
+			return this.timestampCanCallAfter() <= getNowAsMilliseconds();
+		};
+
+		this.timestampCanCallAfter = function () {
+			return this.createdTimestamp + this.cooldownInMilliseconds;
 		};
 
 		this.timestampCanAnimateAfter = function () {
