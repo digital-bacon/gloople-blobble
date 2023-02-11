@@ -15,14 +15,18 @@ class SuperPower {
 		this.radius = configObject.radius;
 		this.color = configObject.fillColor;
 		this.stroke = configObject.strokeColor;
-		this.speed = configObject.speed || 1;
+		this.speed = configObject.speed || 20;
 		this.destroyMe = false;
 		this.target = configObject.target;
 		this.targetReached = false;
 		this.width = configObject.width;
 		this.height = configObject.height;
 		this.img = configObject.img;
-		this.lastUsedTimestamp = null;
+		this.attackDamage = 10;
+		this.attackWidth = configObject.width;
+		this.attacksMultiple = true;
+		this.lastAttackTimestamp = null;
+		this.attackSpeedInMilliseconds = configObject.attackSpeedInMilliseconds || 200;
 		this.spritesheetReverse = configObject.spritesheetReverse || false;
 		this.shift = 0;
 		this.frameWidth = configObject.width;
@@ -39,12 +43,89 @@ class SuperPower {
 			return this.timestampCanAnimateAfter() <= getNowAsMilliseconds();
 		};
 
-		this.timestampCanAnimateAfter = function () {
-			return this.lastAnimateTimestamp + this.animationSpeedInMilliseconds;
+		this.attackOffCooldown = function () {
+			return this.timestampCanAttackAfter() <= getNowAsMilliseconds();
+		};
+
+		this.calculateAttackDamage = function () {
+			// const total = Math.floor(
+			// 	this.attackDamage +
+			// 		this.attackDamage * (this.level * this.multiplier.attackDamage)
+			// );
+			const total = this.attackDamage
+			return total;
+		};
+
+		this.calculateAttackRadius = function () {
+			// const total = Math.floor(
+			// 	this.attackRadius + this.level * this.multiplier.attackRadius
+			// );
+			const total = this.attackWidth
+			return total;
+		};
+
+		this.canReachTarget = function (gloop) {
+			const xGloop = gloop.position.center.x;
+			const yGloop = gloop.position.center.y;
+			const xDelta = Math.abs(this.position.center.x - xGloop);
+			const yDelta = Math.abs(this.position.center.y - yGloop);
+
+			const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
+
+			if (distance <= this.calculateAttackRadius()) {
+				return true;
+			}
+			return false;
+		};
+
+		this.damage = function (gloop) {
+			gloop.loseHP(this.calculateAttackDamage());
 		};
 
 		this.destroy = function () {
 			this.destroyMe = true;
+		};
+
+		this.doAttack = function () {
+			let didAttack = false;
+			if (this.attackOffCooldown()) {
+				if (this.attacksMultiple) {
+					didAttack = this.doAttackSplash();
+				} else {
+			// 		didAttack = this.doAttackSingle();
+				}
+			}
+
+			return didAttack;
+		};
+
+		this.doAttackSplash = function () {
+			let didAttack = false;
+			gloops.forEach((gloop) => {
+				if (this.canReachTarget(gloop)) {
+					this.damage(gloop);
+					didAttack = true;
+				}
+			});
+			return didAttack;
+		};
+
+		this.doAttackSingle = function () {
+			let didAttack = false;
+			this.target = this.getTarget();
+			if (this.target) {
+				this.fireAtTarget(this.target);
+				didAttack = true;
+			}
+			return didAttack;
+		};
+
+		this.timestampCanAnimateAfter = function () {
+			return this.lastAnimateTimestamp + this.animationSpeedInMilliseconds;
+		};
+
+		this.timestampCanAttackAfter = function () {
+			return this.lastAttackTimestamp + this.attackSpeedInMilliseconds;
 		};
 
 		this.update = function () {
@@ -98,7 +179,12 @@ class SuperPower {
 			if (reachedTarget()) {
 				// this.target.loseHP(this.tower.calculateAttackDamage());
 				// this.tower.target = null;
-				console.log("reachedTarget")
+				const didAttack = this.doAttack();
+
+				if (didAttack) {
+					this.lastAttackTimestamp = getNowAsMilliseconds();
+				}
+
 				this.destroy();
 			}
 		};
