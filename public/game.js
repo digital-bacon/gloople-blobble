@@ -43,7 +43,11 @@ const configWave = {
 	goldDefault: 10,
 	hpMultiplier: 1.025,
 	nextWave: INITIAL_WAVE + 1,
-	speedDefault: 1,
+	gloopDefault: {
+		hp: 50,
+		speed: 1,
+		gold: 10,
+	},
 	speedMultiplierStep: 0.1,
 	speedMultiplierInitial: 1,
 	speedMultiplierCurrent: 1,
@@ -66,6 +70,16 @@ const configWave = {
 			this.speedMultiplierCurrent = this.speedMultiplierMax;
 		}
 	},
+	setHPMultiplier: function () {
+		if (this.currentWave > 0) {
+			this.hpMultiplierCurrent =
+				this.hpMultiplierStep + this.hpMultiplierCurrent;
+		}
+
+		if (this.hpMultiplierCurrent > this.hpMultiplierMax) {
+			this.hpMultiplierCurrent = this.hpMultiplierMax;
+		}
+	},
 };
 
 const configGloop = {
@@ -78,7 +92,8 @@ const configGloop = {
 	targettable: true,
 	gold: configWave.goldDefault,
 	hp: configWave.hpDefault,
-	speed: configWave.speedDefault,
+	hpMultiplier: configWave.hpMultiplierInitial,
+	speed: configWave.gloopDefault.speed,
 	speedMultiplier: configWave.speedMultiplierInitial,
 };
 
@@ -326,7 +341,7 @@ const nextWave = () => {
 	configWave.setSpeedMultiplier();
 	if (configWave.nextWave > 1) {
 		configGloop.speed =
-			configWave.speedDefault * configWave.speedMultiplierCurrent;
+			configWave.gloopDefault.speed * configWave.speedMultiplierCurrent;
 		configGloop.hp =
 			configWave.hpDefault + configWave.currentWave * configWave.hpMultiplier;
 		configGloop.gold =
