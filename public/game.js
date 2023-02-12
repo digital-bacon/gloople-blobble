@@ -34,8 +34,6 @@ let superPowers = [];
 let towers = [];
 let uiElements = [];
 
-const buttonSuperPower = new CanvasImage(ui.buttons.superPowerAcidRain.drawing.image);
-uiElements.push(buttonSuperPower);
 const configGloop = {
 	ctx,
 	x: waypoints[0].x,
@@ -151,6 +149,11 @@ const configPlayer = {
 };
 
 const player = new Player(configPlayer);
+const superPowerTypes = player.superPowers
+superPowerTypes.forEach(superPowerType => {
+	const buttonSuperPower = new CanvasImage(ui.buttons[`superpower-${superPowerType.type}`].drawing.image);
+uiElements.push(buttonSuperPower);
+})
 
 const configTower = {
 	ctx,

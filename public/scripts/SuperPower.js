@@ -22,8 +22,8 @@ class SuperPower {
 		this.width = configObject.width;
 		this.height = configObject.height;
 		this.img = configObject.img;
-		this.attackDamage = 10;
-		this.attackWidth = configObject.width - 100;
+		this.attackDamage = configObject.attackDamage;
+		this.attackWidth = configObject.attackWidth;
 		this.attacksMultiple = true;
 		this.lastAttackTimestamp = null;
 		this.attackSpeedInMilliseconds =
@@ -42,6 +42,7 @@ class SuperPower {
 		this.lastAnimateTimestamp = getNowAsMilliseconds();
 		this.durationInMilliseconds = configObject.durationInMilliseconds || 5000;
 		this.cooldownInMilliseconds = configObject.cooldownInMilliseconds || 10000;
+		this.hitBox = configObject.hitBox;
 
 		this.animationOffCooldown = function () {
 			return this.timestampCanAnimateAfter() <= getNowAsMilliseconds();
@@ -195,14 +196,11 @@ class SuperPower {
 			this.xCropImgStart = this.frameWidth * this.shift;
 
 			const reachedTarget = () => {
-				const hitBox = this.offset.x;
-				const reachedTarget = distance - hitBox <= hitBox;
+				const reachedTarget = distance - this.hitBox <= this.hitBox;
 				return reachedTarget;
 			};
 
 			if (reachedTarget()) {
-				// this.target.loseHP(this.tower.calculateAttackDamage());
-				// this.tower.target = null;
 				const didAttack = this.doAttack();
 
 				if (didAttack) {

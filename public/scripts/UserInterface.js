@@ -139,15 +139,32 @@ class UserInterface {
 						},
 					},
 				},
-				superPowerAcidRain: {
+				"superpower-acidrain": {
 					evalAvailable: function () {
 						return game.status === "active";
 					},
 					drawing: {
 						image: {
 							src: "static/button_superpower_acidrain.png",
+							srcOnCooldown: "static/button_superpower_acidrain_off.png",
 							id: "superpower-acidrain",
-							x: canvas.center.x - 100 / 2,
+							x: canvas.center.x - 100 - 5,
+							y: canvas.height - 104 - 10,
+							width: 100,
+							height: 104,
+						},
+					},
+				},
+				"superpower-fireball": {
+					evalAvailable: function () {
+						return game.status === "active";
+					},
+					drawing: {
+						image: {
+							src: "static/button_superpower_fireball.png",
+							srcOnCooldown: "static/button_superpower_fireball_off.png",
+							id: "superpower-fireball",
+							x: canvas.center.x + 5,
 							y: canvas.height - 104 - 10,
 							width: 100,
 							height: 104,
