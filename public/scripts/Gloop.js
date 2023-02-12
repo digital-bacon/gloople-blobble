@@ -17,7 +17,8 @@ class Gloop {
 		this.img = configObject.img;
 		this.speedMultiplier = configObject.speedMultiplier || 1;
 		this.speed = configObject.speed * this.speedMultiplier;
-		this.hp = configObject.hp;
+		this.hpMultiplier = configObject.hpMultiplier || 1;
+		this.hp = Math.floor(configObject.hp * this.hpMultiplier);
 		this.gold = configObject.gold;
 		this.wave = configObject.wave;
 		this.waypointIndex = configObject.waypointIndex;
