@@ -262,12 +262,44 @@ class UserInterface {
 					drawing: {
 						image: {
 							img: null,
-							src: "static/ui_player_bg.png",
+							src: "static/button_long_bg.png",
 							id: "ui-player-bg",
 							x: -50,
 							y: -50,
-							width: 495 * 0.5,
-							height: 365 * 0.5,
+							width: 326,
+							height: 175,
+						},
+					},
+				},
+				buttonNextWaveBg: {
+					evalAvailable: function () {
+						return game.status === "active";
+					},
+					drawing: {
+						image: {
+							img: null,
+							src: "static/ui_player_next_wave_icon.png",
+							id: "ui-player-next-wave-bg",
+							x: 10,
+							y: 5,
+							width: 46,
+							height: 37,
+						},
+					},
+				},
+				buttonNextWaveText: {
+					evalAvailable: function () {
+						return game.status === "active";
+					},
+					drawing: {
+						text: {
+							x: 75,
+							y: 32,
+							fillStyle: "#c2fbef",
+							font: "bold 24px 'Trebuchet MS', sans-serif",
+							text: "Next Wave",
+							textAlign: "left",
+							maxWidth: 100,
 						},
 					},
 				},

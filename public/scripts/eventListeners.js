@@ -36,12 +36,15 @@ const startEventListeners = () => {
 			}
 		});
 
-		if (ui.buttons.nextWave.evalAvailable()) {
-			circles.forEach((circle) => {
-				if (isIntersectingCircle(mousePosition, circle)) {
+		if (ui.playerStatus.buttonNextWaveBg.evalAvailable()) {
+			const targetId = ui.playerStatus.buttonNextWaveBg.drawing.image.id
+			const matchedElements = uiElements.filter(uiElement => uiElement.id === targetId)
+			const targetElement = matchedElements.length > 0 ? matchedElements[0]: null
+			if (targetElement) {
+				if (isIntersectingRect(mousePosition, targetElement)) {
 					callNextWave();
 				}
-			});
+			}
 		}
 
 		roundRects.forEach((roundRect) => {

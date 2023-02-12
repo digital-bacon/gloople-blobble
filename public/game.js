@@ -135,12 +135,18 @@ const imgTowerSplash = new Image();
 imgTowerMagic.src = "static/tower_magic.png";
 imgTowerSplash.src = "static/tower_splash.png";
 
+let imageConfig = null;
+let newUIElement = null;
+
 const imgUIPlayerStatusBg = new Image();
-let imageConfig = ui.playerStatus.background.drawing.image;
-imgUIPlayerStatusBg.src = imageConfig.src;
-imageConfig.img = imgUIPlayerStatusBg;
-let newUIElement = new CanvasImage(imageConfig);
-uiElements.push(newUIElement);
+imageConfig = ui.playerStatus.background.drawing.image;
+newUIElement = generateUIImage(imageConfig, imgUIPlayerStatusBg)
+uiElements.push(newUIElement); 
+
+const imgButtonNextWaveBg = new Image();
+imageConfig = ui.playerStatus.buttonNextWaveBg.drawing.image;
+newUIElement = generateUIImage(imageConfig, imgButtonNextWaveBg)
+uiElements.push(newUIElement); 
 
 const configGloopFranklin = {
   img: imgIdleFranklin,
@@ -277,7 +283,6 @@ document.onclick = (event) => {
 
 const animationLoop = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  populateCircles();
   populateFillText();
   populateGloops();
   populateRoundRects();
@@ -297,7 +302,6 @@ const animationLoop = () => {
     update(towers);
     update(projectiles);
     update(uiElements);
-    update(circles);
     update(fillText);
   }
 
@@ -406,16 +410,6 @@ const isWaveClear = (waveNumber) => {
   return matched.length === 0;
 };
 
-const populateCircles = () => {
-  if (circles.length === 0) {
-    if (ui.buttons.nextWave.evalAvailable()) {
-      const config = ui.buttons.nextWave.drawing.shape;
-      const drawing = generateDrawing("Circle", config);
-      circles.push(drawing);
-    }
-  }
-};
-
 const populateFillText = () => {
   const elements = [
     ui.messages.goldStash,
@@ -423,7 +417,7 @@ const populateFillText = () => {
     ui.buttons.start,
     ui.messages.gameOver,
     ui.buttons.playAgain,
-    ui.buttons.nextWave,
+    ui.playerStatus.buttonNextWaveText,
   ];
 
   fillText = [];
