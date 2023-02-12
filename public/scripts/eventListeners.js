@@ -2,6 +2,15 @@ const startEventListeners = () => {
 	gameCanvas.addEventListener("click", (event) => {
 		const mousePosition = getMousePosition(event);
 
+		const sayMouseClick = () => {
+			const targetSuperPower = {
+				position: {
+					x: mousePosition.x,
+					y: mousePosition.y,
+				},
+			};
+			return targetSuperPower;
+		}
 		if (player.sayNextMouseClick) {
 			const targetSuperPower = {
 				position: {
@@ -9,24 +18,33 @@ const startEventListeners = () => {
 					y: mousePosition.y,
 				},
 			};
-			player.attack(targetSuperPower, "acidrain");
-			player.sayNextMouseClick = false;
-			player.superPowers.acidrain.uiButton.src = "static/button_superpower_acidrain_off.png"
-			const timeOut = player.superPowers.acidrain.canCallAfterTimeStamp - getNowAsMilliseconds()
-			setTimeout(() => {
-				player.superPowers.acidrain.uiButton.src = "static/button_superpower_acidrain.png"
-			}, timeOut)
+			player.target = targetSuperPower
+			player.doAttack()
 		}
 
-		if (ui.buttons.superPowerAcidRain.evalAvailable()) {
-			const uiElement = uiElements.filter((uiElement) => uiElement.id === "superpower-acidrain")
-			if (uiElement.length > 0) {
-				if (isIntersectingRect(mousePosition, uiElement[0])) {
-					player.sayNextMouseClick = true;
-					player.superPowers.acidrain.uiButton = uiElement[0];
+		player.superPowers.forEach(superpower => {
+			if (ui.buttons[`superpower-${superpower.type}`].evalAvailable()) {
+				const uiElement = uiElements.filter((uiElement) => uiElement.id === `superpower-${superpower.type}`)
+				if (uiElement.length > 0) {
+					if (isIntersectingRect(mousePosition, uiElement[0])) {
+						player.sayNextMouseClick = true;
+						const playerSuperPower = player.superPowers.filter(superPower => superPower.type === superpower.type)
+						playerSuperPower[0].uiButton = uiElement[0];
+						playerSuperPower[0].pendingTarget = true;
+					}
 				}
 			}
-		}
+		})
+
+		// if (ui.buttons["superpower-acidrain"].evalAvailable()) {
+		// 	const uiElement = uiElements.filter((uiElement) => uiElement.id === "superpower-acidrain")
+		// 	if (uiElement.length > 0) {
+		// 		if (isIntersectingRect(mousePosition, uiElement[0])) {
+		// 			player.sayNextMouseClick = true;
+		// 			player.superPowers.acidrain.uiButton = uiElement[0];
+		// 		}
+		// 	}
+		// }
 
 		if (ui.buttons.nextWave.evalAvailable()) {
 			circles.forEach((circle) => {

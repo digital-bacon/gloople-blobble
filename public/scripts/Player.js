@@ -8,9 +8,9 @@ class Player {
 				y: configObject.y,
 			},
 		};
-		this.superPowers = {
-			powers: ["acidrain"],
-			"acidrain": {
+		this.superPowers = [
+			{ 
+				type: "acidrain",
 				src: "static/spritesheet_superpower_rain.png",
 				width: 253,
 				height: 256,
@@ -20,20 +20,55 @@ class Player {
 				y: 0,
 				canCallAfterTimeStamp: getNowAsMilliseconds(),
 				uiButton: null,
+				pendingTarget: false,
+				attackWidth: 253 - 100,
+				attackDamage: 10,
+				hitBox: 126, 
 			},
-		}
-		this.sayNextMouseClick =false;
+			{
+				type: "fireball",
+				src: "static/spritesheet_superpower_fireball.png",
+				width: 109,
+				height: 256,
+				totalFrames: 19,
+				animationSpeedInMilliseconds: 100,
+				x: canvas.width,
+				y: 0,
+				canCallAfterTimeStamp: getNowAsMilliseconds(),
+				uiButton: null,
+				pendingTarget: false,
+				attackWidth: 109,
+				attackDamage: 10,
+				hitBox: 126,
+			},
+		],
+		
+		this.target = null,
+		this.sayNextMouseClick = false,
 		this.hp = configObject.hp || 1,
 
-		this.superPowerOffCooldown = function (superPowerType) {
-			const canUseAfter = this.superPowers[superPowerType].canCallAfterTimeStamp;
+		this.doAttack = () => {
+			const matchedSuperPower = this.superPowers.filter(superPower => superPower.pendingTarget === true)
+			const superPower = matchedSuperPower[0];
+			this.attack(this.target, superPower);
+			this.target = null;
+			this.sayNextMouseClick = false;
+			superPower.uiButton.src = ui.buttons[`superpower-${superPower.type}`].drawing.image.srcOnCooldown
+			const timeOut = superPower.canCallAfterTimeStamp - getNowAsMilliseconds()
+			setTimeout(() => {
+				superPower.uiButton.src = ui.buttons[`superpower-${superPower.type}`].drawing.image.src
+			}, timeOut)
+		}
+
+		this.superPowerOffCooldown = function (superPower) {
+			const canUseAfter = superPower.canCallAfterTimeStamp;
 			const offCooldown = canUseAfter <= getNowAsMilliseconds()
 			return offCooldown;
 		};
 
-		this.attack = function (target, superPowerType) {
-			if (this.superPowerOffCooldown(superPowerType)) {
-				this.fireAtTarget(target, superPowerType)
+		this.attack = function (target, superPower) {
+			if (this.superPowerOffCooldown(superPower)) {
+				this.fireAtTarget(target, superPower)
 			}
 		};
 
@@ -41,12 +76,12 @@ class Player {
 			return Math.floor(amount);
 		};
 
-		this.fireAtTarget = function (target, superPowerType) {
-			const superPower = this.loadSuperPower(target, superPowerType);
-			target.position.x -= superPower.offset.x;
-			target.position.y -= superPower.height - superPower.width / 8;
-			superPowers.push(superPower);
-			this.superPowers[superPowerType].canCallAfterTimeStamp = superPower.timestampCanCallAfter();
+		this.fireAtTarget = function (target, superPower) {
+			const newSuperPower = this.loadSuperPower(target, superPower);
+			target.position.x -= newSuperPower.offset.x;
+			target.position.y -= newSuperPower.height - newSuperPower.width / 8;
+			superPowers.push(newSuperPower);
+			superPower.canCallAfterTimeStamp = newSuperPower.timestampCanCallAfter();
 		};
 
 		this.gainHP = function (amount) {
@@ -57,19 +92,19 @@ class Player {
 			return this.hp;
 		};
 
-		this.loadSuperPower = function (target, superPowerType) {
+		this.loadSuperPower = function (target, superPower) {
 			const img = new Image();
-			img.src = this.superPowers[superPowerType].src;
+			img.src = superPower.src
 			const configSuperPower = {
-				...this.superPowers[superPowerType],
+				...superPower,
 				ctx,
 				target,
 				img,
 				player: this,
 			};
 
-			const superPower = new SuperPower(configSuperPower);
-			return superPower;
+			const newSuperPower = new SuperPower(configSuperPower);
+			return newSuperPower;
 		};
 
 		this.loseHP = function (amount) {
