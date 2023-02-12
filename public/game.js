@@ -153,6 +153,11 @@ imageConfig = ui.playerStatus.gemStashIcon.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgGemStashIcon)
 uiElements.push(newUIElement); 
 
+const imgPlayerHPIcon = new Image();
+imageConfig = ui.playerStatus.playerHPIcon.drawing.image;
+newUIElement = generateUIImage(imageConfig, imgPlayerHPIcon)
+uiElements.push(newUIElement); 
+
 const configGloopFranklin = {
   img: imgIdleFranklin,
   width: 144.165,

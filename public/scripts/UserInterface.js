@@ -205,8 +205,8 @@ class UserInterface {
 							img: null,
 							src: "static/button_long_bg.png",
 							id: "ui-player-bg",
-							x: -50,
-							y: -50,
+							x: -80,
+							y: -45,
 							width: 326,
 							height: 175,
 						},
@@ -223,8 +223,8 @@ class UserInterface {
 							id: "ui-player-next-wave-bg",
 							x: 10,
 							y: 5,
-							width: 46,
-							height: 37,
+							width: 46 * 0.9,
+							height: 37 * 0.9,
 						},
 					},
 				},
@@ -234,9 +234,9 @@ class UserInterface {
 					},
 					drawing: {
 						text: {
-							x: 75,
-							y: 32,
-							fillStyle: "#c2fbef",
+							x: 65,
+							y: 30,
+							fillStyle: "#d8d8d8",
 							font: "bold 24px 'Trebuchet MS', sans-serif",
 							text: "Next Wave",
 							textAlign: "left",
@@ -254,7 +254,7 @@ class UserInterface {
 							src: "static/ui_player_gem_stash_icon.png",
 							id: "ui-player-gem-stash-icon",
 							x: 15,
-							y: 50,
+							y: 44,
 							width: 51 * 0.6,
 							height: 40 * 0.6,
 						},
@@ -266,9 +266,9 @@ class UserInterface {
 					},
 					drawing: {
 						text: {
-							x: 75,
-							y: 68,
-							fillStyle: "gold",
+							x: 65,
+							y: 62,
+							fillStyle: "#1bea00",
 							font: "bold 24px 'Trebuchet MS', sans-serif",
 							textAlign: "left",
 							maxWidth: canvas.width - 4,
@@ -278,15 +278,31 @@ class UserInterface {
 						},
 					},
 				},
+				playerHPIcon: {
+					evalAvailable: function () {
+						return game.status === "active";
+					},
+					drawing: {
+						image: {
+							img: null,
+							src: "static/ui_player_hp_icon.png",
+							id: "ui-player-hp-icon",
+							x: 15,
+							y: 72,
+							width: 37 * 0.8,
+							height: 33 * 0.8,
+						},
+					},
+				},
 				playerHPText: {
 					evalAvailable: function () {
 						return game.status === "active" || game.status === "gameover";
 					},
 					drawing: {
 						text: {
-							x: 75,
+							x: 65,
 							y: 68 + 24,
-							fillStyle: "#aaf0d1",
+							fillStyle: "#f96a63",
 							font: "bold 24px 'Trebuchet MS', sans-serif",
 							textAlign: "left",
 							maxWidth: canvas.width - 4,
