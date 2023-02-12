@@ -148,6 +148,11 @@ imageConfig = ui.playerStatus.buttonNextWaveBg.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgButtonNextWaveBg)
 uiElements.push(newUIElement); 
 
+const imgGemStashIcon = new Image();
+imageConfig = ui.playerStatus.gemStashIcon.drawing.image;
+newUIElement = generateUIImage(imageConfig, imgGemStashIcon)
+uiElements.push(newUIElement); 
+
 const configGloopFranklin = {
   img: imgIdleFranklin,
   width: 144.165,
@@ -412,12 +417,12 @@ const isWaveClear = (waveNumber) => {
 
 const populateFillText = () => {
   const elements = [
-    ui.messages.goldStash,
-    ui.messages.playerHP,
-    ui.buttons.start,
-    ui.messages.gameOver,
     ui.buttons.playAgain,
+		ui.buttons.start,
+    ui.messages.gameOver,
     ui.playerStatus.buttonNextWaveText,
+    ui.playerStatus.goldStashText,
+		ui.playerStatus.playerHPText,
   ];
 
   fillText = [];
