@@ -70,27 +70,14 @@ const configWave = {
 		);
 		return total;
 	},
-	setSpeedMultiplier: function () {
+	setGloopMultiplier: function (statisticType) {
+		const stat = this.gloops.multipliers[statisticType];
 		if (this.currentWave > 0) {
-			this.gloops.multipliers.speed.current =
-				this.gloops.multipliers.speed.step +
-				this.gloops.multipliers.speed.current;
+			stat.current = stat.step + stat.current;
 		}
 
-		if (
-			this.gloops.multipliers.speed.current > this.gloops.multipliers.speed.max
-		) {
-			this.gloops.multipliers.speed.current = this.gloops.multipliers.speed.max;
-		}
-	},
-	setHPMultiplier: function () {
-		if (this.currentWave > 0) {
-			this.hpMultiplierCurrent =
-				this.hpMultiplierStep + this.hpMultiplierCurrent;
-		}
-
-		if (this.hpMultiplierCurrent > this.hpMultiplierMax) {
-			this.hpMultiplierCurrent = this.hpMultiplierMax;
+		if (stat.current > stat.max) {
+			stat.current = stat.max;
 		}
 	},
 };
@@ -351,7 +338,7 @@ const clearTowerButtons = () => {
 };
 
 const nextWave = () => {
-	configWave.setSpeedMultiplier();
+	configWave.setGloopMultiplier("speed");
 	if (configWave.nextWave > 1) {
 		configGloop.speed =
 			configWave.gloops.default.speed *
