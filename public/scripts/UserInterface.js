@@ -198,7 +198,7 @@ class UserInterface {
 			playerStatus: {
 				background: {
 					evalAvailable: function () {
-						return game.status === "active";
+						return game.status === "active" || game.status === "gameover";
 					},
 					drawing: {
 						image: {
@@ -246,7 +246,7 @@ class UserInterface {
 				},
 				gemStashIcon: {
 					evalAvailable: function () {
-						return game.status === "active";
+						return game.status === "active" || game.status === "gameover";
 					},
 					drawing: {
 						image: {
@@ -280,7 +280,7 @@ class UserInterface {
 				},
 				playerHPIcon: {
 					evalAvailable: function () {
-						return game.status === "active";
+						return game.status === "active" || game.status === "gameover";
 					},
 					drawing: {
 						image: {

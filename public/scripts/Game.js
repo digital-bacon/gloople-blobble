@@ -11,7 +11,6 @@ class Game {
 				}
 				this.status = status;
 				if (this.status === "gameover") {
-					circles = [];
 					gloops = [];
 					towers.forEach((tower) => (tower.target = null));
 					player.hp = 0;
