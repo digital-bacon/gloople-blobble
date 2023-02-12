@@ -254,6 +254,24 @@ class UserInterface {
 					},
 				},
 			},
+			playerStatus: {
+				background: {
+					evalAvailable: function () {
+						return game.status === "active";
+					},
+					drawing: {
+						image: {
+							img: null,
+							src: "static/ui_player_bg.png",
+							id: "ui-player-bg",
+							x: -50,
+							y: -50,
+							width: 495 * 0.5,
+							height: 365 * 0.5,
+						},
+					},
+				},
+			},
 		};
 	}
 }
