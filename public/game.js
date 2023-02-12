@@ -1,9 +1,9 @@
-const INITIAL_WAVE_GLOOPS = 1;
-const INITIAL_WAVE = 0;
 const INITIAL_GAME_STATUS = "active";
-const INITIAL_PLAYER_HP = 10;
 const INITIAL_GOLD_STASH_TOTAL = 5000;
+const INITIAL_PLAYER_HP = 10;
+const INITIAL_TOTAL_GLOOPS = 1;
 const INITIAL_TOWER_LEVEL = 1;
+const INITIAL_WAVE = 0; // set to 0 for production
 const TOWER_SIZE = { width: 160, height: 160 };
 const TOWER_LOCATION_SIZE = { width: 160, height: 70 };
 
@@ -34,6 +34,72 @@ let superPowers = [];
 let towers = [];
 let uiElements = [];
 
+const configWave = {
+	currentWave: INITIAL_WAVE,
+	earlyBonus: 100,
+	nextWave: INITIAL_WAVE + 1,
+	gloops: {
+		subSpecies: gloopSubSpecies,
+		statistics: {
+			types: ["gold", "hp", "speed"],
+			defaults: {
+				gold: 10,
+				hp: 50,
+				speed: 1,
+			},
+			multipliers: {
+				gold: {
+					current: 1,
+					initial: 1,
+					max: null,
+					step: 1.25,
+				},
+				hp: {
+					current: 1,
+					initial: 1,
+					max: null,
+					step: 0.1,
+				},
+				speed: {
+					current: 1,
+					initial: 1,
+					max: 2.5,
+					step: 0.1,
+				},
+			},
+		},
+	},
+	totalGloopsMultiplier: 0.25,
+	_totalGloops: INITIAL_TOTAL_GLOOPS,
+	get totalGloops() {
+		const total = Math.floor(
+			this._totalGloops + (this.currentWave - 1) * this.totalGloopsMultiplier
+		);
+		return total;
+	},
+	setGloopMultiplier: function (statisticType) {
+		const stat = this.gloops.statistics.multipliers[statisticType];
+		if (this.currentWave > 0) {
+			stat.current = this.currentWave * stat.step + stat.initial;
+		}
+		if (stat.max) {
+			if (stat.current > stat.max) {
+				stat.current = stat.max;
+			}
+		}
+	},
+	setGloopMultipliers: function () {
+		this.gloops.statistics.types.forEach((statisticType) =>
+			this.setGloopMultiplier(statisticType)
+		);
+	},
+	setNextWave: function () {
+		this.setGloopMultipliers();
+		this.currentWave = this.nextWave;
+		this.nextWave++;
+	},
+};
+
 const configGloop = {
 	ctx,
 	x: waypoints[0].x,
@@ -42,41 +108,26 @@ const configGloop = {
 	wave: 0,
 	immobile: false,
 	targettable: true,
-	_gold: 10,
-	get gold() {
-		return this._gold;
-	},
-	set gold(value) {
-		if (value < 0) {
-			return (this._gold = 0);
-		}
-		this._gold = value;
-	},
-	get hp() {
-		return this._hp;
-	},
-	set hp(value) {
-		if (value < 0) {
-			return (this._hp = 0);
-		}
-		this._hp = value;
-	},
-	get speed() {
-		return this._speed;
-	},
-	set speed(value) {
-		if (value < 0) {
-			return (this._speed = 0);
-		}
-		this._speed = value;
-	},
+	gold: configWave.gloops.statistics.defaults.gold,
+	goldMultiplier: configWave.gloops.statistics.multipliers.gold.initial,
+	hp: configWave.gloops.statistics.defaults.hp,
+	hpMultiplier: configWave.gloops.statistics.multipliers.hp.initial,
+	speed: configWave.gloops.statistics.defaults.speed,
+	speedMultiplier: configWave.gloops.statistics.multipliers.speed.initial,
 };
 
 const imgIdleFranklin = new Image();
+const imgGloopBob = new Image();
+const imgGloopSam = new Image();
+const imgGloopSmooch = new Image();
+const imgGloopTom = new Image();
 imgIdleFranklin.src = "static/spritesheet_franklin.png";
+imgGloopBob.src = "static/spritesheet_bob.png";
+imgGloopSam.src = "static/spritesheet_sam.png";
+imgGloopSmooch.src = "static/spritesheet_smooch.png";
+imgGloopTom.src = "static/spritesheet_tom.png";
 
 const configGloopFranklin = {
-	baseConfig: configGloop,
 	img: imgIdleFranklin,
 	width: 144.165,
 	height: 55,
@@ -88,34 +139,25 @@ const configGloopFranklin = {
 	animationSpeedInMilliseconds: 500,
 };
 
-const imgGloopBob = new Image();
-imgGloopBob.src = "static/spritesheet_bob.png";
-
 const configGloopBob = {
-	baseConfig: configGloop,
 	img: imgGloopBob,
 	width: 192,
 	height: 70,
 	totalFrames: 19,
 	animationSpeedInMilliseconds: 250,
+	speed: configWave.gloops.statistics.defaults.speed * 2.5,
+	hp: configWave.gloops.statistics.defaults.hp * 0.5,
+	gold: configWave.gloops.statistics.defaults.gold * 1.25,
 };
 
-const imgGloopSam = new Image();
-imgGloopSam.src = "static/spritesheet_sam.png";
-
 const configGloopSam = {
-	baseConfig: configGloop,
 	img: imgGloopSam,
 	width: 175,
 	height: 70,
 	spritesheetReverse: true,
 };
 
-const imgGloopSmooch = new Image();
-imgGloopSmooch.src = "static/spritesheet_smooch.png";
-
 const configGloopSmooch = {
-	baseConfig: configGloop,
 	img: imgGloopSmooch,
 	width: 67,
 	height: 70,
@@ -123,17 +165,16 @@ const configGloopSmooch = {
 	totalFrames: 18,
 };
 
-const imgGloopTom = new Image();
-imgGloopTom.src = "static/spritesheet_tom.png";
-
 const configGloopTom = {
-	baseConfig: configGloop,
 	img: imgGloopTom,
 	width: 281,
 	height: 100,
 	spritesheetReverse: true,
 	totalFrames: 40,
-	animationSpeedInMilliseconds: 100,
+	animationSpeedInMilliseconds: 150,
+	speed: configWave.gloops.statistics.defaults.speed * 0.5,
+	hp: configWave.gloops.statistics.defaults.hp * 5,
+	gold: configWave.gloops.statistics.defaults.gold * 2.5,
 };
 
 gloopSubSpecies.push(configGloopBob);
@@ -172,7 +213,7 @@ const configTower = {
 	attacksMultiple: false,
 	showRange: true,
 	projectileSize: 10,
-	attackDamage: 100,
+	attackDamage: 25,
 	attackSpeedInMilliseconds: 1000,
 	purchaseCost: 50,
 	upgradeCost: 100,
@@ -216,27 +257,6 @@ const configTowerLocation = {
 	// strokeColor: "transparent",
 };
 
-const configWave = {
-	gloopSubSpecies,
-	currentWave: INITIAL_WAVE,
-	earlyBonus: 100,
-	goldMultiplier: 2,
-	hpDefault: 50,
-	hpMultiplier: 1.025,
-	nextWave: INITIAL_WAVE + 1,
-	speedDefault: 1,
-	speedMaximum: 2.5,
-	speedMultiplier: 0.2,
-	totalGloopsMultiplier: 0.25,
-	_totalGloops: INITIAL_WAVE_GLOOPS,
-	get totalGloops() {
-		const total = Math.floor(
-			this._totalGloops + (this.currentWave - 1) * this.totalGloopsMultiplier
-		);
-		return total;
-	},
-};
-
 const xOffset = Math.round(screenCenter.x - canvas.center.x); // because the canvas is centered
 const yOffset = 0; // because the canvas is at the top of the page
 
@@ -245,6 +265,48 @@ const trackedArray = [];
 document.onclick = (event) => {
 	trackedArray.push(getMousePosition(event));
 	// console.log(JSON.stringify(trackedArray));
+};
+
+const animationLoop = () => {
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	populateCircles();
+	populateFillText();
+	populateGloops();
+	populateRoundRects();
+	populateStaticObjects();
+	populateTowerLocations();
+
+	if (game.status === "initial") {
+		update(roundRects);
+		update(fillText);
+	}
+
+	if (game.status === "active") {
+		update(staticObjects);
+		update(superPowers);
+		update(locations);
+		update(circles);
+		update(gloops);
+		update(towers);
+		update(projectiles);
+		update(fillText);
+		update(uiElements);
+	}
+
+	if (game.status === "gameover") {
+		render(staticObjects);
+		render(towers);
+		render(projectiles);
+		render(roundRects);
+		render(fillText);
+	}
+
+	requestAnimationFrame(animationLoop);
+
+	cleanupGloops();
+	cleanupTowerLocations();
+	cleanupProjectiles();
+	cleanupSuperPowers();
 };
 
 const cleanupGloops = () => {
@@ -272,48 +334,6 @@ const cleanupSuperPowers = () => {
 	);
 	superPowers = [...activeSuperPowers];
 };
-
-const summonGloop = (configGloop) => {
-	const newGloop = new Gloop(configGloop);
-	gloops.push(newGloop);
-};
-
-const summonGloops = (configSummon) => {
-	const { totalGloops, configGloop, xOffset, wave } = configSummon;
-	const newGloops = [];
-	for (let i = 0; i < totalGloops; i++) {
-		const configSubSpecies = randomFromArray(configWave.gloopSubSpecies);
-		const gloop = { ...configGloop, ...configSubSpecies };
-		gloop.wave = wave;
-		newGloops.push(gloop);
-	}
-	let totalOffset = 0;
-	newGloops.forEach((gloop) => {
-		gloop.x = gloop.x - totalOffset;
-		summonGloop(gloop);
-		totalOffset += xOffset;
-	});
-};
-
-const summonTower = (configTower) => {
-	const newTower = new Tower(configTower);
-	towers.push(newTower);
-	return newTower;
-};
-
-// const summonTowers = (configSummon) => {
-// 	const { configTower, configTowerType, towerLocations } = configSummon;
-// 	const newTowers = [];
-// 	for (let i = 0; i < towerLocations.length; i++) {
-// 		const tower = { ...configTower, ...configTowerType };
-// 		tower.x = towerLocations[i].x + towerLocations[i].xTowerOffset;
-// 		tower.y = towerLocations[i].y + towerLocations[i].yTowerOffset;
-// 		newTowers.push(tower);
-// 	}
-// 	newTowers.forEach((tower) => {
-// 		summonTower(tower);
-// 	});
-// };
 
 const generateTowerLocation = (configLocation) => {
 	const newLocation = new TowerLocation(configLocation);
@@ -353,43 +373,19 @@ const clearTowerButtons = () => {
 	});
 };
 
-const calculateGloopSpeed = (configWave) => {
-	let result = configWave.speedDefault;
-	if (configWave.nextWave > 1) {
-		result =
-			configWave.speedDefault +
-			configWave.currentWave * configWave.speedMultiplier;
-	}
-	if (result >= configWave.speedMaximum) {
-		result = configWave.speedMaximum;
-	}
-	return result;
+const isWaveClear = (waveNumber) => {
+	const matched = gloops.filter((gloop) => gloop.wave === waveNumber);
+	return matched.length === 0;
 };
 
-const nextWave = () => {
-	configGloop.speed = calculateGloopSpeed(configWave);
-	if (configWave.nextWave > 1) {
-		configGloop.hp =
-			configWave.hpDefault + configWave.currentWave * configWave.hpMultiplier;
-		configGloop.gold =
-			configGloop.gold + configWave.currentWave * configWave.goldMultiplier;
-	} else {
-		configGloop.hp = configWave.hpDefault;
-	}
-	configWave.currentWave = configWave.nextWave;
-	configWave.nextWave++;
+const callNextWave = () => {
+	configWave.setNextWave();
 	const configSummon = {
-		configGloop,
 		totalGloops: configWave.totalGloops,
 		xOffset: 40,
 		wave: configWave.currentWave,
 	};
 	summonGloops(configSummon);
-};
-
-const isWaveClear = (waveNumber) => {
-	const matched = gloops.filter((gloop) => gloop.wave === waveNumber);
-	return matched.length === 0;
 };
 
 const populateCircles = () => {
@@ -401,22 +397,6 @@ const populateCircles = () => {
 		}
 	}
 };
-
-// const populateImages = () => {
-// 	if (images.length === 0) {
-// 		const img = new Image();
-// 		img.src = "static/gloop.png";
-// 		const config = {
-// 			x: 200,
-// 			y: 200,
-// 			img: img,
-// 			width: 30,
-// 			height: 30,
-// 		};
-// 		const drawing = generateDrawing("Image", config);
-// 		images.push(drawing);
-// 	}
-// };
 
 const populateFillText = () => {
 	const elements = [
@@ -468,13 +448,13 @@ const populateTowers = (configTowerType) => {
 	}
 };
 
-const populateTowerLocations = (configTowerTypes) => {
+const populateTowerLocations = () => {
 	if (locations.length === 0) {
 		const initialLocations = towerLocations;
 		const configGenerate = {
 			configTowerLocation,
 			configTower,
-			configTowerTypes,
+			configTowerTypes: towerTypes,
 			towerLocations: initialLocations,
 		};
 		generateTowerLocations(configGenerate);
@@ -492,54 +472,43 @@ const populateStaticObjects = () => {
 	}
 };
 
-const populateGloops = (configSubSpecies) => {
+const populateGloops = () => {
 	if (gloops.length === 0 || isWaveClear(configWave.currentWave)) {
-		nextWave(configSubSpecies);
+		callNextWave();
 	}
 };
 
-const animationLoop = () => {
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	populateCircles();
-	populateFillText();
-	populateGloops();
-	// populateImages();
-	populateRoundRects();
-	populateStaticObjects();
-	// populateTowers(configTowerMagic);
-	populateTowerLocations(towerTypes);
+const summonGloop = (configGloop) => {
+	const newGloop = new Gloop(configGloop);
+	gloops.push(newGloop);
+};
 
-	if (game.status === "initial") {
-		update(roundRects);
-		update(fillText);
+const summonGloops = (configSummon) => {
+	const { totalGloops, xOffset, wave } = configSummon;
+	const newGloops = [];
+	for (let i = 0; i < totalGloops; i++) {
+		const configSubSpecies = randomFromArray(configWave.gloops.subSpecies);
+		const gloop = { ...configGloop, ...configSubSpecies };
+		gloop.wave = wave;
+		if (gloop.wave > 1) {
+			gloop.speed *= configWave.gloops.statistics.multipliers.speed.current;
+			gloop.hp *= configWave.gloops.statistics.multipliers.hp.current;
+			gloop.gold *= configWave.gloops.statistics.multipliers.gold.current;
+		}
+		newGloops.push(gloop);
 	}
+	let totalOffset = 0;
+	newGloops.forEach((gloop) => {
+		gloop.x = gloop.x - totalOffset;
+		summonGloop(gloop);
+		totalOffset += xOffset;
+	});
+};
 
-	if (game.status === "active") {
-		update(staticObjects);
-		update(superPowers);
-		update(locations);
-		update(circles);
-		update(gloops);
-		update(towers);
-		update(projectiles);
-		update(fillText);
-		update(uiElements);
-	}
-
-	if (game.status === "gameover") {
-		render(staticObjects);
-		render(towers);
-		render(projectiles);
-		render(roundRects);
-		render(fillText);
-	}
-
-	requestAnimationFrame(animationLoop);
-
-	cleanupGloops();
-	cleanupTowerLocations();
-	cleanupProjectiles();
-	cleanupSuperPowers();
+const summonTower = (configTower) => {
+	const newTower = new Tower(configTower);
+	towers.push(newTower);
+	return newTower;
 };
 
 animationLoop();
