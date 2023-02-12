@@ -35,11 +35,11 @@ let towers = [];
 let uiElements = [];
 
 const configWave = {
-	gloopSubSpecies,
 	currentWave: INITIAL_WAVE,
 	earlyBonus: 100,
 	nextWave: INITIAL_WAVE + 1,
 	gloops: {
+		subSpecies: gloopSubSpecies,
 		statistics: {
 			types: ["gold", "hp", "speed"],
 			defaults: {
@@ -487,7 +487,7 @@ const summonGloops = (configSummon) => {
 	const { totalGloops, xOffset, wave } = configSummon;
 	const newGloops = [];
 	for (let i = 0; i < totalGloops; i++) {
-		const configSubSpecies = randomFromArray(configWave.gloopSubSpecies);
+		const configSubSpecies = randomFromArray(configWave.gloops.subSpecies);
 		const gloop = { ...configGloop, ...configSubSpecies };
 		gloop.wave = wave;
 		if (gloop.wave > 1) {
