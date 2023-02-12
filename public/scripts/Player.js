@@ -9,7 +9,7 @@ class Player {
 			},
 		};
 		this.superPowers = [
-			{ 
+			{
 				type: "acidrain",
 				src: "static/spritesheet_superpower_rain.png",
 				width: 253,
@@ -23,7 +23,7 @@ class Player {
 				pendingTarget: false,
 				attackWidth: 253 - 100,
 				attackDamage: 10,
-				hitBox: 126, 
+				hitBox: 126,
 			},
 			{
 				type: "fireball",
@@ -41,34 +41,38 @@ class Player {
 				attackDamage: 10,
 				hitBox: 126,
 			},
-		],
-		
-		this.target = null,
-		this.sayNextMouseClick = false,
-		this.hp = configObject.hp || 1,
+		];
+		this.attackingWithSuperPowerType = null;
+		this.searchingForTarget = false;
+		this.hp = configObject.hp || 1;
 
-		this.doAttack = () => {
-			const matchedSuperPower = this.superPowers.filter(superPower => superPower.pendingTarget === true)
+		this.doAttack = function (target) {
+			const matchedSuperPower = this.superPowers.filter(
+				(superPower) => superPower.type === this.attackingWithSuperPowerType
+			);
 			const superPower = matchedSuperPower[0];
-			this.attack(this.target, superPower);
-			this.target = null;
-			this.sayNextMouseClick = false;
-			superPower.uiButton.src = ui.buttons[`superpower-${superPower.type}`].drawing.image.srcOnCooldown
-			const timeOut = superPower.canCallAfterTimeStamp - getNowAsMilliseconds()
+			console.log(this.attackingWithSuperPowerType);
+			this.attack(target, superPower);
+			this.searchingForTarget = false;
+			superPower.uiButton.src =
+				ui.buttons[`superpower-${superPower.type}`].drawing.image.srcOnCooldown;
+			const timeOut = superPower.canCallAfterTimeStamp - getNowAsMilliseconds();
 			setTimeout(() => {
-				superPower.uiButton.src = ui.buttons[`superpower-${superPower.type}`].drawing.image.src
-			}, timeOut)
-		}
+				superPower.uiButton.src =
+					ui.buttons[`superpower-${superPower.type}`].drawing.image.src;
+			}, timeOut);
+			console.log(this);
+		};
 
 		this.superPowerOffCooldown = function (superPower) {
 			const canUseAfter = superPower.canCallAfterTimeStamp;
-			const offCooldown = canUseAfter <= getNowAsMilliseconds()
+			const offCooldown = canUseAfter <= getNowAsMilliseconds();
 			return offCooldown;
 		};
 
 		this.attack = function (target, superPower) {
 			if (this.superPowerOffCooldown(superPower)) {
-				this.fireAtTarget(target, superPower)
+				this.fireAtTarget(target, superPower);
 			}
 		};
 
@@ -94,7 +98,7 @@ class Player {
 
 		this.loadSuperPower = function (target, superPower) {
 			const img = new Image();
-			img.src = superPower.src
+			img.src = superPower.src;
 			const configSuperPower = {
 				...superPower,
 				ctx,
@@ -110,13 +114,13 @@ class Player {
 		this.loseHP = function (amount) {
 			this.hp -= this.convertToWhole(amount);
 			if (!this.playerIsAlive()) {
-				game.setStatus("gameover")
+				game.setStatus("gameover");
 			}
 		};
 
 		this.playerIsAlive = function () {
 			return this.hp > 0;
-		}
+		};
 
 		this.purchaseTowerUpgrade = function (tower) {
 			const purchaseSuccessful = goldStash.withdraw(
@@ -130,7 +134,6 @@ class Player {
 
 		this.setHP = function (value) {
 			this.hp = value;
-
 		};
 
 		return this;
