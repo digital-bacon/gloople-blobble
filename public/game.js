@@ -43,10 +43,20 @@ const configWave = {
 	goldDefault: 10,
 	hpMultiplier: 1.025,
 	nextWave: INITIAL_WAVE + 1,
-	gloopDefault: {
-		hp: 50,
-		speed: 1,
-		gold: 10,
+	gloops: {
+		default: {
+			hp: 50,
+			speed: 1,
+			gold: 10,
+		},
+		multipliers: {
+			speed: {
+				current: 1,
+				initial: 1,
+				max: 2.5,
+				step: 0.1,
+			},
+		},
 	},
 	speedMultiplierStep: 0.1,
 	speedMultiplierInitial: 1,
@@ -62,12 +72,15 @@ const configWave = {
 	},
 	setSpeedMultiplier: function () {
 		if (this.currentWave > 0) {
-			this.speedMultiplierCurrent =
-				this.speedMultiplierStep + this.speedMultiplierCurrent;
+			this.gloops.multipliers.speed.current =
+				this.gloops.multipliers.speed.step +
+				this.gloops.multipliers.speed.current;
 		}
 
-		if (this.speedMultiplierCurrent > this.speedMultiplierMax) {
-			this.speedMultiplierCurrent = this.speedMultiplierMax;
+		if (
+			this.gloops.multipliers.speed.current > this.gloops.multipliers.speed.max
+		) {
+			this.gloops.multipliers.speed.current = this.gloops.multipliers.speed.max;
 		}
 	},
 	setHPMultiplier: function () {
@@ -93,8 +106,8 @@ const configGloop = {
 	gold: configWave.goldDefault,
 	hp: configWave.hpDefault,
 	hpMultiplier: configWave.hpMultiplierInitial,
-	speed: configWave.gloopDefault.speed,
-	speedMultiplier: configWave.speedMultiplierInitial,
+	speed: configWave.gloops.default.speed,
+	speedMultiplier: configWave.gloops.multipliers.speed.initial,
 };
 
 const imgIdleFranklin = new Image();
@@ -341,7 +354,8 @@ const nextWave = () => {
 	configWave.setSpeedMultiplier();
 	if (configWave.nextWave > 1) {
 		configGloop.speed =
-			configWave.gloopDefault.speed * configWave.speedMultiplierCurrent;
+			configWave.gloops.default.speed *
+			configWave.gloops.multipliers.speed.current;
 		configGloop.hp =
 			configWave.hpDefault + configWave.currentWave * configWave.hpMultiplier;
 		configGloop.gold =
