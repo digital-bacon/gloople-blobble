@@ -137,7 +137,7 @@ class Player {
 		};
 
 		this.purchaseTowerUpgrade = function (tower) {
-			const purchaseSuccessful = goldStash.withdraw(
+			const purchaseSuccessful = gemStash.withdraw(
 				tower.calculateUpgradeCost()
 			);
 			if (purchaseSuccessful) {

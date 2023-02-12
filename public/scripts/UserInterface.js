@@ -46,7 +46,7 @@ class UserInterface {
 						text: {
 							x: canvas.center.x,
 							y: canvas.center.y + 30,
-							fillStyle: "gold",
+							fillStyle: "gem",
 							font: "bold 16px sans-serif",
 							text: "Play Again!",
 							textAlign: "center",

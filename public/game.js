@@ -44,14 +44,14 @@ const configWave = {
   gloops: {
     subSpecies: gloopSubSpecies,
     statistics: {
-      types: ["gold", "hp", "speed"],
+      types: ["gem", "hp", "speed"],
       defaults: {
-        gold: 10,
+        gem: 10,
         hp: 50,
         speed: 1,
       },
       multipliers: {
-        gold: {
+        gem: {
           current: 1,
           initial: 1,
           max: null,
@@ -111,8 +111,8 @@ const configGloop = {
   wave: 0,
   immobile: false,
   targettable: true,
-  gold: configWave.gloops.statistics.defaults.gold,
-  goldMultiplier: configWave.gloops.statistics.multipliers.gold.initial,
+  gem: configWave.gloops.statistics.defaults.gem,
+  gemMultiplier: configWave.gloops.statistics.multipliers.gem.initial,
   hp: configWave.gloops.statistics.defaults.hp,
   hpMultiplier: configWave.gloops.statistics.multipliers.hp.initial,
   speed: configWave.gloops.statistics.defaults.speed,
@@ -178,7 +178,7 @@ const configGloopBob = {
   animationSpeedInMilliseconds: 250,
   speed: configWave.gloops.statistics.defaults.speed * 2.5,
   hp: configWave.gloops.statistics.defaults.hp * 0.5,
-  gold: configWave.gloops.statistics.defaults.gold * 1.25,
+  gem: configWave.gloops.statistics.defaults.gem * 1.25,
 };
 
 const configGloopSam = {
@@ -205,7 +205,7 @@ const configGloopTom = {
   animationSpeedInMilliseconds: 150,
   speed: configWave.gloops.statistics.defaults.speed * 0.5,
   hp: configWave.gloops.statistics.defaults.hp * 5,
-  gold: configWave.gloops.statistics.defaults.gold * 2.5,
+  gem: configWave.gloops.statistics.defaults.gem * 2.5,
 };
 
 gloopSubSpecies.push(configGloopBob);
@@ -515,7 +515,7 @@ const summonGloops = (configSummon) => {
     if (gloop.wave > 1) {
       gloop.speed *= configWave.gloops.statistics.multipliers.speed.current;
       gloop.hp *= configWave.gloops.statistics.multipliers.hp.current;
-      gloop.gold *= configWave.gloops.statistics.multipliers.gold.current;
+      gloop.gem *= configWave.gloops.statistics.multipliers.gem.current;
     }
     newGloops.push(gloop);
   }
