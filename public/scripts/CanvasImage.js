@@ -5,7 +5,7 @@ class CanvasImage {
 			y: configObject.y,
 		};
 		this.id = configObject.id || Math.random().toString(36).substr(2);
-		this.src = configObject.src;
+		this.img = configObject.img;
 		this.width = configObject.width;
 		this.height = configObject.height;
 
@@ -14,10 +14,8 @@ class CanvasImage {
 		};
 
 		this.render = function () {
-			const img = new Image();
-			img.src = this.src;
 			ctx.drawImage(
-				img,
+				this.img,
 				this.position.x,
 				this.position.y,
 				this.width,

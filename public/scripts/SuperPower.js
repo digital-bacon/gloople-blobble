@@ -8,12 +8,12 @@ class SuperPower {
 			x: configObject.x - this.offset.x,
 			y: configObject.y - this.offset.y,
 			center: {
-				x: configObject.x + this.offset.x,
-				y: configObject.y + this.offset.y,
+				x: configObject.x,
+				y: configObject.y,
 			},
 			damageArea: {
 				x: configObject.x,
-				y: configObject.y + 128,
+				y: configObject.y + configObject.height / 2 - configObject.hitbox / 2,
 			},
 		};
 		this.radius = configObject.radius;
@@ -69,7 +69,7 @@ class SuperPower {
 			// const total = Math.floor(
 			// 	this.attackRadius + this.level * this.multiplier.attackRadius
 			// );
-			const total = this.attackWidth;
+			const total = this.hitbox;
 			return total;
 		};
 

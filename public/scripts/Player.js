@@ -69,12 +69,12 @@ class Player {
 			const superPower = matchedSuperPower[0];
 			this.attack(target, superPower);
 			this.searchingForTarget = false;
-			superPower.uiButton.src =
-				ui.buttons[`superpower-${superPower.type}`].drawing.image.srcOnCooldown;
+			const uiImageConfig =
+				ui.buttons[`superpower-${superPower.type}`].drawing.image;
+			superPower.uiButton.img = uiImageConfig.onCooldown.img;
 			const timeOut = superPower.canCallAfterTimeStamp - getNowAsMilliseconds();
 			setTimeout(() => {
-				superPower.uiButton.src =
-					ui.buttons[`superpower-${superPower.type}`].drawing.image.src;
+				superPower.uiButton.img = uiImageConfig.img;
 			}, timeOut);
 		};
 
