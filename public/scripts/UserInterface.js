@@ -148,7 +148,7 @@ class UserInterface {
 							src: "static/button_superpower_acidrain.png",
 							srcOnCooldown: "static/button_superpower_acidrain_off.png",
 							id: "superpower-acidrain",
-							x: canvas.center.x - 100 - 5,
+							x: canvas.center.x - 100 - 50 - 10,
 							y: canvas.height - 104 - 10,
 							width: 100,
 							height: 104,
@@ -164,7 +164,23 @@ class UserInterface {
 							src: "static/button_superpower_fireball.png",
 							srcOnCooldown: "static/button_superpower_fireball_off.png",
 							id: "superpower-fireball",
-							x: canvas.center.x + 5,
+							x: canvas.center.x - 50,
+							y: canvas.height - 104 - 10,
+							width: 100,
+							height: 104,
+						},
+					},
+				},
+				"superpower-stones": {
+					evalAvailable: function () {
+						return game.status === "active";
+					},
+					drawing: {
+						image: {
+							src: "static/button_superpower_stones.png",
+							srcOnCooldown: "static/button_superpower_stones_off.png",
+							id: "superpower-stones",
+							x: canvas.center.x + 50 + 10,
 							y: canvas.height - 104 - 10,
 							width: 100,
 							height: 104,

@@ -41,6 +41,22 @@ class Player {
 				attackDamage: 10,
 				hitBox: 126,
 			},
+			{
+				type: "stones",
+				src: "static/spritesheet_superpower_stones.png",
+				width: 194,
+				height: 512,
+				totalFrames: 18,
+				animationSpeedInMilliseconds: 100,
+				x: canvas.width,
+				y: 0,
+				canCallAfterTimeStamp: getNowAsMilliseconds(),
+				uiButton: null,
+				pendingTarget: false,
+				attackWidth: 150,
+				attackDamage: 10,
+				hitBox: 126,
+			},
 		];
 		this.attackingWithSuperPowerType = null;
 		this.searchingForTarget = false;
@@ -51,7 +67,6 @@ class Player {
 				(superPower) => superPower.type === this.attackingWithSuperPowerType
 			);
 			const superPower = matchedSuperPower[0];
-			console.log(this.attackingWithSuperPowerType);
 			this.attack(target, superPower);
 			this.searchingForTarget = false;
 			superPower.uiButton.src =
@@ -61,7 +76,6 @@ class Player {
 				superPower.uiButton.src =
 					ui.buttons[`superpower-${superPower.type}`].drawing.image.src;
 			}, timeOut);
-			console.log(this);
 		};
 
 		this.superPowerOffCooldown = function (superPower) {
