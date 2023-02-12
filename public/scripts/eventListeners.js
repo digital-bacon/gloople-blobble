@@ -2,49 +2,40 @@ const startEventListeners = () => {
 	gameCanvas.addEventListener("click", (event) => {
 		const mousePosition = getMousePosition(event);
 
-		const sayMouseClick = () => {
+		if (player.searchingForTarget) {
 			const targetSuperPower = {
 				position: {
 					x: mousePosition.x,
 					y: mousePosition.y,
 				},
 			};
-			return targetSuperPower;
-		}
-		if (player.sayNextMouseClick) {
-			const targetSuperPower = {
-				position: {
-					x: mousePosition.x,
-					y: mousePosition.y,
-				},
-			};
-			player.target = targetSuperPower
-			player.doAttack()
+			player.doAttack(targetSuperPower);
 		}
 
-		player.superPowers.forEach(superpower => {
+		player.superPowers.forEach((superpower) => {
 			if (ui.buttons[`superpower-${superpower.type}`].evalAvailable()) {
-				const uiElement = uiElements.filter((uiElement) => uiElement.id === `superpower-${superpower.type}`)
-				if (uiElement.length > 0) {
-					if (isIntersectingRect(mousePosition, uiElement[0])) {
-						player.sayNextMouseClick = true;
-						const playerSuperPower = player.superPowers.filter(superPower => superPower.type === superpower.type)
-						playerSuperPower[0].uiButton = uiElement[0];
-						playerSuperPower[0].pendingTarget = true;
+				const uiElementMatches = uiElements.filter(
+					(uiElement) => uiElement.id === `superpower-${superpower.type}`
+				);
+				const uiElement = uiElementMatches[0] ? uiElementMatches[0] : null;
+				if (uiElement) {
+					if (isIntersectingRect(mousePosition, uiElement)) {
+						player.searchingForTarget = true;
+						const superPowerPlayerMatches = player.superPowers.filter(
+							(superPower) => superPower.type === superpower.type
+						);
+						const playerSuperPower = superPowerPlayerMatches[0]
+							? superPowerPlayerMatches[0]
+							: null;
+						if (playerSuperPower) {
+							playerSuperPower.uiButton = uiElement;
+							player.attackingWithSuperPowerType = playerSuperPower.type;
+							console.log(player.attackingWithSuperPowerType);
+						}
 					}
 				}
 			}
-		})
-
-		// if (ui.buttons["superpower-acidrain"].evalAvailable()) {
-		// 	const uiElement = uiElements.filter((uiElement) => uiElement.id === "superpower-acidrain")
-		// 	if (uiElement.length > 0) {
-		// 		if (isIntersectingRect(mousePosition, uiElement[0])) {
-		// 			player.sayNextMouseClick = true;
-		// 			player.superPowers.acidrain.uiButton = uiElement[0];
-		// 		}
-		// 	}
-		// }
+		});
 
 		if (ui.buttons.nextWave.evalAvailable()) {
 			circles.forEach((circle) => {
