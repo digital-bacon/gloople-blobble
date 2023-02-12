@@ -1,9 +1,9 @@
-const INITIAL_WAVE_GLOOPS = 1;
-const INITIAL_WAVE = 0;
 const INITIAL_GAME_STATUS = "active";
-const INITIAL_PLAYER_HP = 10;
 const INITIAL_GOLD_STASH_TOTAL = 5000;
+const INITIAL_PLAYER_HP = 10;
+const INITIAL_TOTAL_GLOOPS = 1;
 const INITIAL_TOWER_LEVEL = 1;
+const INITIAL_WAVE = 0; // set to 0 for production
 const TOWER_SIZE = { width: 160, height: 160 };
 const TOWER_LOCATION_SIZE = { width: 160, height: 70 };
 
@@ -40,35 +40,37 @@ const configWave = {
 	earlyBonus: 100,
 	nextWave: INITIAL_WAVE + 1,
 	gloops: {
-		statisticTypes: ["gold", "hp", "speed"],
-		default: {
-			gold: 10,
-			hp: 50,
-			speed: 1,
-		},
-		multipliers: {
-			gold: {
-				current: 1,
-				initial: 1,
-				max: null,
-				step: 1.25,
+		statistics: {
+			types: ["gold", "hp", "speed"],
+			defaults: {
+				gold: 10,
+				hp: 50,
+				speed: 1,
 			},
-			hp: {
-				current: 1,
-				initial: 1,
-				max: null,
-				step: 0.1,
-			},
-			speed: {
-				current: 1,
-				initial: 1,
-				max: 2.5,
-				step: 0.1,
+			multipliers: {
+				gold: {
+					current: 1,
+					initial: 1,
+					max: null,
+					step: 1.25,
+				},
+				hp: {
+					current: 1,
+					initial: 1,
+					max: null,
+					step: 0.1,
+				},
+				speed: {
+					current: 1,
+					initial: 1,
+					max: 2.5,
+					step: 0.1,
+				},
 			},
 		},
 	},
 	totalGloopsMultiplier: 0.25,
-	_totalGloops: INITIAL_WAVE_GLOOPS,
+	_totalGloops: INITIAL_TOTAL_GLOOPS,
 	get totalGloops() {
 		const total = Math.floor(
 			this._totalGloops + (this.currentWave - 1) * this.totalGloopsMultiplier
@@ -76,9 +78,9 @@ const configWave = {
 		return total;
 	},
 	setGloopMultiplier: function (statisticType) {
-		const stat = this.gloops.multipliers[statisticType];
+		const stat = this.gloops.statistics.multipliers[statisticType];
 		if (this.currentWave > 0) {
-			stat.current = stat.step + stat.current;
+			stat.current = this.currentWave * stat.step + stat.initial;
 		}
 		if (stat.max) {
 			if (stat.current > stat.max) {
@@ -87,7 +89,7 @@ const configWave = {
 		}
 	},
 	setGloopMultipliers: function () {
-		this.gloops.statisticTypes.forEach((statisticType) =>
+		this.gloops.statistics.types.forEach((statisticType) =>
 			this.setGloopMultiplier(statisticType)
 		);
 	},
@@ -106,12 +108,12 @@ const configGloop = {
 	wave: 0,
 	immobile: false,
 	targettable: true,
-	gold: configWave.gloops.default.gold,
-	goldMultiplier: configWave.gloops.multipliers.gold.initial,
-	hp: configWave.gloops.default.hp,
-	hpMultiplier: configWave.gloops.multipliers.hp.initial,
-	speed: configWave.gloops.default.speed,
-	speedMultiplier: configWave.gloops.multipliers.speed.initial,
+	gold: configWave.gloops.statistics.defaults.gold,
+	goldMultiplier: configWave.gloops.statistics.multipliers.gold.initial,
+	hp: configWave.gloops.statistics.defaults.hp,
+	hpMultiplier: configWave.gloops.statistics.multipliers.hp.initial,
+	speed: configWave.gloops.statistics.defaults.speed,
+	speedMultiplier: configWave.gloops.statistics.multipliers.speed.initial,
 };
 
 const imgIdleFranklin = new Image();
@@ -143,8 +145,9 @@ const configGloopBob = {
 	height: 70,
 	totalFrames: 19,
 	animationSpeedInMilliseconds: 250,
-	speedMultiplier: 2.5,
-	hp: configWave.gloops.default.hp * 0.5,
+	speed: configWave.gloops.statistics.defaults.speed * 2.5,
+	hp: configWave.gloops.statistics.defaults.hp * 0.5,
+	gold: configWave.gloops.statistics.defaults.gold * 1.25,
 };
 
 const configGloopSam = {
@@ -169,8 +172,9 @@ const configGloopTom = {
 	spritesheetReverse: true,
 	totalFrames: 40,
 	animationSpeedInMilliseconds: 150,
-	speedMultiplier: 0.5,
-	hp: configWave.gloops.default.hp * 5,
+	speed: configWave.gloops.statistics.defaults.speed * 0.5,
+	hp: configWave.gloops.statistics.defaults.hp * 5,
+	gold: configWave.gloops.statistics.defaults.gold * 2.5,
 };
 
 gloopSubSpecies.push(configGloopBob);
@@ -487,9 +491,9 @@ const summonGloops = (configSummon) => {
 		const gloop = { ...configGloop, ...configSubSpecies };
 		gloop.wave = wave;
 		if (gloop.wave > 1) {
-			gloop.speed *= configWave.gloops.multipliers.speed.current;
-			gloop.hp *= configWave.gloops.multipliers.hp.current;
-			gloop.gold *= configWave.gloops.multipliers.gold.current;
+			gloop.speed *= configWave.gloops.statistics.multipliers.speed.current;
+			gloop.hp *= configWave.gloops.statistics.multipliers.hp.current;
+			gloop.gold *= configWave.gloops.statistics.multipliers.gold.current;
 		}
 		newGloops.push(gloop);
 	}
