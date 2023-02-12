@@ -108,8 +108,8 @@ const startEventListeners = () => {
 								(towerType) => towerType.type === location.towerType
 							);
 							const tower = { ...configTower, ...towerType[0] };
-							if (goldStash.total >= tower.purchaseCost) {
-								goldStash.withdraw(tower.purchaseCost);
+							if (gemStash.total >= tower.purchaseCost) {
+								gemStash.withdraw(tower.purchaseCost);
 								tower.x = location.position.x + location.xTowerOffset;
 								tower.y =
 									location.position.y - location.height + location.yTowerOffset;

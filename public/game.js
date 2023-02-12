@@ -19,7 +19,7 @@ const screenCenter = getScreenCenter();
 
 const ui = new UserInterface();
 const game = new Game();
-const goldStash = new GoldStash();
+const gemStash = new GemStash();
 
 const gloopSubSpecies = [];
 let circles = [];
@@ -338,7 +338,7 @@ const callNextWave = () => {
   const countGloops = currentWaveGloops.length;
   if (countGloops > 0) {
     const totalReward = configWave.earlyBonus.default * countGloops;
-    goldStash.deposit(totalReward);
+    gemStash.deposit(totalReward);
   }
 
   configWave.setNextWave();
@@ -426,7 +426,7 @@ const populateFillText = () => {
 		ui.buttons.start,
     ui.messages.gameOver,
     ui.playerStatus.buttonNextWaveText,
-    ui.playerStatus.goldStashText,
+    ui.playerStatus.gemStashText,
 		ui.playerStatus.playerHPText,
   ];
 

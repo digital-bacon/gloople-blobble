@@ -25,7 +25,7 @@ class Game {
 			reset() {
 				configWave.currentWave = INITIAL_WAVE;
 				configWave.nextWave = INITIAL_WAVE + 1;
-				goldStash.setTotal(INITIAL_GOLD_STASH_TOTAL);
+				gemStash.setTotal(INITIAL_GOLD_STASH_TOTAL);
 				player.hp = INITIAL_PLAYER_HP;
 				gloops = [];
 				locations = [];

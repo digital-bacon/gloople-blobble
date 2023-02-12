@@ -260,7 +260,7 @@ class UserInterface {
 						},
 					},
 				},
-				goldStashText: {
+				gemStashText: {
 					evalAvailable: function () {
 						return game.status === "active" || game.status === "gameover";
 					},
@@ -273,7 +273,7 @@ class UserInterface {
 							textAlign: "left",
 							maxWidth: canvas.width - 4,
 							get text() {
-								return goldStash.total.toString();
+								return gemStash.total.toString();
 							},
 						},
 					},

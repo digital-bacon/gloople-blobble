@@ -67,7 +67,7 @@ class Gloop {
 			this.underAttack();
 			this.isUnderAttack = false;
 			if (this.hp <= 0) {
-				goldStash.deposit(this.gold);
+				gemStash.deposit(this.gold);
 				this.destroy();
 				return;
 			}

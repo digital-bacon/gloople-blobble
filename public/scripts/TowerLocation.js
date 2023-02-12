@@ -23,7 +23,7 @@ class TowerLocation {
 		this.towerType = configObject.type || "unspecified";
 
 		this.drawBuildButton = function () {
-			const canAffordUpgrade = goldStash.total >= this.towerCost;
+			const canAffordUpgrade = gemStash.total >= this.towerCost;
 			if (this.button.length > 0) {
 				const button = this.button[0];
 				const text = this.button[1];
