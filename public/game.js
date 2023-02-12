@@ -34,6 +34,40 @@ let superPowers = [];
 let towers = [];
 let uiElements = [];
 
+const configWave = {
+	gloopSubSpecies,
+	currentWave: INITIAL_WAVE,
+	earlyBonus: 100,
+	goldMultiplier: 2,
+	hpDefault: 50,
+	goldDefault: 10,
+	hpMultiplier: 1.025,
+	nextWave: INITIAL_WAVE + 1,
+	speedDefault: 1,
+	speedMultiplierStep: 0.1,
+	speedMultiplierInitial: 1,
+	speedMultiplierCurrent: 1,
+	speedMultiplierMax: 2.5,
+	totalGloopsMultiplier: 0.25,
+	_totalGloops: INITIAL_WAVE_GLOOPS,
+	get totalGloops() {
+		const total = Math.floor(
+			this._totalGloops + (this.currentWave - 1) * this.totalGloopsMultiplier
+		);
+		return total;
+	},
+	setSpeedMultiplier: function () {
+		if (this.currentWave > 0) {
+			this.speedMultiplierCurrent =
+				this.speedMultiplierStep + this.speedMultiplierCurrent;
+		}
+
+		if (this.speedMultiplierCurrent > this.speedMultiplierMax) {
+			this.speedMultiplierCurrent = this.speedMultiplierMax;
+		}
+	},
+};
+
 const configGloop = {
 	ctx,
 	x: waypoints[0].x,
@@ -42,41 +76,24 @@ const configGloop = {
 	wave: 0,
 	immobile: false,
 	targettable: true,
-	_gold: 10,
-	get gold() {
-		return this._gold;
-	},
-	set gold(value) {
-		if (value < 0) {
-			return (this._gold = 0);
-		}
-		this._gold = value;
-	},
-	get hp() {
-		return this._hp;
-	},
-	set hp(value) {
-		if (value < 0) {
-			return (this._hp = 0);
-		}
-		this._hp = value;
-	},
-	get speed() {
-		return this._speed;
-	},
-	set speed(value) {
-		if (value < 0) {
-			return (this._speed = 0);
-		}
-		this._speed = value;
-	},
+	gold: configWave.goldDefault,
+	hp: configWave.hpDefault,
+	speed: configWave.speedDefault,
+	speedMultiplier: configWave.speedMultiplierInitial,
 };
 
 const imgIdleFranklin = new Image();
+const imgGloopBob = new Image();
+const imgGloopSam = new Image();
+const imgGloopSmooch = new Image();
+const imgGloopTom = new Image();
 imgIdleFranklin.src = "static/spritesheet_franklin.png";
+imgGloopBob.src = "static/spritesheet_bob.png";
+imgGloopSam.src = "static/spritesheet_sam.png";
+imgGloopSmooch.src = "static/spritesheet_smooch.png";
+imgGloopTom.src = "static/spritesheet_tom.png";
 
 const configGloopFranklin = {
-	baseConfig: configGloop,
 	img: imgIdleFranklin,
 	width: 144.165,
 	height: 55,
@@ -88,34 +105,23 @@ const configGloopFranklin = {
 	animationSpeedInMilliseconds: 500,
 };
 
-const imgGloopBob = new Image();
-imgGloopBob.src = "static/spritesheet_bob.png";
-
 const configGloopBob = {
-	baseConfig: configGloop,
 	img: imgGloopBob,
 	width: 192,
 	height: 70,
 	totalFrames: 19,
 	animationSpeedInMilliseconds: 250,
+	speedMultiplier: 1.5,
 };
 
-const imgGloopSam = new Image();
-imgGloopSam.src = "static/spritesheet_sam.png";
-
 const configGloopSam = {
-	baseConfig: configGloop,
 	img: imgGloopSam,
 	width: 175,
 	height: 70,
 	spritesheetReverse: true,
 };
 
-const imgGloopSmooch = new Image();
-imgGloopSmooch.src = "static/spritesheet_smooch.png";
-
 const configGloopSmooch = {
-	baseConfig: configGloop,
 	img: imgGloopSmooch,
 	width: 67,
 	height: 70,
@@ -123,17 +129,15 @@ const configGloopSmooch = {
 	totalFrames: 18,
 };
 
-const imgGloopTom = new Image();
-imgGloopTom.src = "static/spritesheet_tom.png";
-
 const configGloopTom = {
-	baseConfig: configGloop,
 	img: imgGloopTom,
 	width: 281,
 	height: 100,
 	spritesheetReverse: true,
 	totalFrames: 40,
-	animationSpeedInMilliseconds: 100,
+	animationSpeedInMilliseconds: 150,
+	speedMultiplier: 0.5,
+	hp: configWave.hpDefault * 5,
 };
 
 gloopSubSpecies.push(configGloopBob);
@@ -172,7 +176,7 @@ const configTower = {
 	attacksMultiple: false,
 	showRange: true,
 	projectileSize: 10,
-	attackDamage: 100,
+	attackDamage: 25,
 	attackSpeedInMilliseconds: 1000,
 	purchaseCost: 50,
 	upgradeCost: 100,
@@ -214,27 +218,6 @@ const configTowerLocation = {
 	fillColor: "transparent",
 	strokeColor: "yellow",
 	// strokeColor: "transparent",
-};
-
-const configWave = {
-	gloopSubSpecies,
-	currentWave: INITIAL_WAVE,
-	earlyBonus: 100,
-	goldMultiplier: 2,
-	hpDefault: 50,
-	hpMultiplier: 1.025,
-	nextWave: INITIAL_WAVE + 1,
-	speedDefault: 1,
-	speedMaximum: 2.5,
-	speedMultiplier: 0.2,
-	totalGloopsMultiplier: 0.25,
-	_totalGloops: INITIAL_WAVE_GLOOPS,
-	get totalGloops() {
-		const total = Math.floor(
-			this._totalGloops + (this.currentWave - 1) * this.totalGloopsMultiplier
-		);
-		return total;
-	},
 };
 
 const xOffset = Math.round(screenCenter.x - canvas.center.x); // because the canvas is centered
@@ -301,20 +284,6 @@ const summonTower = (configTower) => {
 	return newTower;
 };
 
-// const summonTowers = (configSummon) => {
-// 	const { configTower, configTowerType, towerLocations } = configSummon;
-// 	const newTowers = [];
-// 	for (let i = 0; i < towerLocations.length; i++) {
-// 		const tower = { ...configTower, ...configTowerType };
-// 		tower.x = towerLocations[i].x + towerLocations[i].xTowerOffset;
-// 		tower.y = towerLocations[i].y + towerLocations[i].yTowerOffset;
-// 		newTowers.push(tower);
-// 	}
-// 	newTowers.forEach((tower) => {
-// 		summonTower(tower);
-// 	});
-// };
-
 const generateTowerLocation = (configLocation) => {
 	const newLocation = new TowerLocation(configLocation);
 	locations.push(newLocation);
@@ -353,22 +322,11 @@ const clearTowerButtons = () => {
 	});
 };
 
-const calculateGloopSpeed = (configWave) => {
-	let result = configWave.speedDefault;
-	if (configWave.nextWave > 1) {
-		result =
-			configWave.speedDefault +
-			configWave.currentWave * configWave.speedMultiplier;
-	}
-	if (result >= configWave.speedMaximum) {
-		result = configWave.speedMaximum;
-	}
-	return result;
-};
-
 const nextWave = () => {
-	configGloop.speed = calculateGloopSpeed(configWave);
+	configWave.setSpeedMultiplier();
 	if (configWave.nextWave > 1) {
+		configGloop.speed =
+			configWave.speedDefault * configWave.speedMultiplierCurrent;
 		configGloop.hp =
 			configWave.hpDefault + configWave.currentWave * configWave.hpMultiplier;
 		configGloop.gold =
@@ -492,9 +450,9 @@ const populateStaticObjects = () => {
 	}
 };
 
-const populateGloops = (configSubSpecies) => {
+const populateGloops = () => {
 	if (gloops.length === 0 || isWaveClear(configWave.currentWave)) {
-		nextWave(configSubSpecies);
+		nextWave();
 	}
 };
 
