@@ -47,7 +47,7 @@ const startEventListeners = () => {
 						const totalReward = configWave.earlyBonus * countGloops;
 						goldStash.deposit(totalReward);
 					}
-					nextWave();
+					callNextWave();
 				}
 			});
 		}

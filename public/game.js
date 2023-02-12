@@ -38,16 +38,21 @@ const configWave = {
 	gloopSubSpecies,
 	currentWave: INITIAL_WAVE,
 	earlyBonus: 100,
-	goldMultiplier: 2,
-	goldDefault: 10,
 	nextWave: INITIAL_WAVE + 1,
 	gloops: {
+		statisticTypes: ["gold", "hp", "speed"],
 		default: {
 			gold: 10,
 			hp: 50,
 			speed: 1,
 		},
 		multipliers: {
+			gold: {
+				current: 1,
+				initial: 1,
+				max: null,
+				step: 1.25,
+			},
 			hp: {
 				current: 1,
 				initial: 1,
@@ -81,6 +86,16 @@ const configWave = {
 			}
 		}
 	},
+	setGloopMultipliers: function () {
+		this.gloops.statisticTypes.forEach((statisticType) =>
+			this.setGloopMultiplier(statisticType)
+		);
+	},
+	setNextWave: function () {
+		this.setGloopMultipliers();
+		this.currentWave = this.nextWave;
+		this.nextWave++;
+	},
 };
 
 const configGloop = {
@@ -91,7 +106,8 @@ const configGloop = {
 	wave: 0,
 	immobile: false,
 	targettable: true,
-	gold: configWave.goldDefault,
+	gold: configWave.gloops.default.gold,
+	goldMultiplier: configWave.gloops.multipliers.gold.initial,
 	hp: configWave.gloops.default.hp,
 	hpMultiplier: configWave.gloops.multipliers.hp.initial,
 	speed: configWave.gloops.default.speed,
@@ -358,11 +374,8 @@ const isWaveClear = (waveNumber) => {
 	return matched.length === 0;
 };
 
-const nextWave = () => {
-	configWave.setGloopMultiplier("speed");
-	configWave.setGloopMultiplier("hp");
-	configWave.currentWave = configWave.nextWave;
-	configWave.nextWave++;
+const callNextWave = () => {
+	configWave.setNextWave();
 	const configSummon = {
 		totalGloops: configWave.totalGloops,
 		xOffset: 40,
@@ -457,7 +470,7 @@ const populateStaticObjects = () => {
 
 const populateGloops = () => {
 	if (gloops.length === 0 || isWaveClear(configWave.currentWave)) {
-		nextWave();
+		callNextWave();
 	}
 };
 
@@ -476,9 +489,8 @@ const summonGloops = (configSummon) => {
 		if (gloop.wave > 1) {
 			gloop.speed *= configWave.gloops.multipliers.speed.current;
 			gloop.hp *= configWave.gloops.multipliers.hp.current;
-			gloop.gold *= configWave.currentWave * configWave.goldMultiplier;
+			gloop.gold *= configWave.gloops.multipliers.gold.current;
 		}
-
 		newGloops.push(gloop);
 	}
 	let totalOffset = 0;
