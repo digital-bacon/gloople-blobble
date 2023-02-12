@@ -39,14 +39,6 @@ const startEventListeners = () => {
 		if (ui.buttons.nextWave.evalAvailable()) {
 			circles.forEach((circle) => {
 				if (isIntersectingCircle(mousePosition, circle)) {
-					const currentWaveGloops = gloops.filter(
-						(gloop) => gloop.wave === configWave.currentWave
-					);
-					const countGloops = currentWaveGloops.length;
-					if (countGloops > 0) {
-						const totalReward = configWave.earlyBonus * countGloops;
-						goldStash.deposit(totalReward);
-					}
 					callNextWave();
 				}
 			});

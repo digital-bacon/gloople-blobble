@@ -1,3 +1,4 @@
+const INITIAL_EARLY_WAVE_GOLD_BONUS = 100;
 const INITIAL_GAME_STATUS = "active";
 const INITIAL_GOLD_STASH_TOTAL = 5000;
 const INITIAL_PLAYER_HP = 10;
@@ -36,8 +37,10 @@ let uiElements = [];
 
 const configWave = {
 	currentWave: INITIAL_WAVE,
-	earlyBonus: 100,
 	nextWave: INITIAL_WAVE + 1,
+	earlyBonus: {
+		default: INITIAL_EARLY_WAVE_GOLD_BONUS,
+	},
 	gloops: {
 		subSpecies: gloopSubSpecies,
 		statistics: {
@@ -254,7 +257,6 @@ const configTowerLocation = {
 	height: TOWER_LOCATION_SIZE.height,
 	fillColor: "transparent",
 	strokeColor: "yellow",
-	// strokeColor: "transparent",
 };
 
 const xOffset = Math.round(screenCenter.x - canvas.center.x); // because the canvas is centered
@@ -307,6 +309,26 @@ const animationLoop = () => {
 	cleanupTowerLocations();
 	cleanupProjectiles();
 	cleanupSuperPowers();
+};
+
+const callNextWave = () => {
+	const currentWaveGloops = gloops.filter(
+		(gloop) => gloop.wave === configWave.currentWave
+	);
+	const countGloops = currentWaveGloops.length;
+	if (countGloops > 0) {
+		const totalReward = configWave.earlyBonus.default * countGloops;
+		goldStash.deposit(totalReward);
+	}
+
+	configWave.setNextWave();
+
+	const configSummon = {
+		totalGloops: configWave.totalGloops,
+		xOffset: 40,
+		wave: configWave.currentWave,
+	};
+	summonGloops(configSummon);
 };
 
 const cleanupGloops = () => {
@@ -376,16 +398,6 @@ const clearTowerButtons = () => {
 const isWaveClear = (waveNumber) => {
 	const matched = gloops.filter((gloop) => gloop.wave === waveNumber);
 	return matched.length === 0;
-};
-
-const callNextWave = () => {
-	configWave.setNextWave();
-	const configSummon = {
-		totalGloops: configWave.totalGloops,
-		xOffset: 40,
-		wave: configWave.currentWave,
-	};
-	summonGloops(configSummon);
 };
 
 const populateCircles = () => {
