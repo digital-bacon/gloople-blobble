@@ -97,7 +97,7 @@ class Tower {
 		};
 
 		this.drawUpgradeButton = function () {
-			const canAffordUpgrade = goldStash.total >= this.calculateUpgradeCost();
+			const canAffordUpgrade = gemStash.total >= this.calculateUpgradeCost();
 			const configButton = {
 				...ui.buttons.towerUpgrade.drawing.shape,
 				x:

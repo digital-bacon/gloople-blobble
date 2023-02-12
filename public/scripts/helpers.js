@@ -123,3 +123,10 @@ const randomFromArray = (array) => {
 	const randomElement = array[Math.floor(Math.random() * array.length)];
 	return randomElement;
 };
+
+const generateUIImage = (imageConfig, img) => {
+	img.src = imageConfig.src;
+	imageConfig.img = img;
+	let newUIElement = new CanvasImage(imageConfig);
+	return newUIElement; 
+}

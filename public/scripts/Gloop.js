@@ -19,8 +19,8 @@ class Gloop {
 		this.speed = configObject.speed * this.speedMultiplier;
 		this.hpMultiplier = configObject.hpMultiplier || 1;
 		this.hp = Math.floor(configObject.hp * this.hpMultiplier);
-		this.goldMultiplier = configObject.goldMultiplier || 1;
-		this.gold = Math.floor(configObject.gold * this.goldMultiplier);
+		this.gemMultiplier = configObject.gemMultiplier || 1;
+		this.gem = Math.floor(configObject.gem * this.gemMultiplier);
 		this.wave = configObject.wave;
 		this.waypointIndex = configObject.waypointIndex;
 		this.isUnderAttack = false;
@@ -67,7 +67,7 @@ class Gloop {
 			this.underAttack();
 			this.isUnderAttack = false;
 			if (this.hp <= 0) {
-				goldStash.deposit(this.gold);
+				gemStash.deposit(this.gem);
 				this.destroy();
 				return;
 			}

@@ -1,4 +1,4 @@
-class GoldStash {
+class GemStash {
 	constructor() {
 		return {
 			total: INITIAL_GOLD_STASH_TOTAL,

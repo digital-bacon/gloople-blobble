@@ -2,29 +2,6 @@ class UserInterface {
 	constructor() {
 		return {
 			buttons: {
-				nextWave: {
-					evalAvailable: function () {
-						return game.status === "active";
-					},
-					drawing: {
-						shape: {
-							x: 25,
-							y: 25,
-							radius: 20,
-							fillColor: "#5f464b",
-							strokeColor: "rgba(0, 0, 0, 0)",
-						},
-						text: {
-							x: 25,
-							y: 30,
-							fillStyle: "#c2fbef",
-							font: "bold 14px sans-serif",
-							text: "Next",
-							textAlign: "center",
-							maxWidth: 40,
-						},
-					},
-				},
 				start: {
 					evalAvailable: function () {
 						return game.status === "initial";
@@ -69,7 +46,7 @@ class UserInterface {
 						text: {
 							x: canvas.center.x,
 							y: canvas.center.y + 30,
-							fillStyle: "gold",
+							fillStyle: "gem",
 							font: "bold 16px sans-serif",
 							text: "Play Again!",
 							textAlign: "center",
@@ -217,35 +194,117 @@ class UserInterface {
 						},
 					},
 				},
-				goldStash: {
+			},
+			playerStatus: {
+				background: {
+					evalAvailable: function () {
+						return game.status === "active";
+					},
+					drawing: {
+						image: {
+							img: null,
+							src: "static/button_long_bg.png",
+							id: "ui-player-bg",
+							x: -80,
+							y: -45,
+							width: 326,
+							height: 175,
+						},
+					},
+				},
+				buttonNextWaveBg: {
+					evalAvailable: function () {
+						return game.status === "active";
+					},
+					drawing: {
+						image: {
+							img: null,
+							src: "static/ui_player_next_wave_icon.png",
+							id: "ui-player-next-wave-bg",
+							x: 10,
+							y: 5,
+							width: 46 * 0.9,
+							height: 37 * 0.9,
+						},
+					},
+				},
+				buttonNextWaveText: {
+					evalAvailable: function () {
+						return game.status === "active";
+					},
+					drawing: {
+						text: {
+							x: 65,
+							y: 30,
+							fillStyle: "#d8d8d8",
+							font: "bold 24px 'Trebuchet MS', sans-serif",
+							text: "Next Wave",
+							textAlign: "left",
+							maxWidth: 125,
+						},
+					},
+				},
+				gemStashIcon: {
+					evalAvailable: function () {
+						return game.status === "active";
+					},
+					drawing: {
+						image: {
+							img: null,
+							src: "static/ui_player_gem_stash_icon.png",
+							id: "ui-player-gem-stash-icon",
+							x: 15,
+							y: 44,
+							width: 51 * 0.6,
+							height: 40 * 0.6,
+						},
+					},
+				},
+				gemStashText: {
 					evalAvailable: function () {
 						return game.status === "active" || game.status === "gameover";
 					},
 					drawing: {
 						text: {
-							x: 25,
-							y: 64,
-							fillStyle: "gold",
-							font: "bold 16px sans-serif",
-							textAlign: "center",
+							x: 65,
+							y: 62,
+							fillStyle: "#1bea00",
+							font: "bold 24px 'Trebuchet MS', sans-serif",
+							textAlign: "left",
 							maxWidth: canvas.width - 4,
 							get text() {
-								return goldStash.total.toString();
+								return gemStash.total.toString();
 							},
 						},
 					},
 				},
-				playerHP: {
+				playerHPIcon: {
+					evalAvailable: function () {
+						return game.status === "active";
+					},
+					drawing: {
+						image: {
+							img: null,
+							src: "static/ui_player_hp_icon.png",
+							id: "ui-player-hp-icon",
+							x: 15,
+							y: 72,
+							width: 37 * 0.8,
+							height: 33 * 0.8,
+						},
+					},
+				},
+				playerHPText: {
 					evalAvailable: function () {
 						return game.status === "active" || game.status === "gameover";
 					},
 					drawing: {
 						text: {
-							x: 25,
-							y: 64 + 18,
-							fillStyle: "#aaf0d1",
-							font: "bold 16px sans-serif",
-							textAlign: "center",
+							x: 65,
+							y: 68 + 24,
+							fillStyle: "#f96a63",
+							font: "bold 24px 'Trebuchet MS', sans-serif",
+							textAlign: "left",
 							maxWidth: canvas.width - 4,
 							get text() {
 								return player.hp.toString();
