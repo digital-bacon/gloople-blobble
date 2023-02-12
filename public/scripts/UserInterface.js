@@ -102,7 +102,7 @@ class UserInterface {
 								size: "14",
 								family: "sans-serif",
 							},
-							text: "Build⛏️🪚Tower",
+							text: "Build⛏️Tower",
 							textAlign: "center",
 							maxWidth: 106,
 						},
@@ -145,9 +145,13 @@ class UserInterface {
 					},
 					drawing: {
 						image: {
-							src: "static/button_superpower_acidrain.png",
-							srcOnCooldown: "static/button_superpower_acidrain_off.png",
 							id: "superpower-acidrain",
+							img: null,
+							src: "static/button_superpower_acidrain.png",
+							onCooldown: {
+								img: null,
+								src: "static/button_superpower_acidrain_off.png",
+							},
 							x: canvas.center.x - 100 - 50 - 10,
 							y: canvas.height - 104 - 10,
 							width: 100,
@@ -161,8 +165,12 @@ class UserInterface {
 					},
 					drawing: {
 						image: {
+							img: null,
 							src: "static/button_superpower_fireball.png",
-							srcOnCooldown: "static/button_superpower_fireball_off.png",
+							onCooldown: {
+								img: null,
+								src: "static/button_superpower_fireball_off.png",
+							},
 							id: "superpower-fireball",
 							x: canvas.center.x - 50,
 							y: canvas.height - 104 - 10,
@@ -177,8 +185,12 @@ class UserInterface {
 					},
 					drawing: {
 						image: {
+							img: null,
 							src: "static/button_superpower_stones.png",
-							srcOnCooldown: "static/button_superpower_stones_off.png",
+							onCooldown: {
+								img: null,
+								src: "static/button_superpower_stones_off.png",
+							},
 							id: "superpower-stones",
 							x: canvas.center.x + 50 + 10,
 							y: canvas.height - 104 - 10,

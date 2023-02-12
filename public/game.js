@@ -149,11 +149,19 @@ const configPlayer = {
 };
 
 const player = new Player(configPlayer);
-const superPowerTypes = player.superPowers
-superPowerTypes.forEach(superPowerType => {
-	const buttonSuperPower = new CanvasImage(ui.buttons[`superpower-${superPowerType.type}`].drawing.image);
-uiElements.push(buttonSuperPower);
-})
+const superPowerTypes = player.superPowers;
+superPowerTypes.forEach((superPowerType) => {
+	const imgReady = new Image();
+	const imgCooldown = new Image();
+	const imageConfig =
+		ui.buttons[`superpower-${superPowerType.type}`].drawing.image;
+	imgReady.src = imageConfig.src;
+	imgCooldown.src = imageConfig.onCooldown.src;
+	imageConfig.img = imgReady;
+	imageConfig.onCooldown.img = imgCooldown;
+	const buttonSuperPower = new CanvasImage(imageConfig);
+	uiElements.push(buttonSuperPower);
+});
 
 const configTower = {
 	ctx,
@@ -394,21 +402,21 @@ const populateCircles = () => {
 	}
 };
 
-const populateImages = () => {
-	if (images.length === 0) {
-		const img = new Image();
-		img.src = "static/gloop.png";
-		const config = {
-			x: 200,
-			y: 200,
-			img: img,
-			width: 30,
-			height: 30,
-		};
-		const drawing = generateDrawing("Image", config);
-		images.push(drawing);
-	}
-};
+// const populateImages = () => {
+// 	if (images.length === 0) {
+// 		const img = new Image();
+// 		img.src = "static/gloop.png";
+// 		const config = {
+// 			x: 200,
+// 			y: 200,
+// 			img: img,
+// 			width: 30,
+// 			height: 30,
+// 		};
+// 		const drawing = generateDrawing("Image", config);
+// 		images.push(drawing);
+// 	}
+// };
 
 const populateFillText = () => {
 	const elements = [
@@ -495,7 +503,7 @@ const animationLoop = () => {
 	populateCircles();
 	populateFillText();
 	populateGloops();
-	populateImages();
+	// populateImages();
 	populateRoundRects();
 	populateStaticObjects();
 	// populateTowers(configTowerMagic);
