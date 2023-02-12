@@ -30,7 +30,6 @@ const startEventListeners = () => {
 						if (playerSuperPower) {
 							playerSuperPower.uiButton = uiElement;
 							player.attackingWithSuperPowerType = playerSuperPower.type;
-							console.log(player.attackingWithSuperPowerType);
 						}
 					}
 				}
