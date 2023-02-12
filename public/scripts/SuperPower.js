@@ -8,8 +8,12 @@ class SuperPower {
 			x: configObject.x - this.offset.x,
 			y: configObject.y - this.offset.y,
 			center: {
-				x: configObject.x - this.offset.x + this.offset.x,
-				y: configObject.y - this.offset.y + this.offset.y,
+				x: configObject.x + this.offset.x,
+				y: configObject.y + this.offset.y,
+			},
+			damageArea: {
+				x: configObject.x,
+				y: configObject.y + 128,
 			},
 		};
 		this.radius = configObject.radius;
@@ -42,7 +46,7 @@ class SuperPower {
 		this.lastAnimateTimestamp = getNowAsMilliseconds();
 		this.durationInMilliseconds = configObject.durationInMilliseconds || 5000;
 		this.cooldownInMilliseconds = configObject.cooldownInMilliseconds || 10000;
-		this.hitBox = configObject.hitBox;
+		this.hitbox = configObject.hitbox;
 
 		this.animationOffCooldown = function () {
 			return this.timestampCanAnimateAfter() <= getNowAsMilliseconds();
@@ -70,10 +74,10 @@ class SuperPower {
 		};
 
 		this.canReachTarget = function (gloop) {
-			const xGloop = gloop.position.center.x;
-			const yGloop = gloop.position.center.y;
-			const xDelta = Math.abs(this.position.center.x - xGloop);
-			const yDelta = Math.abs(this.position.center.y - yGloop);
+			const xGloopCenter = gloop.position.center.x;
+			const yGloopCenter = gloop.position.center.y;
+			const xDelta = Math.abs(this.position.damageArea.x - xGloopCenter);
+			const yDelta = Math.abs(this.position.damageArea.y - yGloopCenter);
 
 			const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
 
@@ -151,13 +155,13 @@ class SuperPower {
 
 		this.update = function () {
 			if (this.isDurationExpired()) {
-				this.destroy()
+				this.destroy();
 				return;
 			}
 			let xMoveTo = this.target.position.x;
 			let yMoveTo = this.target.position.y;
-			let xDelta = xMoveTo - this.position.center.x;
-			let yDelta = yMoveTo - this.position.center.y;
+			let xDelta = xMoveTo - this.position.x;
+			let yDelta = yMoveTo - this.position.y;
 			const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
 			const moves = Math.floor(distance / this.speed);
 			let xTravelDistance = (xMoveTo - this.position.x) / moves || 0;
@@ -166,6 +170,8 @@ class SuperPower {
 			this.position.y += yTravelDistance;
 			this.position.center.x += xTravelDistance;
 			this.position.center.y += yTravelDistance;
+			this.position.damageArea.x += xTravelDistance;
+			this.position.damageArea.y += yTravelDistance;
 			let didAnimate = false;
 			if (this.animationOffCooldown()) {
 				didAnimate = true;
@@ -196,7 +202,7 @@ class SuperPower {
 			this.xCropImgStart = this.frameWidth * this.shift;
 
 			const reachedTarget = () => {
-				const reachedTarget = distance - this.hitBox <= this.hitBox;
+				const reachedTarget = distance - this.hitbox <= this.hitbox;
 				return reachedTarget;
 			};
 
@@ -206,7 +212,6 @@ class SuperPower {
 				if (didAttack) {
 					this.lastAttackTimestamp = getNowAsMilliseconds();
 				}
-
 			}
 		};
 

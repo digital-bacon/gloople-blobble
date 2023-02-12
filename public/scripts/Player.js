@@ -23,7 +23,7 @@ class Player {
 				pendingTarget: false,
 				attackWidth: 253 - 100,
 				attackDamage: 10,
-				hitBox: 126,
+				hitbox: 126,
 			},
 			{
 				type: "fireball",
@@ -39,7 +39,7 @@ class Player {
 				pendingTarget: false,
 				attackWidth: 109,
 				attackDamage: 10,
-				hitBox: 126,
+				hitbox: 126,
 			},
 			{
 				type: "stones",
@@ -53,9 +53,9 @@ class Player {
 				canCallAfterTimeStamp: getNowAsMilliseconds(),
 				uiButton: null,
 				pendingTarget: false,
-				attackWidth: 150,
+				attackWidth: 200,
 				attackDamage: 10,
-				hitBox: 126,
+				hitbox: 126,
 			},
 		];
 		this.attackingWithSuperPowerType = null;
