@@ -13,7 +13,7 @@ const startEventListeners = () => {
 		}
 
 		player.superPowers.forEach((superpower) => {
-			if (ui.buttons[`superpower-${superpower.type}`].evalAvailable()) {
+			if (ui.superPowers[superpower.type].evalAvailable()) {
 				const uiElementMatches = uiElements.filter(
 					(uiElement) => uiElement.id === `superpower-${superpower.type}`
 				);
