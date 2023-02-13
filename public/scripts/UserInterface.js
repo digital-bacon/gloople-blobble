@@ -98,6 +98,7 @@ class UserInterface {
 					},
 					drawing: {
 						image: {
+							active: true,
 							img: null,
 							src: "static/ui_game_over_bg.png",
 							id: "ui-game-over-bg",
@@ -114,6 +115,7 @@ class UserInterface {
 					},
 					drawing: {
 						image: {
+							active: true,
 							img: null,
 							src: "static/ui_play_again_button.png",
 							id: "ui-play-again-button",
@@ -132,6 +134,7 @@ class UserInterface {
 					},
 					drawing: {
 						image: {
+							active: true,
 							id: "superpower-acidRain",
 							img: null,
 							src: "static/button_superpower_acidrain.png",
@@ -153,6 +156,7 @@ class UserInterface {
 					},
 					drawing: {
 						image: {
+							active: true,
 							img: null,
 							src: "static/button_superpower_fireball.png",
 							onCooldown: {
@@ -174,6 +178,7 @@ class UserInterface {
 					},
 					drawing: {
 						image: {
+							active: true,
 							img: null,
 							src: "static/button_superpower_stones.png",
 							onCooldown: {
@@ -197,6 +202,7 @@ class UserInterface {
 					},
 					drawing: {
 						image: {
+							active: true,
 							img: null,
 							src: "static/button_long_bg.png",
 							id: "ui-player-bg",
@@ -213,6 +219,7 @@ class UserInterface {
 					},
 					drawing: {
 						image: {
+							active: true,
 							img: null,
 							src: "static/ui_next_wave_button.png",
 							id: "ui-player-next-wave-bg",
@@ -271,6 +278,7 @@ class UserInterface {
 					},
 					drawing: {
 						image: {
+							active: true,
 							img: null,
 							src: "static/ui_player_gem_stash_icon.png",
 							id: "ui-player-gem-stash-icon",
@@ -306,6 +314,7 @@ class UserInterface {
 					},
 					drawing: {
 						image: {
+							active: true,
 							img: null,
 							src: "static/ui_player_hp_icon.png",
 							id: "ui-player-hp-icon",
@@ -343,6 +352,7 @@ class UserInterface {
 					},
 					drawing: {
 						image: {
+							active: true,
 							img: null,
 							src: "static/gloople_blobble_logo.png",
 							id: "gloople-blobble-logo",
@@ -359,6 +369,7 @@ class UserInterface {
 					},
 					drawing: {
 						image: {
+							active: true,
 							img: null,
 							src: "static/ui_play_button.png",
 							id: "ui-play-button",
@@ -377,6 +388,8 @@ class UserInterface {
 					},
 					drawing: {
 						image: {
+							towerId: null,
+							active: false,
 							img: null,
 							src: "static/ui_build_meteor_tower_button.png",
 							id: "ui-build-meteor-tower-button",
@@ -393,6 +406,8 @@ class UserInterface {
 					},
 					drawing: {
 						image: {
+							towerId: null,
+							active: false,
 							img: null,
 							src: "static/ui_build_quake_tower_button.png",
 							id: "ui-build-quake-tower-button",
