@@ -223,7 +223,30 @@ class UserInterface {
 						},
 					},
 				},
-				buttonNextWaveText: {
+				buttonNextWaveTimerText: {
+					evalAvailable: function () {
+						return game.status === "active";
+					},
+					drawing: {
+						text: {
+							x: 20,
+							y: 325,
+							id: "next-wave-timer-text",
+							fillStyle: "orange",
+							font: "bold 24px 'Trebuchet MS', sans-serif",
+							get text() {
+								return Math.floor(
+									convertMillisecondsToSeconds(
+										configWave.getMillisecondsUntilNextWave()
+									)
+								);
+							},
+							textAlign: "left",
+							maxWidth: 125,
+						},
+					},
+				},
+				waveCountText: {
 					evalAvailable: function () {
 						return game.status === "active" || game.status === "gameover";
 					},
@@ -231,7 +254,7 @@ class UserInterface {
 						text: {
 							x: 65,
 							y: 30,
-							id: "next-wave-text",
+							id: "wave-count-text",
 							fillStyle: "#d8d8d8",
 							font: "bold 24px 'Trebuchet MS', sans-serif",
 							get text() {

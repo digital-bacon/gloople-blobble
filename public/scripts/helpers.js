@@ -119,6 +119,10 @@ const getNowAsMilliseconds = () => {
 	return now;
 };
 
+const convertMillisecondsToSeconds = (milliseconds) => {
+	return milliseconds / 1000;
+};
+
 const randomFromArray = (array) => {
 	const randomElement = array[Math.floor(Math.random() * array.length)];
 	return randomElement;
@@ -128,5 +132,5 @@ const generateUIImage = (imageConfig, img) => {
 	img.src = imageConfig.src;
 	imageConfig.img = img;
 	let newUIElement = new CanvasImage(imageConfig);
-	return newUIElement; 
-}
+	return newUIElement;
+};
