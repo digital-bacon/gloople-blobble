@@ -1,5 +1,5 @@
 const INITIAL_EARLY_WAVE_GOLD_BONUS = 100;
-const INITIAL_GAME_STATUS = "initial";
+const INITIAL_GAME_STATUS = "active";
 const INITIAL_GOLD_STASH_TOTAL = 5000;
 const INITIAL_PLAYER_HP = 10;
 const INITIAL_TOTAL_GLOOPS = 1;
@@ -177,6 +177,14 @@ newUIElement = generateUIImage(imageConfig, imgPlayAgainButton);
 const imgUIGameOverBg = new Image();
 imageConfig = ui.gameOverScreen.background.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgUIGameOverBg);
+
+const imgButtonBuildMeteorTower = new Image();
+imageConfig = ui.towers.buttonBuildMeteor.drawing.image;
+newUIElement = generateUIImage(imageConfig, imgButtonBuildMeteorTower);
+
+// const imgButtonBuildQuakeTower = new Image();
+// imageConfig = ui.towers.buttonBuildQuake.drawing.image;
+// newUIElement = generateUIImage(imageConfig, imgButtonBuildQuakeTower);
 
 const imgAcidRain = new Image();
 imageConfig = ui.superPowers.acidRain.drawing.image;
@@ -469,6 +477,8 @@ const populateUIImages = () => {
 		ui.superPowers.acidRain,
 		ui.superPowers.fireBall,
 		ui.superPowers.stones,
+    ui.towers.buttonBuildMeteor,
+    // ui.tower.buttonBuildQuake,
 	];
 
 	uiElements = [];

@@ -370,6 +370,24 @@ class UserInterface {
 					},
 				},
 			},
+			towers: {
+				buttonBuildMeteor: {
+					evalAvailable: function () {
+						return game.status === "active";
+					},
+					drawing: {
+						image: {
+							img: null,
+							src: "static/ui_build_meteor_tower_button.png",
+							id: "ui-build-meteor-tower-button",
+							x: canvas.center.x,
+							y: canvas.center.y,
+							width: 300 * 0.7,
+							height: 137 * 0.7,
+						},
+					},
+				},
+			},
 		};
 	}
 }
