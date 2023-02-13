@@ -112,33 +112,12 @@ const startEventListeners = () => {
 		if (!wasTowerClicked) clearTowerButtons();
 
 		let wasBuildLocationClicked = false;
-		if (ui.towers.buttonBuildMeteor.evalAvailable()) {
-			for (const location of locations) {
-				if (location.towerId === null) {
-					const buildButton =
-						location.button.length > 0 ? location.button[0] : null;
-					if (buildButton) {
-						if (isIntersectingRect(mousePosition, buildButton)) {
-							// const towerType = location.towerTypes[0];
-							const towerType = location.towerTypes.filter(
-								(towerType) => towerType.type === location.towerType
-							);
-							const tower = { ...configTower, ...towerType[0] };
-							if (gemStash.total >= tower.purchaseCost) {
-								gemStash.withdraw(tower.purchaseCost);
-								tower.x = location.position.x + location.xTowerOffset;
-								tower.y =
-									location.position.y - location.height + location.yTowerOffset;
-								const newTower = summonTower(tower);
-								location.towerId = newTower.id;
-								clearBuildButtons();
-								break;
-							}
-						}
-					}
-					if (isIntersectingRect(mousePosition, location)) {
-						wasBuildLocationClicked = true;
+		for (const location of locations) {
+			if (location.towerId === null) {
+				if (isIntersectingRect(mousePosition, location)) {
+					if (ui.towers.buttonBuildMeteor.evalAvailable()) {
 						const configDrawing = ui.towers.buttonBuildMeteor.drawing.image;
+						wasBuildLocationClicked = true;
 						const buttonIsActive = configDrawing.activeId !== null;
 						if (buttonIsActive && configDrawing.activeId === location.id) {
 							const purchaseCompleted = player.purchaseTowerUpgrade(tower);
@@ -152,13 +131,40 @@ const startEventListeners = () => {
 						}
 						location.towerCost = configTower.purchaseCost;
 						configDrawing.active = true;
-						configDrawing.parentId = location.id;
+						configDrawing.parent = location;
 						configDrawing.x =
 							location.position.center.x - configDrawing.width / 2;
 						configDrawing.y =
 							location.position.center.y - configDrawing.height / 2;
 						// location.drawBuildButton();
 					}
+				}
+			}
+		}
+
+		if (ui.towers.buttonBuildMeteor.evalAvailable()) {
+			const configDrawing = ui.towers.buttonBuildMeteor.drawing.image;
+			const targetId = configDrawing.id;
+			const targetElement = uiElements.find(
+				(uiElement) => uiElement.id === targetId
+			);
+
+			if (targetElement) {
+				if (isIntersectingRect(mousePosition, targetElement)) {
+					console.log("build button clicked");
+					const towerType = locations.towerTypes.find(
+						(towerType) => towerType.type === location.towerType
+					);
+					// 		const tower = { ...configTower, ...towerType };
+					// 		if (gemStash.total >= tower.purchaseCost) {
+					// 			gemStash.withdraw(tower.purchaseCost);
+					// 			tower.x = location.position.x + location.xTowerOffset;
+					// 			tower.y =
+					// 				location.position.y - location.height + location.yTowerOffset;
+					// 			const newTower = summonTower(tower);
+					// 			location.towerId = newTower.id;
+					// 			configDrawing.active = false;
+					// 		}
 				}
 			}
 		}
