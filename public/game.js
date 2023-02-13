@@ -162,6 +162,14 @@ const imgPlayButton = new Image();
 imageConfig = ui.splashScreen.playButton.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgPlayButton)
 
+const imgPlayAgainButton = new Image();
+imageConfig = ui.gameOverScreen.playAgainButton.drawing.image;
+newUIElement = generateUIImage(imageConfig, imgPlayAgainButton)
+
+const imgUIGameOverBg = new Image();
+imageConfig = ui.gameOverScreen.background.drawing.image;
+newUIElement = generateUIImage(imageConfig, imgUIGameOverBg)
+
 const imgAcidRain = new Image();
 imageConfig =  ui.superPowers.acidRain.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgAcidRain)
@@ -308,7 +316,7 @@ const configTowerLocation = {
   width: TOWER_LOCATION_SIZE.width,
   height: TOWER_LOCATION_SIZE.height,
   fillColor: "transparent",
-  strokeColor: "yellow",
+  strokeColor: "transparent",
 };
 
 const xOffset = Math.round(screenCenter.x - canvas.center.x); // because the canvas is centered
@@ -324,13 +332,11 @@ const animationLoop = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   populateFillText();
   populateGloops();
-  populateRoundRects();
   populateStaticObjects();
   populateTowerLocations();
   populateUIImages();
 
   if (game.status === "initial") {
-    update(roundRects);
     update(uiElements);
     update(fillText);
   }
@@ -350,7 +356,6 @@ const animationLoop = () => {
     render(staticObjects);
     render(towers);
     render(projectiles);
-    render(roundRects);
     render(uiElements);
     render(fillText);
   }
@@ -454,6 +459,8 @@ const isWaveClear = (waveNumber) => {
 
 const populateUIImages = () => {
   const elements = [
+    ui.gameOverScreen.background,
+    ui.gameOverScreen.playAgainButton,
     ui.playerStatus.background,
     ui.playerStatus.buttonNextWaveBg,
     ui.playerStatus.gemStashIcon,
@@ -479,8 +486,6 @@ const populateUIImages = () => {
 
 const populateFillText = () => {
   const elements = [
-    ui.buttons.playAgain,
-    ui.messages.gameOver,
     ui.playerStatus.buttonNextWaveText,
     ui.playerStatus.gemStashText,
     ui.playerStatus.playerHPText,
@@ -493,20 +498,6 @@ const populateFillText = () => {
         const config = element.drawing.text;
         const drawing = generateDrawing("FillText", config);
         fillText.push(drawing);
-      }
-    });
-  }
-};
-
-const populateRoundRects = () => {
-  const elements = [ui.buttons.playAgain];
-  roundRects = [];
-  if (roundRects.length === 0) {
-    elements.forEach((element) => {
-      if (element.evalAvailable()) {
-        const config = element.drawing.shape;
-        const drawing = generateDrawing("RoundRect", config);
-        roundRects.push(drawing);
       }
     });
   }

@@ -58,16 +58,16 @@ const startEventListeners = () => {
 			}
 		}
 
-		roundRects.forEach((roundRect) => {
-			if (isIntersectingRect(mousePosition, roundRect)) {
-				if (
-					roundRect.id === "play-again" &&
-					ui.buttons.playAgain.evalAvailable()
-				) {
+		if (ui.gameOverScreen.playAgainButton.evalAvailable()) {
+			const targetId = ui.gameOverScreen.playAgainButton.drawing.image.id
+			const matchedElements = uiElements.filter(uiElement => uiElement.id === targetId)
+			const targetElement = matchedElements.length > 0 ? matchedElements[0] : null
+			if (targetElement) {
+				if (isIntersectingRect(mousePosition, targetElement)) {
 					game.setStatus("initial");
 				}
 			}
-		});
+		}
 
 		let wasTowerClicked = false;
 		if (ui.buttons.towerUpgrade.evalAvailable()) {
