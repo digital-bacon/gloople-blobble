@@ -39,7 +39,7 @@ const configWave = {
 	currentWave: INITIAL_WAVE,
 	nextWave: INITIAL_WAVE + 1,
 	waveTimestamp: getNowAsMilliseconds(),
-	waveDurationInMilliseconds: 5000,
+	waveDurationInMilliseconds: 15000,
 	earlyBonus: {
 		default: INITIAL_EARLY_WAVE_GOLD_BONUS,
 	},
@@ -537,7 +537,14 @@ const populateStaticObjects = () => {
 };
 
 const populateGloops = () => {
-	if (gloops.length === 0 || isWaveClear(configWave.currentWave)) {
+	// if (gloops.length === 0 || isWaveClear(configWave.currentWave)) {
+	const nextWaveTimerExpired = () => {
+		return (
+			getNowAsMilliseconds() - configWave.waveTimestamp >=
+			configWave.waveDurationInMilliseconds
+		);
+	};
+	if (nextWaveTimerExpired() || configWave.currentWave === INITIAL_WAVE) {
 		callNextWave("game");
 	}
 };
