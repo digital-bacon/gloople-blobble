@@ -225,15 +225,18 @@ class UserInterface {
 				},
 				buttonNextWaveText: {
 					evalAvailable: function () {
-						return game.status === "active";
+						return game.status === "active" || game.status === "gameover";
 					},
 					drawing: {
 						text: {
 							x: 65,
 							y: 30,
+							id: "next-wave-text",
 							fillStyle: "#d8d8d8",
 							font: "bold 24px 'Trebuchet MS', sans-serif",
-							text: "Next Wave",
+							get text() {
+								return `Wave ${configWave.currentWave.toString()}`;
+							},
 							textAlign: "left",
 							maxWidth: 125,
 						},
@@ -263,6 +266,7 @@ class UserInterface {
 						text: {
 							x: 65,
 							y: 62,
+							id: "gem-stash-text",
 							fillStyle: "#1bea00",
 							font: "bold 24px 'Trebuchet MS', sans-serif",
 							textAlign: "left",
@@ -297,6 +301,7 @@ class UserInterface {
 						text: {
 							x: 65,
 							y: 68 + 24,
+							id: "player-hp-text",
 							fillStyle: "#f96a63",
 							font: "bold 24px 'Trebuchet MS', sans-serif",
 							textAlign: "left",
