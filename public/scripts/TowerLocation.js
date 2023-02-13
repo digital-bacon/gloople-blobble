@@ -11,7 +11,7 @@ class TowerLocation {
 		this.xTowerOffset = configObject.xTowerOffset || 0;
 		this.yTowerOffset = configObject.yTowerOffset || 0;
 		this.button = configObject.button || [];
-		this.id = configObject.id;
+		this.id = configObject.id || Math.random().toString(36).substr(2);
 		this.width = configObject.width;
 		this.height = configObject.height;
 		this.color = configObject.fillColor;

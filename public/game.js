@@ -338,9 +338,6 @@ const animationLoop = () => {
   populateGloops();
   populateStaticObjects();
   populateTowerLocations();
-  uiElements.forEach(uiElement => {
-      // console.log(uiElement)
-  })
   populateUIImages();
 
   if (game.status === "initial") {

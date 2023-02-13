@@ -388,7 +388,7 @@ class UserInterface {
 					},
 					drawing: {
 						image: {
-							towerId: null,
+							activeId: null,
 							active: false,
 							img: null,
 							src: "static/ui_build_meteor_tower_button.png",
@@ -406,7 +406,7 @@ class UserInterface {
 					},
 					drawing: {
 						image: {
-							towerId: null,
+							activeId: null,
 							active: false,
 							img: null,
 							src: "static/ui_build_quake_tower_button.png",
