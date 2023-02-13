@@ -112,6 +112,53 @@ const startEventListeners = () => {
 		if (!wasTowerClicked) clearTowerButtons();
 
 		let wasBuildLocationClicked = false;
+		// if (ui.towers.buttonBuildMeteor.evalAvailable()) {
+		// 	for (const location of locations) {
+		// 		if (location.towerId === null) {
+		// 			const buildButton =
+		// 				location.button.length > 0 ? location.button[0] : null;
+		// 			if (buildButton) {
+		// 				if (isIntersectingRect(mousePosition, buildButton)) {
+		// 					// const towerType = location.towerTypes[0];
+		// 					const towerType = location.towerTypes.filter(
+		// 						(towerType) => towerType.type === location.towerType
+		// 					);
+		// 					const tower = { ...configTower, ...towerType[0] };
+		// 					if (gemStash.total >= tower.purchaseCost) {
+		// 						gemStash.withdraw(tower.purchaseCost);
+		// 						tower.x = location.position.x + location.xTowerOffset;
+		// 						tower.y =
+		// 							location.position.y - location.height + location.yTowerOffset;
+		// 						const newTower = summonTower(tower);
+		// 						location.towerId = newTower.id;
+		// 						clearBuildButtons();
+		// 						break;
+		// 					}
+		// 				}
+		// 			}
+		// 			if (isIntersectingRect(mousePosition, location)) {
+		// 				wasBuildLocationClicked = true;
+		// 				const activeId = ui.towers.buttonBuildMeteor.drawing.image.activeId;
+		// 				const buttonIsActive = activeId !== null;
+		// 				if (buttonIsActive && activeId === location.id) {
+		// 					const purchaseCompleted = player.purchaseTowerUpgrade(tower);
+		// 					break;
+		// 				} else {
+		// 					locations.map((location) => {
+		// 						if (location.id === activeId) {
+		// 							location.button = [];
+		// 						}
+		// 					});
+		// 				}
+		// 				location.towerCost = configTower.purchaseCost;
+		// 				ui.towers.buttonBuildMeteor.drawing.image.active = true;
+		// 				ui.towers.buttonBuildMeteor.drawing.image.activeId = location.id;
+		// 				// location.drawBuildButton();
+		// 			}
+		// 		}
+		// 	}
+		// }
+		
 		if (ui.buttons.towerBuild.evalAvailable()) {
 			for (const location of locations) {
 				if (location.towerId === null) {
@@ -160,3 +207,4 @@ const startEventListeners = () => {
 		if (!wasBuildLocationClicked) clearBuildButtons();
 	});
 };
+
