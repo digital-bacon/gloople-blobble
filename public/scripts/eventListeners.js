@@ -36,20 +36,26 @@ const startEventListeners = () => {
 		});
 
 		if (ui.playerStatus.buttonNextWaveBg.evalAvailable()) {
-			const targetId = ui.playerStatus.buttonNextWaveBg.drawing.image.id
-			const matchedElements = uiElements.filter(uiElement => uiElement.id === targetId)
-			const targetElement = matchedElements.length > 0 ? matchedElements[0] : null
+			const targetId = ui.playerStatus.buttonNextWaveBg.drawing.image.id;
+			const matchedElements = uiElements.filter(
+				(uiElement) => uiElement.id === targetId
+			);
+			const targetElement =
+				matchedElements.length > 0 ? matchedElements[0] : null;
 			if (targetElement) {
 				if (isIntersectingRect(mousePosition, targetElement)) {
-					callNextWave();
+					callNextWave("player");
 				}
 			}
 		}
 
 		if (ui.splashScreen.playButton.evalAvailable()) {
-			const targetId = ui.splashScreen.playButton.drawing.image.id
-			const matchedElements = uiElements.filter(uiElement => uiElement.id === targetId)
-			const targetElement = matchedElements.length > 0 ? matchedElements[0] : null
+			const targetId = ui.splashScreen.playButton.drawing.image.id;
+			const matchedElements = uiElements.filter(
+				(uiElement) => uiElement.id === targetId
+			);
+			const targetElement =
+				matchedElements.length > 0 ? matchedElements[0] : null;
 			if (targetElement) {
 				if (isIntersectingRect(mousePosition, targetElement)) {
 					game.setStatus("active");
@@ -58,9 +64,12 @@ const startEventListeners = () => {
 		}
 
 		if (ui.gameOverScreen.playAgainButton.evalAvailable()) {
-			const targetId = ui.gameOverScreen.playAgainButton.drawing.image.id
-			const matchedElements = uiElements.filter(uiElement => uiElement.id === targetId)
-			const targetElement = matchedElements.length > 0 ? matchedElements[0] : null
+			const targetId = ui.gameOverScreen.playAgainButton.drawing.image.id;
+			const matchedElements = uiElements.filter(
+				(uiElement) => uiElement.id === targetId
+			);
+			const targetElement =
+				matchedElements.length > 0 ? matchedElements[0] : null;
 			if (targetElement) {
 				if (isIntersectingRect(mousePosition, targetElement)) {
 					game.setStatus("initial");

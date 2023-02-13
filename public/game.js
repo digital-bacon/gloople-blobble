@@ -38,6 +38,8 @@ let uiElements = [];
 const configWave = {
 	currentWave: INITIAL_WAVE,
 	nextWave: INITIAL_WAVE + 1,
+	waveTimestamp: getNowAsMilliseconds(),
+	waveDurationInMilliseconds: 15000,
 	earlyBonus: {
 		default: INITIAL_EARLY_WAVE_GOLD_BONUS,
 	},
@@ -100,6 +102,7 @@ const configWave = {
 		this.setGloopMultipliers();
 		this.currentWave = this.nextWave;
 		this.nextWave++;
+		this.waveTimestamp = getNowAsMilliseconds();
 	},
 };
 
@@ -260,18 +263,6 @@ const configPlayer = {
 };
 
 const player = new Player(configPlayer);
-// const superPowerTypes = player.superPowers;
-// superPowerTypes.forEach((superPowerType) => {
-//   const imgReady = new Image();
-//   const imgCooldown = new Image();
-//   const imageConfig = ui.superPowers[`${superPowerType.type}`].drawing.image;
-//   imgReady.src = imageConfig.src;
-//   imgCooldown.src = imageConfig.onCooldown.src;
-//   imageConfig.img = imgReady;
-//   imageConfig.onCooldown.img = imgCooldown;
-//   const buttonSuperPower = new CanvasImage(imageConfig);
-//   uiElements.push(buttonSuperPower);
-// });
 
 const configTower = {
 	ctx,
@@ -368,12 +359,12 @@ const animationLoop = () => {
 	cleanupSuperPowers();
 };
 
-const callNextWave = () => {
+const callNextWave = (caller = "game") => {
 	const currentWaveGloops = gloops.filter(
 		(gloop) => gloop.wave === configWave.currentWave
 	);
 	const countGloops = currentWaveGloops.length;
-	if (countGloops > 0) {
+	if (countGloops > 0 && caller === "player") {
 		const totalReward = configWave.earlyBonus.default * countGloops;
 		gemStash.deposit(totalReward);
 	}
@@ -546,8 +537,15 @@ const populateStaticObjects = () => {
 };
 
 const populateGloops = () => {
-	if (gloops.length === 0 || isWaveClear(configWave.currentWave)) {
-		callNextWave();
+	// if (gloops.length === 0 || isWaveClear(configWave.currentWave)) {
+	const nextWaveTimerExpired = () => {
+		return (
+			getNowAsMilliseconds() - configWave.waveTimestamp >=
+			configWave.waveDurationInMilliseconds
+		);
+	};
+	if (nextWaveTimerExpired() || configWave.currentWave === INITIAL_WAVE) {
+		callNextWave("game");
 	}
 };
 
