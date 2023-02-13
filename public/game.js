@@ -38,6 +38,7 @@ let uiElements = [];
 const configWave = {
 	currentWave: INITIAL_WAVE,
 	nextWave: INITIAL_WAVE + 1,
+	waveTimestamp: getNowAsMilliseconds(),
 	earlyBonus: {
 		default: INITIAL_EARLY_WAVE_GOLD_BONUS,
 	},
@@ -100,6 +101,7 @@ const configWave = {
 		this.setGloopMultipliers();
 		this.currentWave = this.nextWave;
 		this.nextWave++;
+		this.waveTimestamp = getNowAsMilliseconds();
 	},
 };
 
