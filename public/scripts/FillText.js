@@ -4,6 +4,7 @@ class FillText {
 			x: configObject.x || 0,
 			y: configObject.y || 0,
 		};
+		this.id = configObject.id || Math.random().toString(36).substr(2);
 		this.fillStyle = configObject.fillStyle || "grey";
 		this.font = configObject.font || "14px sans-serif";
 		this.maxWidth = configObject.maxWidth || null;
