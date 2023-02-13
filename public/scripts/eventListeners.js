@@ -39,7 +39,7 @@ const startEventListeners = () => {
 		if (ui.playerStatus.buttonNextWaveBg.evalAvailable()) {
 			const targetId = ui.playerStatus.buttonNextWaveBg.drawing.image.id
 			const matchedElements = uiElements.filter(uiElement => uiElement.id === targetId)
-			const targetElement = matchedElements.length > 0 ? matchedElements[0]: null
+			const targetElement = matchedElements.length > 0 ? matchedElements[0] : null
 			if (targetElement) {
 				if (isIntersectingRect(mousePosition, targetElement)) {
 					callNextWave();
@@ -47,11 +47,19 @@ const startEventListeners = () => {
 			}
 		}
 
-		roundRects.forEach((roundRect) => {
-			if (isIntersectingRect(mousePosition, roundRect)) {
-				if (roundRect.id === "start-game" && ui.buttons.start.evalAvailable()) {
+		if (ui.splashScreen.playButton.evalAvailable()) {
+			const targetId = ui.splashScreen.playButton.drawing.image.id
+			const matchedElements = uiElements.filter(uiElement => uiElement.id === targetId)
+			const targetElement = matchedElements.length > 0 ? matchedElements[0] : null
+			if (targetElement) {
+				if (isIntersectingRect(mousePosition, targetElement)) {
 					game.setStatus("active");
 				}
+			}
+		}
+
+		roundRects.forEach((roundRect) => {
+			if (isIntersectingRect(mousePosition, roundRect)) {
 				if (
 					roundRect.id === "play-again" &&
 					ui.buttons.playAgain.evalAvailable()

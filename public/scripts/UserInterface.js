@@ -2,32 +2,6 @@ class UserInterface {
 	constructor() {
 		return {
 			buttons: {
-				start: {
-					evalAvailable: function () {
-						return game.status === "initial";
-					},
-					drawing: {
-						shape: {
-							id: "start-game",
-							x: canvas.center.x - 160,
-							y: canvas.center.y + 50,
-							width: 320,
-							height: 50,
-							radii: 10,
-							strokeStyle: "green",
-							fillStyle: "pink",
-						},
-						text: {
-							x: canvas.center.x,
-							y: canvas.center.y + 70,
-							fillStyle: "black",
-							font: "bold 24px sans-serif",
-							text: "UNLEASH THE GLOOPS!",
-							textAlign: "center",
-							maxWidth: 316,
-						},
-					},
-				},
 				playAgain: {
 					evalAvailable: function () {
 						return game.status === "gameover";
@@ -326,9 +300,25 @@ class UserInterface {
 							src: "static/gloople_blobble_logo.png",
 							id: "gloople-blobble-logo",
 							x: 165,
-							y: 50,
+							y: 80,
 							width: 1563 * 0.6,
 							height: 597 * 0.6,
+						},
+					},
+				},
+				playButton: {
+					evalAvailable: function () {
+						return game.status === "initial";
+					},
+					drawing: {
+						image: {
+							img: null,
+							src: "static/ui_play_button.png",
+							id: "ui-play-button",
+							x: 539,
+							y: 430,
+							width: 346 * 0.6,
+							height: 341 * 0.6,
 						},
 					},
 				},

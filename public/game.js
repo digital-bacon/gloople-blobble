@@ -141,54 +141,48 @@ let newUIElement = null;
 const imgUIPlayerStatusBg = new Image();
 imageConfig = ui.playerStatus.background.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgUIPlayerStatusBg)
-// uiElements.push(newUIElement);
 
 const imgButtonNextWaveBg = new Image();
 imageConfig = ui.playerStatus.buttonNextWaveBg.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgButtonNextWaveBg)
-// uiElements.push(newUIElement);
 
 const imgGemStashIcon = new Image();
 imageConfig = ui.playerStatus.gemStashIcon.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgGemStashIcon)
-// uiElements.push(newUIElement);
 
 const imgPlayerHPIcon = new Image();
 imageConfig = ui.playerStatus.playerHPIcon.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgPlayerHPIcon)
-// uiElements.push(newUIElement);
 
 const imgLogo = new Image();
 imageConfig = ui.splashScreen.logo.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgLogo)
-// uiElements.push(newUIElement);
+
+const imgPlayButton = new Image();
+imageConfig = ui.splashScreen.playButton.drawing.image;
+newUIElement = generateUIImage(imageConfig, imgPlayButton)
 
 const imgAcidRain = new Image();
 imageConfig =  ui.superPowers.acidRain.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgAcidRain)
-// uiElements.push(newUIElement);
 
 const imgFireBall = new Image();
 imageConfig =  ui.superPowers.fireBall.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgFireBall)
-// uiElements.push(newUIElement);
 
 const imgStones = new Image();
 imageConfig =  ui.superPowers.stones.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgStones)
-// uiElements.push(newUIElement);
 
 const imgAcidRainCoolDown = new Image();
 imageConfig =  ui.superPowers.acidRain.drawing.image.onCooldown;
 imgAcidRainCoolDown.src = imageConfig.src
 imageConfig.img = imgAcidRainCoolDown
-// uiElements.push(newUIElement)
 
 const imgFireBallCoolDown = new Image();
 imageConfig =  ui.superPowers.fireBall.drawing.image.onCooldown;
 imgFireBallCoolDown.src = imageConfig.src
 imageConfig.img = imgFireBallCoolDown
-// uiElements.push(newUIElement);
 
 const imgStonesCoolDown = new Image();
 imageConfig =  ui.superPowers.stones.drawing.image.onCooldown;
@@ -465,6 +459,7 @@ const populateUIImages = () => {
     ui.playerStatus.gemStashIcon,
     ui.playerStatus.playerHPIcon,
     ui.splashScreen.logo,
+    ui.splashScreen.playButton,
     ui.superPowers.acidRain,
     ui.superPowers.fireBall,
     ui.superPowers.stones,
@@ -485,7 +480,6 @@ const populateUIImages = () => {
 const populateFillText = () => {
   const elements = [
     ui.buttons.playAgain,
-    ui.buttons.start,
     ui.messages.gameOver,
     ui.playerStatus.buttonNextWaveText,
     ui.playerStatus.gemStashText,
@@ -505,7 +499,7 @@ const populateFillText = () => {
 };
 
 const populateRoundRects = () => {
-  const elements = [ui.buttons.start, ui.buttons.playAgain];
+  const elements = [ui.buttons.playAgain];
   roundRects = [];
   if (roundRects.length === 0) {
     elements.forEach((element) => {
