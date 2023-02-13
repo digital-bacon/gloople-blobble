@@ -557,11 +557,13 @@ const populateStaticObjects = () => {
 };
 
 const populateGloops = () => {
-	if (
-		configWave.getMillisecondsUntilNextWave() <= 0 ||
-		configWave.currentWave === INITIAL_WAVE
-	) {
-		callNextWave("game");
+	if (game.status === "active") {
+		if (
+			configWave.getMillisecondsUntilNextWave() <= 0 ||
+			configWave.currentWave === INITIAL_WAVE
+		) {
+			callNextWave("game");
+		}
 	}
 };
 
