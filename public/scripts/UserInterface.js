@@ -387,6 +387,22 @@ class UserInterface {
 						},
 					},
 				},
+				buttonBuildQuake: {
+					evalAvailable: function () {
+						return game.status === "active";
+					},
+					drawing: {
+						image: {
+							img: null,
+							src: "static/ui_build_quake_tower_button.png",
+							id: "ui-build-quake-tower-button",
+							x: canvas.center.x - 150,
+							y: canvas.center.y - 150,
+							width: 300 * 0.7,
+							height: 137 * 0.7,
+						},
+					},
+				},
 			},
 		};
 	}

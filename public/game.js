@@ -182,9 +182,9 @@ const imgButtonBuildMeteorTower = new Image();
 imageConfig = ui.towers.buttonBuildMeteor.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgButtonBuildMeteorTower);
 
-// const imgButtonBuildQuakeTower = new Image();
-// imageConfig = ui.towers.buttonBuildQuake.drawing.image;
-// newUIElement = generateUIImage(imageConfig, imgButtonBuildQuakeTower);
+const imgButtonBuildQuakeTower = new Image();
+imageConfig = ui.towers.buttonBuildQuake.drawing.image;
+newUIElement = generateUIImage(imageConfig, imgButtonBuildQuakeTower);
 
 const imgAcidRain = new Image();
 imageConfig = ui.superPowers.acidRain.drawing.image;
@@ -478,7 +478,7 @@ const populateUIImages = () => {
 		ui.superPowers.fireBall,
 		ui.superPowers.stones,
     ui.towers.buttonBuildMeteor,
-    // ui.tower.buttonBuildQuake,
+    ui.towers.buttonBuildQuake,
 	];
 
 	uiElements = [];
