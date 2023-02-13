@@ -1,5 +1,5 @@
 const INITIAL_EARLY_WAVE_GOLD_BONUS = 100;
-const INITIAL_GAME_STATUS = "gameover";
+const INITIAL_GAME_STATUS = "initial";
 const INITIAL_GOLD_STASH_TOTAL = 5000;
 const INITIAL_PLAYER_HP = 10;
 const INITIAL_TOTAL_GLOOPS = 1;
@@ -166,6 +166,10 @@ const imgPlayAgainButton = new Image();
 imageConfig = ui.gameOverScreen.playAgainButton.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgPlayAgainButton)
 
+const imgUIGameOverBg = new Image();
+imageConfig = ui.gameOverScreen.background.drawing.image;
+newUIElement = generateUIImage(imageConfig, imgUIGameOverBg)
+
 const imgAcidRain = new Image();
 imageConfig =  ui.superPowers.acidRain.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgAcidRain)
@@ -312,7 +316,7 @@ const configTowerLocation = {
   width: TOWER_LOCATION_SIZE.width,
   height: TOWER_LOCATION_SIZE.height,
   fillColor: "transparent",
-  strokeColor: "yellow",
+  strokeColor: "transparent",
 };
 
 const xOffset = Math.round(screenCenter.x - canvas.center.x); // because the canvas is centered
@@ -455,6 +459,7 @@ const isWaveClear = (waveNumber) => {
 
 const populateUIImages = () => {
   const elements = [
+    ui.gameOverScreen.background,
     ui.gameOverScreen.playAgainButton,
     ui.playerStatus.background,
     ui.playerStatus.buttonNextWaveBg,
@@ -481,7 +486,6 @@ const populateUIImages = () => {
 
 const populateFillText = () => {
   const elements = [
-    ui.messages.gameOver,
     ui.playerStatus.buttonNextWaveText,
     ui.playerStatus.gemStashText,
     ui.playerStatus.playerHPText,

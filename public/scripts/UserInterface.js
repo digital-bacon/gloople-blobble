@@ -92,6 +92,22 @@ class UserInterface {
 				},
 			},
 			gameOverScreen: {
+				background: {
+					evalAvailable: function () {
+						return game.status === "gameover";
+					},
+					drawing: {
+						image: {
+							img: null,
+							src: "static/ui_game_over_bg.png",
+							id: "ui-game-over-bg",
+							x: canvas.center.x - 526 / 2,
+							y: canvas.center.y - 643 / 2,
+							width: 526,
+							height: 643,
+						},
+					},
+				},
 				playAgainButton: {
 					evalAvailable: function () {
 						return game.status === "gameover";
@@ -102,7 +118,7 @@ class UserInterface {
 							src: "static/ui_play_again_button.png",
 							id: "ui-play-again-button",
 							x: canvas.center.x - 185 / 2,
-							y: canvas.center.y,
+							y: canvas.center.y + 144,
 							width: 185,
 							height: 176,
 						},
@@ -167,24 +183,6 @@ class UserInterface {
 							y: canvas.height - 104 - 10,
 							width: 100,
 							height: 104,
-						},
-					},
-				},
-			},
-			messages: {
-				gameOver: {
-					evalAvailable: function () {
-						return game.status === "gameover";
-					},
-					drawing: {
-						text: {
-							x: canvas.center.x,
-							y: canvas.center.y - 30,
-							fillStyle: "#D85678",
-							font: "bold 48px sans-serif",
-							text: "THE GL😈😈PS ATE YOUR FACE!!",
-							textAlign: "center",
-							maxWidth: canvas.width - 4,
 						},
 					},
 				},
