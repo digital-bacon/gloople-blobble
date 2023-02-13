@@ -1,5 +1,5 @@
 const INITIAL_EARLY_WAVE_GOLD_BONUS = 100;
-const INITIAL_GAME_STATUS = "active";
+const INITIAL_GAME_STATUS = "initial";
 const INITIAL_GOLD_STASH_TOTAL = 5000;
 const INITIAL_PLAYER_HP = 10;
 const INITIAL_TOTAL_GLOOPS = 1;
@@ -141,22 +141,53 @@ let newUIElement = null;
 const imgUIPlayerStatusBg = new Image();
 imageConfig = ui.playerStatus.background.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgUIPlayerStatusBg)
-uiElements.push(newUIElement); 
 
 const imgButtonNextWaveBg = new Image();
 imageConfig = ui.playerStatus.buttonNextWaveBg.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgButtonNextWaveBg)
-uiElements.push(newUIElement); 
 
 const imgGemStashIcon = new Image();
 imageConfig = ui.playerStatus.gemStashIcon.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgGemStashIcon)
-uiElements.push(newUIElement); 
 
 const imgPlayerHPIcon = new Image();
 imageConfig = ui.playerStatus.playerHPIcon.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgPlayerHPIcon)
-uiElements.push(newUIElement); 
+
+const imgLogo = new Image();
+imageConfig = ui.splashScreen.logo.drawing.image;
+newUIElement = generateUIImage(imageConfig, imgLogo)
+
+const imgPlayButton = new Image();
+imageConfig = ui.splashScreen.playButton.drawing.image;
+newUIElement = generateUIImage(imageConfig, imgPlayButton)
+
+const imgAcidRain = new Image();
+imageConfig =  ui.superPowers.acidRain.drawing.image;
+newUIElement = generateUIImage(imageConfig, imgAcidRain)
+
+const imgFireBall = new Image();
+imageConfig =  ui.superPowers.fireBall.drawing.image;
+newUIElement = generateUIImage(imageConfig, imgFireBall)
+
+const imgStones = new Image();
+imageConfig =  ui.superPowers.stones.drawing.image;
+newUIElement = generateUIImage(imageConfig, imgStones)
+
+const imgAcidRainCoolDown = new Image();
+imageConfig =  ui.superPowers.acidRain.drawing.image.onCooldown;
+imgAcidRainCoolDown.src = imageConfig.src
+imageConfig.img = imgAcidRainCoolDown
+
+const imgFireBallCoolDown = new Image();
+imageConfig =  ui.superPowers.fireBall.drawing.image.onCooldown;
+imgFireBallCoolDown.src = imageConfig.src
+imageConfig.img = imgFireBallCoolDown
+
+const imgStonesCoolDown = new Image();
+imageConfig =  ui.superPowers.stones.drawing.image.onCooldown;
+imgStonesCoolDown.src = imageConfig.src
+imageConfig.img = imgStonesCoolDown
 
 const configGloopFranklin = {
   img: imgIdleFranklin,
@@ -221,19 +252,18 @@ const configPlayer = {
 };
 
 const player = new Player(configPlayer);
-const superPowerTypes = player.superPowers;
-superPowerTypes.forEach((superPowerType) => {
-  const imgReady = new Image();
-  const imgCooldown = new Image();
-  const imageConfig =
-    ui.buttons[`superpower-${superPowerType.type}`].drawing.image;
-  imgReady.src = imageConfig.src;
-  imgCooldown.src = imageConfig.onCooldown.src;
-  imageConfig.img = imgReady;
-  imageConfig.onCooldown.img = imgCooldown;
-  const buttonSuperPower = new CanvasImage(imageConfig);
-  uiElements.push(buttonSuperPower);
-});
+// const superPowerTypes = player.superPowers;
+// superPowerTypes.forEach((superPowerType) => {
+//   const imgReady = new Image();
+//   const imgCooldown = new Image();
+//   const imageConfig = ui.superPowers[`${superPowerType.type}`].drawing.image;
+//   imgReady.src = imageConfig.src;
+//   imgCooldown.src = imageConfig.onCooldown.src;
+//   imageConfig.img = imgReady;
+//   imageConfig.onCooldown.img = imgCooldown;
+//   const buttonSuperPower = new CanvasImage(imageConfig);
+//   uiElements.push(buttonSuperPower);
+// });
 
 const configTower = {
   ctx,
@@ -290,7 +320,6 @@ document.onclick = (event) => {
   trackedArray.push(getMousePosition(event));
   // console.log(JSON.stringify(trackedArray));
 };
-
 const animationLoop = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   populateFillText();
@@ -298,9 +327,11 @@ const animationLoop = () => {
   populateRoundRects();
   populateStaticObjects();
   populateTowerLocations();
+  populateUIImages();
 
   if (game.status === "initial") {
     update(roundRects);
+    update(uiElements);
     update(fillText);
   }
 
@@ -320,6 +351,7 @@ const animationLoop = () => {
     render(towers);
     render(projectiles);
     render(roundRects);
+    render(uiElements);
     render(fillText);
   }
 
@@ -420,14 +452,38 @@ const isWaveClear = (waveNumber) => {
   return matched.length === 0;
 };
 
+const populateUIImages = () => {
+  const elements = [
+    ui.playerStatus.background,
+    ui.playerStatus.buttonNextWaveBg,
+    ui.playerStatus.gemStashIcon,
+    ui.playerStatus.playerHPIcon,
+    ui.splashScreen.logo,
+    ui.splashScreen.playButton,
+    ui.superPowers.acidRain,
+    ui.superPowers.fireBall,
+    ui.superPowers.stones,
+  ];
+
+  uiElements = [];
+  if (uiElements.length === 0) {
+    elements.forEach((element) => {
+      if (element.evalAvailable()) {
+        const config = element.drawing.image;
+        const drawing = generateDrawing("Image", config);
+        uiElements.push(drawing);
+      }
+    });
+  }
+};
+
 const populateFillText = () => {
   const elements = [
     ui.buttons.playAgain,
-		ui.buttons.start,
     ui.messages.gameOver,
     ui.playerStatus.buttonNextWaveText,
     ui.playerStatus.gemStashText,
-		ui.playerStatus.playerHPText,
+    ui.playerStatus.playerHPText,
   ];
 
   fillText = [];
@@ -443,7 +499,7 @@ const populateFillText = () => {
 };
 
 const populateRoundRects = () => {
-  const elements = [ui.buttons.start, ui.buttons.playAgain];
+  const elements = [ui.buttons.playAgain];
   roundRects = [];
   if (roundRects.length === 0) {
     elements.forEach((element) => {

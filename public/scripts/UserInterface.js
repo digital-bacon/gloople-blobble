@@ -2,32 +2,6 @@ class UserInterface {
 	constructor() {
 		return {
 			buttons: {
-				start: {
-					evalAvailable: function () {
-						return game.status === "initial";
-					},
-					drawing: {
-						shape: {
-							id: "start-game",
-							x: canvas.center.x - 160,
-							y: canvas.center.y - 25,
-							width: 320,
-							height: 50,
-							radii: 10,
-							strokeStyle: "green",
-							fillStyle: "pink",
-						},
-						text: {
-							x: canvas.center.x,
-							y: canvas.center.y + 9,
-							fillStyle: "black",
-							font: "bold 24px sans-serif",
-							text: "UNLEASH THE GLOOPS!",
-							textAlign: "center",
-							maxWidth: 316,
-						},
-					},
-				},
 				playAgain: {
 					evalAvailable: function () {
 						return game.status === "gameover";
@@ -116,13 +90,15 @@ class UserInterface {
 						},
 					},
 				},
-				"superpower-acidrain": {
+			},
+			superPowers: {
+				acidRain: {
 					evalAvailable: function () {
 						return game.status === "active";
 					},
 					drawing: {
 						image: {
-							id: "superpower-acidrain",
+							id: "superpower-acidRain",
 							img: null,
 							src: "static/button_superpower_acidrain.png",
 							onCooldown: {
@@ -136,7 +112,7 @@ class UserInterface {
 						},
 					},
 				},
-				"superpower-fireball": {
+				fireBall: {
 					evalAvailable: function () {
 						return game.status === "active";
 					},
@@ -148,7 +124,7 @@ class UserInterface {
 								img: null,
 								src: "static/button_superpower_fireball_off.png",
 							},
-							id: "superpower-fireball",
+							id: "superpower-fireBall",
 							x: canvas.center.x - 50,
 							y: canvas.height - 104 - 10,
 							width: 100,
@@ -156,7 +132,7 @@ class UserInterface {
 						},
 					},
 				},
-				"superpower-stones": {
+				stones: {
 					evalAvailable: function () {
 						return game.status === "active";
 					},
@@ -198,7 +174,7 @@ class UserInterface {
 			playerStatus: {
 				background: {
 					evalAvailable: function () {
-						return game.status === "active";
+						return game.status === "active" || game.status === "gameover";
 					},
 					drawing: {
 						image: {
@@ -246,7 +222,7 @@ class UserInterface {
 				},
 				gemStashIcon: {
 					evalAvailable: function () {
-						return game.status === "active";
+						return game.status === "active" || game.status === "gameover";
 					},
 					drawing: {
 						image: {
@@ -280,7 +256,7 @@ class UserInterface {
 				},
 				playerHPIcon: {
 					evalAvailable: function () {
-						return game.status === "active";
+						return game.status === "active" || game.status === "gameover";
 					},
 					drawing: {
 						image: {
@@ -309,6 +285,40 @@ class UserInterface {
 							get text() {
 								return player.hp.toString();
 							},
+						},
+					},
+				},
+			},
+			splashScreen: {
+				logo: {
+					evalAvailable: function () {
+						return game.status === "initial";
+					},
+					drawing: {
+						image: {
+							img: null,
+							src: "static/gloople_blobble_logo.png",
+							id: "gloople-blobble-logo",
+							x: 165,
+							y: 80,
+							width: 1563 * 0.6,
+							height: 597 * 0.6,
+						},
+					},
+				},
+				playButton: {
+					evalAvailable: function () {
+						return game.status === "initial";
+					},
+					drawing: {
+						image: {
+							img: null,
+							src: "static/ui_play_button.png",
+							id: "ui-play-button",
+							x: 539,
+							y: 430,
+							width: 346 * 0.6,
+							height: 341 * 0.6,
 						},
 					},
 				},

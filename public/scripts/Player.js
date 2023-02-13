@@ -10,7 +10,7 @@ class Player {
 		};
 		this.superPowers = [
 			{
-				type: "acidrain",
+				type: "acidRain",
 				src: "static/spritesheet_superpower_rain.png",
 				width: 253,
 				height: 256,
@@ -26,7 +26,7 @@ class Player {
 				hitbox: 126,
 			},
 			{
-				type: "fireball",
+				type: "fireBall",
 				src: "static/spritesheet_superpower_fireball.png",
 				width: 109,
 				height: 256,
@@ -70,7 +70,7 @@ class Player {
 			this.attack(target, superPower);
 			this.searchingForTarget = false;
 			const uiImageConfig =
-				ui.buttons[`superpower-${superPower.type}`].drawing.image;
+				ui.superPowers[superPower.type].drawing.image;
 			superPower.uiButton.img = uiImageConfig.onCooldown.img;
 			const timeOut = superPower.canCallAfterTimeStamp - getNowAsMilliseconds();
 			setTimeout(() => {
