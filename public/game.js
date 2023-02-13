@@ -1,5 +1,5 @@
 const INITIAL_EARLY_WAVE_GOLD_BONUS = 100;
-const INITIAL_GAME_STATUS = "initial";
+const INITIAL_GAME_STATUS = "gameover";
 const INITIAL_GOLD_STASH_TOTAL = 5000;
 const INITIAL_PLAYER_HP = 10;
 const INITIAL_TOTAL_GLOOPS = 1;
@@ -161,6 +161,10 @@ newUIElement = generateUIImage(imageConfig, imgLogo)
 const imgPlayButton = new Image();
 imageConfig = ui.splashScreen.playButton.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgPlayButton)
+
+const imgPlayAgainButton = new Image();
+imageConfig = ui.gameOverScreen.playAgainButton.drawing.image;
+newUIElement = generateUIImage(imageConfig, imgPlayAgainButton)
 
 const imgAcidRain = new Image();
 imageConfig =  ui.superPowers.acidRain.drawing.image;
@@ -454,6 +458,7 @@ const isWaveClear = (waveNumber) => {
 
 const populateUIImages = () => {
   const elements = [
+    ui.gameOverScreen.playAgainButton,
     ui.playerStatus.background,
     ui.playerStatus.buttonNextWaveBg,
     ui.playerStatus.gemStashIcon,

@@ -91,6 +91,24 @@ class UserInterface {
 					},
 				},
 			},
+			gameOverScreen: {
+				playAgainButton: {
+					evalAvailable: function () {
+						return game.status === "gameover";
+					},
+					drawing: {
+						image: {
+							img: null,
+							src: "static/ui_play_again_button.png",
+							id: "ui-play-again-button",
+							x: canvas.center.x - 176 / 2,
+							y: canvas.center.y,
+							width: 176,
+							height: 175,
+						},
+					},
+				},
+			},
 			superPowers: {
 				acidRain: {
 					evalAvailable: function () {

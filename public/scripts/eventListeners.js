@@ -58,6 +58,17 @@ const startEventListeners = () => {
 			}
 		}
 
+		if (ui.gameOverScreen.playAgainButton.evalAvailable()) {
+			const targetId = ui.gameOverScreen.playAgainButton.drawing.image.id
+			const matchedElements = uiElements.filter(uiElement => uiElement.id === targetId)
+			const targetElement = matchedElements.length > 0 ? matchedElements[0] : null
+			if (targetElement) {
+				if (isIntersectingRect(mousePosition, targetElement)) {
+					game.setStatus("initial");
+				}
+			}
+		}
+
 		roundRects.forEach((roundRect) => {
 			if (isIntersectingRect(mousePosition, roundRect)) {
 				if (
