@@ -1,5 +1,5 @@
 const INITIAL_EARLY_WAVE_GOLD_BONUS = 100;
-const INITIAL_GAME_STATUS = "initial";
+const INITIAL_GAME_STATUS = "active";
 const INITIAL_GOLD_STASH_TOTAL = 5000;
 const INITIAL_PLAYER_HP = 10;
 const INITIAL_TOTAL_GLOOPS = 1;
@@ -366,6 +366,7 @@ const animationLoop = () => {
   cleanupTowerLocations();
   cleanupProjectiles();
   cleanupSuperPowers();
+
 };
 
 const callNextWave = () => {
@@ -476,7 +477,11 @@ const populateUIImages = () => {
   if (uiElements.length === 0) {
     elements.forEach((element) => {
       if (element.evalAvailable()) {
-        const config = element.drawing.image;
+        const config = {...element.drawing.image}
+        const isOnCoolDown = config?.onCooldown?.active || false
+        if (isOnCoolDown) {
+          config.img = config.onCooldown.img
+        }
         const drawing = generateDrawing("Image", config);
         uiElements.push(drawing);
       }

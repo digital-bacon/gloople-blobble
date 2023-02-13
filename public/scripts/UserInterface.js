@@ -118,7 +118,7 @@ class UserInterface {
 							src: "static/ui_play_again_button.png",
 							id: "ui-play-again-button",
 							x: canvas.center.x - 185 / 2,
-							y: canvas.center.y + 144,
+							y: canvas.center.y + 164,
 							width: 185,
 							height: 176,
 						},
@@ -136,6 +136,7 @@ class UserInterface {
 							img: null,
 							src: "static/button_superpower_acidrain.png",
 							onCooldown: {
+								active: false,
 								img: null,
 								src: "static/button_superpower_acidrain_off.png",
 							},
@@ -155,6 +156,7 @@ class UserInterface {
 							img: null,
 							src: "static/button_superpower_fireball.png",
 							onCooldown: {
+								active: false,
 								img: null,
 								src: "static/button_superpower_fireball_off.png",
 							},
@@ -175,6 +177,7 @@ class UserInterface {
 							img: null,
 							src: "static/button_superpower_stones.png",
 							onCooldown: {
+								active: false,
 								img: null,
 								src: "static/button_superpower_stones_off.png",
 							},
