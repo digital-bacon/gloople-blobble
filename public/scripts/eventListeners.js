@@ -69,17 +69,6 @@ const startEventListeners = () => {
 			}
 		}
 
-		roundRects.forEach((roundRect) => {
-			if (isIntersectingRect(mousePosition, roundRect)) {
-				if (
-					roundRect.id === "play-again" &&
-					ui.buttons.playAgain.evalAvailable()
-				) {
-					game.setStatus("initial");
-				}
-			}
-		});
-
 		let wasTowerClicked = false;
 		if (ui.buttons.towerUpgrade.evalAvailable()) {
 			for (const tower of towers) {

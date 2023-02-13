@@ -328,13 +328,11 @@ const animationLoop = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   populateFillText();
   populateGloops();
-  populateRoundRects();
   populateStaticObjects();
   populateTowerLocations();
   populateUIImages();
 
   if (game.status === "initial") {
-    update(roundRects);
     update(uiElements);
     update(fillText);
   }
@@ -354,7 +352,6 @@ const animationLoop = () => {
     render(staticObjects);
     render(towers);
     render(projectiles);
-    render(roundRects);
     render(uiElements);
     render(fillText);
   }
@@ -484,7 +481,6 @@ const populateUIImages = () => {
 
 const populateFillText = () => {
   const elements = [
-    ui.buttons.playAgain,
     ui.messages.gameOver,
     ui.playerStatus.buttonNextWaveText,
     ui.playerStatus.gemStashText,
@@ -498,20 +494,6 @@ const populateFillText = () => {
         const config = element.drawing.text;
         const drawing = generateDrawing("FillText", config);
         fillText.push(drawing);
-      }
-    });
-  }
-};
-
-const populateRoundRects = () => {
-  const elements = [ui.buttons.playAgain];
-  roundRects = [];
-  if (roundRects.length === 0) {
-    elements.forEach((element) => {
-      if (element.evalAvailable()) {
-        const config = element.drawing.shape;
-        const drawing = generateDrawing("RoundRect", config);
-        roundRects.push(drawing);
       }
     });
   }
