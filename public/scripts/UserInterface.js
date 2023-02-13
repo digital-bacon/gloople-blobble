@@ -200,7 +200,7 @@ class UserInterface {
 							img: null,
 							src: "static/button_long_bg.png",
 							id: "ui-player-bg",
-							x: -80,
+							x: -120,
 							y: -45,
 							width: 326,
 							height: 175,
@@ -214,12 +214,12 @@ class UserInterface {
 					drawing: {
 						image: {
 							img: null,
-							src: "static/ui_player_next_wave_icon.png",
+							src: "static/ui_next_wave_button.png",
 							id: "ui-player-next-wave-bg",
 							x: 10,
-							y: 5,
-							width: 46 * 0.9,
-							height: 37 * 0.9,
+							y: 275,
+							width: 188 * 0.5,
+							height: 137 * 0.5,
 						},
 					},
 				},
@@ -229,11 +229,11 @@ class UserInterface {
 					},
 					drawing: {
 						text: {
-							x: 20,
-							y: 325,
+							x: 110,
+							y: 321,
 							id: "next-wave-timer-text",
 							fillStyle: "orange",
-							font: "bold 24px 'Trebuchet MS', sans-serif",
+							font: "bold 36px 'Trebuchet MS', sans-serif",
 							get text() {
 								return Math.floor(
 									convertMillisecondsToSeconds(
@@ -252,13 +252,13 @@ class UserInterface {
 					},
 					drawing: {
 						text: {
-							x: 65,
-							y: 30,
+							x: 20,
+							y: 33,
 							id: "wave-count-text",
 							fillStyle: "#d8d8d8",
-							font: "bold 24px 'Trebuchet MS', sans-serif",
+							font: "bold 32px 'Trebuchet MS', sans-serif",
 							get text() {
-								return `Wave ${configWave.currentWave.toString()}`;
+								return `WAVE ${configWave.currentWave.toString()}`;
 							},
 							textAlign: "left",
 							maxWidth: 125,
