@@ -28,7 +28,6 @@ const startEventListeners = () => {
 							? superPowerPlayerMatches[0]
 							: null;
 						if (playerSuperPower) {
-							playerSuperPower.uiButton = uiElement;
 							player.attackingWithSuperPowerType = playerSuperPower.type;
 						}
 					}

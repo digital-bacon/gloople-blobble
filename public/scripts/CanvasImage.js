@@ -8,6 +8,11 @@ class CanvasImage {
 		this.img = configObject.img;
 		this.width = configObject.width;
 		this.height = configObject.height;
+		this.destroyMe = false;
+		
+		this.destroy = function () {
+			this.destroyMe = true;
+		};
 
 		this.update = function () {
 			this.render();

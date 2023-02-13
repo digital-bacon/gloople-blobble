@@ -71,10 +71,10 @@ class Player {
 			this.searchingForTarget = false;
 			const uiImageConfig =
 				ui.superPowers[superPower.type].drawing.image;
-			superPower.uiButton.img = uiImageConfig.onCooldown.img;
+			uiImageConfig.onCooldown.active = true;
 			const timeOut = superPower.canCallAfterTimeStamp - getNowAsMilliseconds();
 			setTimeout(() => {
-				superPower.uiButton.img = uiImageConfig.img;
+				uiImageConfig.onCooldown.active = false;
 			}, timeOut);
 		};
 
