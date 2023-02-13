@@ -1,5 +1,5 @@
 const INITIAL_EARLY_WAVE_GOLD_BONUS = 100;
-const INITIAL_GAME_STATUS = "initial";
+const INITIAL_GAME_STATUS = "active";
 const INITIAL_GOLD_STASH_TOTAL = 5000;
 const INITIAL_PLAYER_HP = 10;
 const INITIAL_TOTAL_GLOOPS = 1;
@@ -103,6 +103,11 @@ const configWave = {
 		this.currentWave = this.nextWave;
 		this.nextWave++;
 		this.waveTimestamp = getNowAsMilliseconds();
+	},
+	getMillisecondsUntilNextWave: function () {
+		const nextWaveTimestamp =
+			this.waveTimestamp + this.waveDurationInMilliseconds;
+		return nextWaveTimestamp - getNowAsMilliseconds();
 	},
 };
 
@@ -321,6 +326,9 @@ document.onclick = (event) => {
 };
 const animationLoop = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	// const nextWaveMilliseconds = getTimeUntilNextWaveInMilliseconds(configWave);
+	// console.log(Math.floor(convertMillisecondsToSeconds(nextWaveMilliseconds)));
+	// console.log(configWave.getMillisecondsUntilNextWave());
 	populateFillText();
 	populateGloops();
 	populateStaticObjects();
@@ -481,7 +489,8 @@ const populateUIImages = () => {
 
 const populateFillText = () => {
 	const elements = [
-		ui.playerStatus.buttonNextWaveText,
+		ui.playerStatus.buttonNextWaveTimerText,
+		ui.playerStatus.waveCountText,
 		ui.playerStatus.gemStashText,
 		ui.playerStatus.playerHPText,
 	];
@@ -537,14 +546,10 @@ const populateStaticObjects = () => {
 };
 
 const populateGloops = () => {
-	// if (gloops.length === 0 || isWaveClear(configWave.currentWave)) {
-	const nextWaveTimerExpired = () => {
-		return (
-			getNowAsMilliseconds() - configWave.waveTimestamp >=
-			configWave.waveDurationInMilliseconds
-		);
-	};
-	if (nextWaveTimerExpired() || configWave.currentWave === INITIAL_WAVE) {
+	if (
+		configWave.getMillisecondsUntilNextWave() <= 0 ||
+		configWave.currentWave === INITIAL_WAVE
+	) {
 		callNextWave("game");
 	}
 };
