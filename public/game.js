@@ -309,13 +309,11 @@ const configTower = {
 };
 
 const configTowerMeteor = {
-	baseConfig: configTower,
 	img: imgTowerMeteor,
 	type: "meteor",
 };
 
 const configTowerQuake = {
-	baseConfig: configTower,
 	img: imgTowerQuake,
 	attacksMultiple: true,
 	type: "quake",
