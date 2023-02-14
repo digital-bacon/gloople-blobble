@@ -346,6 +346,23 @@ class UserInterface {
 				},
 			},
 			splashScreen: {
+				background: {
+					evalAvailable: function () {
+						return game.status === "initial";
+					},
+					drawing: {
+						image: {
+							active: true,
+							img: null,
+							src: "static/mask_background.png",
+							id: "splash-screen-bg",
+							x: -10,
+							y: -10,
+							width: canvas.width + 10,
+							height: canvas.height + 10,
+						},
+					},
+				},
 				logo: {
 					evalAvailable: function () {
 						return game.status === "initial";

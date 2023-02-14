@@ -1,7 +1,8 @@
 body {
 	margin: 0;
-	background: url("../public/static/gloops_background.png") center top no-repeat, #882fff url("../public/static/light_burst_bg.png") center top no-repeat;
-	background-size: auto, cover;
+	background: url("../public/static/gloops_background.png") center top no-repeat,
+		#882fff url("../public/static/light_burst_bg.png") center top no-repeat;
+	background-size: auto, contain;
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
 		"Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
 		sans-serif;
