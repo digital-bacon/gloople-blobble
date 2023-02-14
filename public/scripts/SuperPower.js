@@ -45,7 +45,7 @@ class SuperPower {
 		this.createdTimestamp = getNowAsMilliseconds();
 		this.lastAnimateTimestamp = getNowAsMilliseconds();
 		this.durationInMilliseconds = configObject.durationInMilliseconds || 5000;
-		this.cooldownInMilliseconds = configObject.cooldownInMilliseconds || 10000;
+		this.cooldownInMilliseconds = configObject.cooldownInMilliseconds || 60000;
 		this.hitbox = configObject.hitbox;
 
 		this.animationOffCooldown = function () {

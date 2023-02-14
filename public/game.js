@@ -147,6 +147,7 @@ imgTowerQuake.src = "static/tower_quake.png";
 const imgButtonNextWaveBg = new Image();
 
 // Splash screen elements
+const imgSplashBackground = new Image();
 const imgLogo = new Image();
 const imgPlayButton = new Image();
 
@@ -185,6 +186,9 @@ newUIElement = generateUIImage(imageConfig, imgGemStashIcon);
 
 imageConfig = ui.playerStatus.playerHPIcon.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgPlayerHPIcon);
+
+imageConfig = ui.splashScreen.background.drawing.image;
+newUIElement = generateUIImage(imageConfig, imgSplashBackground);
 
 imageConfig = ui.splashScreen.logo.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgLogo);
@@ -243,7 +247,7 @@ const configGloopBob = {
 	height: 70,
 	totalFrames: 19,
 	animationSpeedInMilliseconds: 250,
-	speed: configWave.gloops.statistics.defaults.speed * 2.5,
+	speed: configWave.gloops.statistics.defaults.speed * 2.0,
 	hp: configWave.gloops.statistics.defaults.hp * 0.5,
 	gem: configWave.gloops.statistics.defaults.gem * 1.25,
 };
@@ -292,7 +296,7 @@ const configTower = {
 	x: 135,
 	y: 135,
 	towersIndex: towers.length,
-	attackRadius: 100,
+	attackRadius: 125,
 	attacksMultiple: false,
 	showRange: true,
 	projectileSize: 10,
@@ -486,6 +490,7 @@ const populateUIImages = () => {
 		ui.playerStatus.buttonNextWaveBg,
 		ui.playerStatus.gemStashIcon,
 		ui.playerStatus.playerHPIcon,
+		ui.splashScreen.background,
 		ui.splashScreen.logo,
 		ui.splashScreen.playButton,
 		ui.superPowers.acidRain,
