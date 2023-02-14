@@ -115,56 +115,46 @@ const startEventListeners = () => {
 		for (const location of locations) {
 			if (location.towerId === null) {
 				if (isIntersectingRect(mousePosition, location)) {
-					if (ui.towers.buttonBuildMeteor.evalAvailable()) {
-						const configDrawing = ui.towers.buttonBuildMeteor.drawing.image;
-						wasBuildLocationClicked = true;
-						const buttonIsActive = configDrawing.activeId !== null;
-						if (buttonIsActive && configDrawing.activeId === location.id) {
-							const purchaseCompleted = player.purchaseTowerUpgrade(tower);
-							break;
-						} else {
-							locations.map((location) => {
-								if (location.id === configDrawing.activeId) {
-									location.button = [];
-								}
-							});
-						}
-						location.towerCost = configTower.purchaseCost;
-						configDrawing.active = true;
-						configDrawing.parent = location;
-						configDrawing.x =
-							location.position.center.x - configDrawing.width / 2;
-						configDrawing.y =
-							location.position.center.y - configDrawing.height / 2;
-						// location.drawBuildButton();
+					const configDrawing = ui.towers.buttonBuildMeteor.drawing.image;
+					wasBuildLocationClicked = true;
+					const buttonIsActive = configDrawing.parent !== null;
+					if (buttonIsActive && configDrawing.activeId === location.id) {
+						const purchaseCompleted = player.purchaseTowerUpgrade(tower);
+						break;
 					}
+
+					location.configBuildButton(ui.towers.buttonBuildMeteor);
 				}
 			}
 		}
 
-		if (ui.towers.buttonBuildMeteor.evalAvailable()) {
-			const configDrawing = ui.towers.buttonBuildMeteor.drawing.image;
-			const targetId = configDrawing.id;
-			const targetElement = uiElements.find(
-				(uiElement) => uiElement.id === targetId
-			);
+		// Build button click handlers
+		const buildButtons = [
+			ui.towers.buttonBuildMeteor,
+			// ui.towers.buildButtonQuake,
+		];
 
-			if (targetElement) {
-				if (isIntersectingRect(mousePosition, targetElement)) {
-					console.log("build button clicked");
-					const location = targetElement.parent;
-					const towerType = location.towerTypes.find(
-						(towerType) => towerType.type === location.towerType
-					);
-					const tower = { ...configTower, ...towerType };
-					if (gemStash.total >= tower.purchaseCost) {
-						gemStash.withdraw(tower.purchaseCost);
-						tower.x = location.position.x + location.xTowerOffset;
-						tower.y =
-							location.position.y - location.height + location.yTowerOffset;
-						const newTower = summonTower(tower);
-						location.towerId = newTower.id;
-						configDrawing.active = false;
+		for (const button of buildButtons) {
+			if (button.evalAvailable()) {
+				const configDrawing = button.drawing.image;
+				const targetId = configDrawing.id;
+				const targetElement = uiElements.find(
+					(uiElement) => uiElement.id === targetId
+				);
+
+				if (targetElement) {
+					if (isIntersectingRect(mousePosition, targetElement)) {
+						const location = targetElement.parent;
+						const towerType = location.towerTypes.find(
+							(towerType) => towerType.type === location.towerType
+						);
+						const tower = { ...configTower, ...towerType };
+						const purchaseCompleted = player.purchaseTower(tower, gemStash);
+						if (purchaseCompleted) {
+							const newTower = player.buildTower(tower, location);
+							configDrawing.active = false;
+						}
+						break;
 					}
 				}
 			}
