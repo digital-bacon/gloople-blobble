@@ -354,7 +354,7 @@ class UserInterface {
 						image: {
 							active: true,
 							img: null,
-							src: "static/mask_background.png",
+							src: "static/mask_background_light_60.png",
 							id: "splash-screen-bg",
 							x: -10,
 							y: -10,
