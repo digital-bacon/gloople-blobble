@@ -109,7 +109,7 @@ class Tower {
 			};
 
 			if (canAffordUpgrade) {
-				configButton.fillStyle = "green";
+				configButton.fillStyle = "#10970a";
 			}
 			const button = new RoundRect(configButton);
 			this.button.push(button);
@@ -124,7 +124,7 @@ class Tower {
 				y: this.position.center.y + configFont.size / 3,
 				font: `${configFont.weight} ${configFont.size}px ${configFont.family}`,
 				fillStyle: "white",
-				text: `LVL. ${this.level + 1} 💰${this.calculateUpgradeCost()}`,
+				text: `LVL ${this.level + 1} 💎${this.calculateUpgradeCost()}`,
 			};
 
 			const text = new FillText(configText);
