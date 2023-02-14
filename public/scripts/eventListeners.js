@@ -111,22 +111,12 @@ const startEventListeners = () => {
 		}
 		if (!wasTowerClicked) clearTowerButtons();
 
-		let wasBuildLocationClicked = false;
 		// Tower location click handlers
 		for (const location of locations) {
 			if (location.towerId === null) {
 				if (isIntersectingRect(mousePosition, location)) {
-					// Get the tower type that's allowed on this location
-					console.log(location);
-					const configDrawing = ui.towers.buttonBuildMeteor.drawing.image;
-					wasBuildLocationClicked = true;
-					const buttonIsActive = configDrawing.parent !== null;
-					if (buttonIsActive && configDrawing.activeId === location.id) {
-						const purchaseCompleted = player.purchaseTowerUpgrade(tower);
-						break;
-					}
-
-					location.configBuildButton(ui.towers.buttonBuildMeteor);
+					const configDrawing = location.towerTypes[0].uiButtonBuildConfig;
+					location.configBuildButton(configDrawing);
 				}
 			}
 		}
@@ -134,7 +124,7 @@ const startEventListeners = () => {
 		// Build button click handlers
 		const buildButtons = [
 			ui.towers.buttonBuildMeteor,
-			// ui.towers.buildButtonQuake,
+			ui.towers.buttonBuildQuake,
 		];
 
 		for (const button of buildButtons) {
@@ -162,7 +152,5 @@ const startEventListeners = () => {
 				}
 			}
 		}
-
-		if (!wasBuildLocationClicked) clearBuildButtons();
 	});
 };

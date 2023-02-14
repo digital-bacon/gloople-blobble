@@ -112,7 +112,6 @@ const configWave = {
 };
 
 const configGloop = {
-	ctx,
 	x: waypoints[0].x,
 	y: waypoints[0].y,
 	waypointIndex: 0,
@@ -282,7 +281,6 @@ gloopSubSpecies.push(configGloopSmooch);
 gloopSubSpecies.push(configGloopTom);
 
 const configPlayer = {
-	ctx,
 	x: canvas.width,
 	y: 0,
 	hp: INITIAL_PLAYER_HP,
@@ -291,7 +289,6 @@ const configPlayer = {
 const player = new Player(configPlayer);
 
 const configTower = {
-	ctx,
 	x: 135,
 	y: 135,
 	towersIndex: towers.length,
@@ -311,12 +308,14 @@ const configTower = {
 const configTowerMeteor = {
 	img: imgTowerMeteor,
 	type: "meteor",
+	uiButtonBuildConfig: ui.towers.buttonBuildMeteor,
 };
 
 const configTowerQuake = {
 	img: imgTowerQuake,
 	attacksMultiple: true,
 	type: "quake",
+	uiButtonBuildConfig: ui.towers.buttonBuildQuake,
 };
 
 const towerTypes = [];
@@ -324,7 +323,6 @@ towerTypes.push(configTowerMeteor);
 towerTypes.push(configTowerQuake);
 
 const configTowerLocation = {
-	ctx,
 	towerTypes,
 	x: 0,
 	y: 0,
@@ -441,14 +439,19 @@ const generateTowerLocations = (configGenerate) => {
 	const newLocations = [];
 	for (let i = 0; i < towerLocations.length; i++) {
 		const location = { ...configTowerLocation };
-		location.towerTypes = configTowerTypes;
+		// location.towerTypes = configTowerTypes;
 		location.x = towerLocations[i].x;
 		location.y = towerLocations[i].y;
 		location.type = towerLocations[i].type; //tower type
 		location.xTowerOffset = towerLocations[i].xTowerOffset;
 		location.yTowerOffset = towerLocations[i].yTowerOffset;
+		location.towerTypes = configTowerTypes.filter(
+			(towerType) => towerType.type === location.type
+		);
+
 		newLocations.push(location);
 	}
+
 	newLocations.forEach((location) => {
 		generateTowerLocation(location);
 	});
