@@ -13,7 +13,7 @@ class Tower {
 				x: this.position.center.x,
 				y: this.position.center.y - 50,
 			},
-			src: "static/projectile_magic_tower.png",
+			src: "static/projectile_meteor_tower.png",
 			width: 32,
 			height: 32,
 			speed: 3,

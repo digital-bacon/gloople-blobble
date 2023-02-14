@@ -1,4 +1,5 @@
 class Player {
+	targetId;
 	constructor(configObject) {
 		this.position = {
 			x: configObject.x,
@@ -62,6 +63,25 @@ class Player {
 		this.searchingForTarget = false;
 		this.hp = configObject.hp || 1;
 
+		this.attack = function (target, superPower) {
+			if (this.superPowerOffCooldown(superPower)) {
+				this.fireAtTarget(target, superPower);
+			}
+		};
+
+		this.buildTower = function (towerConfig, location) {
+			towerConfig.x = location.position.x + location.xTowerOffset;
+			towerConfig.y =
+				location.position.y - location.height + location.yTowerOffset;
+			const newTower = summonTower(towerConfig);
+			location.towerId = newTower.id;
+			return newTower;
+		};
+
+		this.convertToWhole = function (amount) {
+			return Math.floor(amount);
+		};
+
 		this.doAttack = function (target) {
 			const matchedSuperPower = this.superPowers.filter(
 				(superPower) => superPower.type === this.attackingWithSuperPowerType
@@ -69,29 +89,12 @@ class Player {
 			const superPower = matchedSuperPower[0];
 			this.attack(target, superPower);
 			this.searchingForTarget = false;
-			const uiImageConfig =
-				ui.superPowers[superPower.type].drawing.image;
+			const uiImageConfig = ui.superPowers[superPower.type].drawing.image;
 			uiImageConfig.onCooldown.active = true;
 			const timeOut = superPower.canCallAfterTimeStamp - getNowAsMilliseconds();
 			setTimeout(() => {
 				uiImageConfig.onCooldown.active = false;
 			}, timeOut);
-		};
-
-		this.superPowerOffCooldown = function (superPower) {
-			const canUseAfter = superPower.canCallAfterTimeStamp;
-			const offCooldown = canUseAfter <= getNowAsMilliseconds();
-			return offCooldown;
-		};
-
-		this.attack = function (target, superPower) {
-			if (this.superPowerOffCooldown(superPower)) {
-				this.fireAtTarget(target, superPower);
-			}
-		};
-
-		this.convertToWhole = function (amount) {
-			return Math.floor(amount);
 		};
 
 		this.fireAtTarget = function (target, superPower) {
@@ -136,6 +139,14 @@ class Player {
 			return this.hp > 0;
 		};
 
+		this.purchaseTower = function (towerConfig, gemStash) {
+			if (gemStash.total >= towerConfig.purchaseCost) {
+				gemStash.withdraw(towerConfig.purchaseCost);
+				return true;
+			}
+			return false;
+		};
+
 		this.purchaseTowerUpgrade = function (tower) {
 			const purchaseSuccessful = gemStash.withdraw(
 				tower.calculateUpgradeCost()
@@ -148,6 +159,12 @@ class Player {
 
 		this.setHP = function (value) {
 			this.hp = value;
+		};
+
+		this.superPowerOffCooldown = function (superPower) {
+			const canUseAfter = superPower.canCallAfterTimeStamp;
+			const offCooldown = canUseAfter <= getNowAsMilliseconds();
+			return offCooldown;
 		};
 
 		return this;

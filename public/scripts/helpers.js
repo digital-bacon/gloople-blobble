@@ -1,43 +1,7 @@
-const update = (objects) => objects.forEach((object) => object.update());
+const colorFromHexString = (hexadecimalString) =>
+	"#" + hexadecimalString.slice(0, 6).toUpperCase();
 
-const render = (objects) => objects.forEach((object) => object.render());
-
-const isIntersectingCircle = (mousePoint, circle) => {
-	return (
-		Math.sqrt(
-			(mousePoint.x - circle.position.x) ** 2 +
-				(mousePoint.y - circle.position.y) ** 2
-		) < circle.radius
-	);
-};
-
-const isIntersectingRect = (mousePoint, rect) => {
-	const left = rect.position.x;
-	const right = rect.position.x + rect.width;
-
-	const top = rect.position.y;
-	const bottom = rect.position.y + rect.height;
-
-	const xClicked = mousePoint.x >= left && mousePoint.x <= right;
-
-	const yClicked = mousePoint.y >= top && mousePoint.y <= bottom;
-
-	return xClicked && yClicked;
-};
-
-const randomHex = () => (Math.random() * 0xfffff * 1000000).toString(16);
-
-const colorFromHexString = (hexadecimalString) => {
-	return "#" + hexadecimalString.slice(0, 6).toUpperCase();
-};
-
-const getMousePosition = (event) => {
-	const x = event.clientX - xOffset;
-	const y = event.clientY;
-	return { x, y };
-};
-
-const randomColor = () => colorFromHexString(randomHex());
+const convertMillisecondsToSeconds = (milliseconds) => milliseconds / 1000;
 
 const generateDrawing = (drawingType, config) => {
 	switch (drawingType) {
@@ -56,6 +20,13 @@ const generateDrawing = (drawingType, config) => {
 	}
 };
 
+const generateUIImage = (imageConfig, img) => {
+	img.src = imageConfig.src;
+	imageConfig.img = img;
+	let newUIElement = new CanvasImage(imageConfig);
+	return newUIElement;
+};
+
 const getCanvasProperties = (gameCanvas) => {
 	return {
 		width: gameCanvas.width,
@@ -67,6 +38,16 @@ const getCanvasProperties = (gameCanvas) => {
 	};
 };
 
+const getGameStatusTypes = () => ["initial", "active", "gameover"];
+
+const getMousePosition = (event) => {
+	const x = event.clientX - xOffset;
+	const y = event.clientY;
+	return { x, y };
+};
+
+const getNowAsMilliseconds = () => Date.now();
+
 const getScreenCenter = () => {
 	return {
 		x: window.innerWidth / 2,
@@ -74,16 +55,12 @@ const getScreenCenter = () => {
 	};
 };
 
-const getGameStatusTypes = () => {
-	return ["initial", "active", "gameover"];
-};
-
 const getTowerLocations = (locationSize) => {
 	const locations = [
-		{ type: "magic", x: 278, y: 547, yTowerOffset: -18 },
-		{ type: "magic", x: 408, y: 332, yTowerOffset: -7 },
-		{ type: "magic", x: 566, y: 547, yTowerOffset: -18 },
-		{ type: "splash", x: 887, y: 387, yTowerOffset: 0 },
+		{ type: "meteor", x: 278, y: 547, yTowerOffset: -18 },
+		{ type: "meteor", x: 408, y: 332, yTowerOffset: -7 },
+		{ type: "meteor", x: 566, y: 547, yTowerOffset: -18 },
+		{ type: "quake", x: 887, y: 387, yTowerOffset: 0 },
 	];
 	const xOffset = locationSize.width / 2;
 	const yOffset = locationSize.height;
@@ -114,23 +91,36 @@ const getWayPoints = () => {
 	];
 };
 
-const getNowAsMilliseconds = () => {
-	const now = Date.now();
-	return now;
+const isIntersectingCircle = (mousePoint, circle) => {
+	return (
+		Math.sqrt(
+			(mousePoint.x - circle.position.x) ** 2 +
+				(mousePoint.y - circle.position.y) ** 2
+		) < circle.radius
+	);
 };
 
-const convertMillisecondsToSeconds = (milliseconds) => {
-	return milliseconds / 1000;
+const isIntersectingRect = (mousePoint, rect) => {
+	const left = rect.position.x;
+	const right = rect.position.x + rect.width;
+
+	const top = rect.position.y;
+	const bottom = rect.position.y + rect.height;
+
+	const xClicked = mousePoint.x >= left && mousePoint.x <= right;
+
+	const yClicked = mousePoint.y >= top && mousePoint.y <= bottom;
+
+	return xClicked && yClicked;
 };
 
-const randomFromArray = (array) => {
-	const randomElement = array[Math.floor(Math.random() * array.length)];
-	return randomElement;
-};
+const randomColor = () => colorFromHexString(randomHex());
 
-const generateUIImage = (imageConfig, img) => {
-	img.src = imageConfig.src;
-	imageConfig.img = img;
-	let newUIElement = new CanvasImage(imageConfig);
-	return newUIElement;
-};
+const randomFromArray = (array) =>
+	array[Math.floor(Math.random() * array.length)];
+
+const randomHex = () => (Math.random() * 0xfffff * 1000000).toString(16);
+
+const render = (objects) => objects.forEach((object) => object.render());
+
+const update = (objects) => objects.forEach((object) => object.update());

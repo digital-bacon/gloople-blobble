@@ -5,11 +5,12 @@ class CanvasImage {
 			y: configObject.y,
 		};
 		this.id = configObject.id || Math.random().toString(36).substr(2);
+		this.parent = configObject.parent || null;
 		this.img = configObject.img;
 		this.width = configObject.width;
 		this.height = configObject.height;
 		this.destroyMe = false;
-		
+
 		this.destroy = function () {
 			this.destroyMe = true;
 		};
