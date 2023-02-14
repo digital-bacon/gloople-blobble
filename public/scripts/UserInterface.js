@@ -127,6 +127,25 @@ class UserInterface {
 					},
 				},
 			},
+			superPowerDock: {
+				background: {
+					evalAvailable: function () {
+						return game.status === "active";
+					},
+					drawing: {
+						image: {
+							active: true,
+							img: null,
+							src: "static/ui_dock_bg.png",
+							id: "ui-dock-bg",
+							x: 0,
+							y: canvas.height - 30,
+							width: 1978,
+							height: 192,
+						},
+					},
+				},
+			},
 			superPowers: {
 				acidRain: {
 					evalAvailable: function () {
