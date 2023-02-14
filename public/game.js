@@ -298,7 +298,7 @@ const configTower = {
 	projectileSize: 10,
 	attackDamage: 25,
 	attackSpeedInMilliseconds: 1000,
-	purchaseCost: 50,
+	purchaseCost: 1000,
 	upgradeCost: 100,
 	level: INITIAL_TOWER_LEVEL,
 	width: TOWER_SIZE.width,
@@ -308,6 +308,7 @@ const configTower = {
 const configTowerMeteor = {
 	img: imgTowerMeteor,
 	type: "meteor",
+	purchaseCost: 1000,
 	uiButtonBuildConfig: ui.towers.buttonBuildMeteor,
 };
 
@@ -315,6 +316,7 @@ const configTowerQuake = {
 	img: imgTowerQuake,
 	attacksMultiple: true,
 	type: "quake",
+	purchaseCost: 3000,
 	uiButtonBuildConfig: ui.towers.buttonBuildQuake,
 };
 
