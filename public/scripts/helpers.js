@@ -42,7 +42,7 @@ const getGameStatusTypes = () => ["initial", "active", "gameover"];
 
 const getMousePosition = (event) => {
 	const x = event.clientX - xOffset;
-	const y = event.clientY;
+	const y = event.clientY - yOffset;
 	return { x, y };
 };
 

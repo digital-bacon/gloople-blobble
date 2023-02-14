@@ -333,7 +333,7 @@ const configTowerLocation = {
 };
 
 const xOffset = Math.round(screenCenter.x - canvas.center.x); // because the canvas is centered
-const yOffset = 0; // because the canvas is at the top of the page
+const yOffset = 358; // because the canvas is at the top of the page
 
 // Uncomment this block to enable waypoint building in the console.
 const trackedArray = [];
