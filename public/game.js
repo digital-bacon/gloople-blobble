@@ -127,6 +127,7 @@ const configGloop = {
 	speedMultiplier: configWave.gloops.statistics.multipliers.speed.initial,
 };
 
+// Gloop elements
 const imgGloopBob = new Image();
 const imgGloopSam = new Image();
 const imgGloopSmooch = new Image();
@@ -138,77 +139,89 @@ imgGloopSmooch.src = "static/spritesheet_smooch.png";
 imgGloopTom.src = "static/spritesheet_tom.png";
 imgIdleFranklin.src = "static/spritesheet_franklin.png";
 
-const imgTowerMagic = new Image();
-const imgTowerSplash = new Image();
-imgTowerMagic.src = "static/tower_magic.png";
-imgTowerSplash.src = "static/tower_splash.png";
+// Tower elements
+const imgTowerMeteor = new Image();
+const imgTowerQuake = new Image();
+imgTowerMeteor.src = "static/tower_meteor.png";
+imgTowerQuake.src = "static/tower_quake.png";
+
+const imgButtonNextWaveBg = new Image();
+
+// Splash screen elements
+const imgLogo = new Image();
+const imgPlayButton = new Image();
+
+// Player status UI elements
+const imgUIPlayerStatusBg = new Image();
+const imgPlayerHPIcon = new Image();
+const imgGemStashIcon = new Image();
+
+// Game over screen elements
+const imgUIGameOverBg = new Image();
+const imgPlayAgainButton = new Image();
+
+// Superpower UI elements
+const imgAcidRain = new Image();
+const imgAcidRainCoolDown = new Image();
+const imgFireBall = new Image();
+const imgFireBallCoolDown = new Image();
+const imgStones = new Image();
+const imgStonesCoolDown = new Image();
+
+// Tower build button elements
+const imgButtonBuildQuakeTower = new Image();
+const imgButtonBuildMeteorTower = new Image();
 
 let imageConfig = null;
 let newUIElement = null;
 
-const imgUIPlayerStatusBg = new Image();
 imageConfig = ui.playerStatus.background.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgUIPlayerStatusBg);
 
-const imgButtonNextWaveBg = new Image();
 imageConfig = ui.playerStatus.buttonNextWaveBg.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgButtonNextWaveBg);
 
-const imgGemStashIcon = new Image();
 imageConfig = ui.playerStatus.gemStashIcon.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgGemStashIcon);
 
-const imgPlayerHPIcon = new Image();
 imageConfig = ui.playerStatus.playerHPIcon.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgPlayerHPIcon);
 
-const imgLogo = new Image();
 imageConfig = ui.splashScreen.logo.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgLogo);
 
-const imgPlayButton = new Image();
 imageConfig = ui.splashScreen.playButton.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgPlayButton);
 
-const imgPlayAgainButton = new Image();
 imageConfig = ui.gameOverScreen.playAgainButton.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgPlayAgainButton);
 
-const imgUIGameOverBg = new Image();
 imageConfig = ui.gameOverScreen.background.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgUIGameOverBg);
 
-const imgButtonBuildMeteorTower = new Image();
 imageConfig = ui.towers.buttonBuildMeteor.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgButtonBuildMeteorTower);
 
-const imgButtonBuildQuakeTower = new Image();
 imageConfig = ui.towers.buttonBuildQuake.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgButtonBuildQuakeTower);
 
-const imgAcidRain = new Image();
 imageConfig = ui.superPowers.acidRain.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgAcidRain);
 
-const imgFireBall = new Image();
 imageConfig = ui.superPowers.fireBall.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgFireBall);
 
-const imgStones = new Image();
 imageConfig = ui.superPowers.stones.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgStones);
 
-const imgAcidRainCoolDown = new Image();
 imageConfig = ui.superPowers.acidRain.drawing.image.onCooldown;
 imgAcidRainCoolDown.src = imageConfig.src;
 imageConfig.img = imgAcidRainCoolDown;
 
-const imgFireBallCoolDown = new Image();
 imageConfig = ui.superPowers.fireBall.drawing.image.onCooldown;
 imgFireBallCoolDown.src = imageConfig.src;
 imageConfig.img = imgFireBallCoolDown;
 
-const imgStonesCoolDown = new Image();
 imageConfig = ui.superPowers.stones.drawing.image.onCooldown;
 imgStonesCoolDown.src = imageConfig.src;
 imageConfig.img = imgStonesCoolDown;
@@ -295,22 +308,22 @@ const configTower = {
 	height: TOWER_SIZE.height,
 };
 
-const configTowerMagic = {
+const configTowerMeteor = {
 	baseConfig: configTower,
-	img: imgTowerMagic,
-	type: "magic",
+	img: imgTowerMeteor,
+	type: "meteor",
 };
 
-const configTowerSplash = {
+const configTowerQuake = {
 	baseConfig: configTower,
-	img: imgTowerSplash,
+	img: imgTowerQuake,
 	attacksMultiple: true,
-	type: "splash",
+	type: "quake",
 };
 
 const towerTypes = [];
-towerTypes.push(configTowerMagic);
-towerTypes.push(configTowerSplash);
+towerTypes.push(configTowerMeteor);
+towerTypes.push(configTowerQuake);
 
 const configTowerLocation = {
 	ctx,

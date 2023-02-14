@@ -112,9 +112,12 @@ const startEventListeners = () => {
 		if (!wasTowerClicked) clearTowerButtons();
 
 		let wasBuildLocationClicked = false;
+		// Tower location click handlers
 		for (const location of locations) {
 			if (location.towerId === null) {
 				if (isIntersectingRect(mousePosition, location)) {
+					// Get the tower type that's allowed on this location
+					console.log(location);
 					const configDrawing = ui.towers.buttonBuildMeteor.drawing.image;
 					wasBuildLocationClicked = true;
 					const buttonIsActive = configDrawing.parent !== null;
