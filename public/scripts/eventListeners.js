@@ -123,8 +123,8 @@ const startEventListeners = () => {
 
 		// Build button click handlers
 		const buildButtons = [
-			ui.towers.buttonBuildMeteor,
-			ui.towers.buttonBuildQuake,
+			ui.towerLocations.buttonBuildMeteor,
+			ui.towerLocations.buttonBuildQuake,
 		];
 
 		for (const button of buildButtons) {

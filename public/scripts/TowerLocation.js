@@ -8,14 +8,13 @@ class TowerLocation {
 				y: configObject.y + configObject.height / 2,
 			},
 		};
+		this.id = configObject.id || Math.random().toString(36).substr(2);
+		this.imageConfig = configObject.imageConfig;
 		this.xTowerOffset = configObject.xTowerOffset || 0;
 		this.yTowerOffset = configObject.yTowerOffset || 0;
 		this.button = configObject.button || [];
-		this.id = configObject.id || Math.random().toString(36).substr(2);
 		this.width = configObject.width;
 		this.height = configObject.height;
-		this.color = configObject.fillColor;
-		this.stroke = configObject.strokeColor;
 		this.towerCost = configObject.towerCost || 0;
 		this.destroyMe = false;
 		this.towerId = configObject.towerId || null;
@@ -85,15 +84,17 @@ class TowerLocation {
 		};
 
 		this.render = function () {
-			if (this.width > 0 && this.height > 0) {
-				ctx.beginPath();
-				ctx.fillStyle = this.color;
-				ctx.strokeStyle = this.stroke;
-				ctx.rect(this.position.x, this.position.y, this.width, this.height);
-				ctx.fill();
-				ctx.stroke();
-				ctx.closePath();
-			}
+			const xPosition = this.position.center.x - this.imageConfig.width / 2;
+			const yPosition = this.position.center.y - this.imageConfig.height / 2;
+			ctx.beginPath();
+			ctx.drawImage(
+				this.imageConfig.img,
+				xPosition,
+				yPosition,
+				this.imageConfig.width,
+				this.imageConfig.height
+			);
+			ctx.closePath();
 		};
 		return this;
 	}

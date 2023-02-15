@@ -417,7 +417,7 @@ class UserInterface {
 					},
 				},
 			},
-			towers: {
+			towerLocations: {
 				buttonBuildMeteor: {
 					evalAvailable: function () {
 						return game.status === "active";
@@ -451,6 +451,24 @@ class UserInterface {
 							y: canvas.center.y - 150,
 							width: 300 * 0.7,
 							height: 103 * 0.7,
+						},
+					},
+				},
+				buildIndicator: {
+					evalAvailable: function () {
+						return game.status === "active";
+					},
+					drawing: {
+						image: {
+							parent: null,
+							active: false,
+							img: null,
+							src: "static/ui_tower_build_indicator.png",
+							id: "ui-tower-build-indicator",
+							x: canvas.center.x,
+							y: canvas.center.y,
+							width: 70,
+							height: 70,
 						},
 					},
 				},

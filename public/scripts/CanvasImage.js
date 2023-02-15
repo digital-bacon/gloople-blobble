@@ -20,6 +20,7 @@ class CanvasImage {
 		};
 
 		this.render = function () {
+			ctx.beginPath();
 			ctx.drawImage(
 				this.img,
 				this.position.x,
@@ -27,7 +28,7 @@ class CanvasImage {
 				this.width,
 				this.height
 			);
-			ctx.beginPath();
+			ctx.closePath();
 		};
 		return this;
 	}
