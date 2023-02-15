@@ -353,7 +353,6 @@ const configTowerLocation = {
 	height: TOWER_LOCATION_SIZE.height,
 	imageConfig: ui.towerLocations.buildIndicator.drawing.image,
 };
-console.log(configTowerLocation);
 
 const xOffset = Math.round(screenCenter.x - canvas.center.x); // because the canvas is centered
 const yOffset = 358; // because the canvas is at the top of the page
@@ -490,7 +489,7 @@ const clearBuildButtons = () => {
 const clearTowerButtons = () => {
 	towers.forEach((tower) => {
 		tower.button = [];
-		ui.buttons.towerUpgrade.activeId = null;
+		ui.towers.upgradeButton.drawing.image.activeId = null;
 	});
 };
 
@@ -580,7 +579,7 @@ const populateTowerLocations = () => {
 			configTowerTypes: towerTypes,
 			towerLocations: initialLocations,
 		};
-		console.log(configGenerate);
+
 		generateTowerLocations(configGenerate);
 	}
 };

@@ -44,7 +44,7 @@ class Tower {
 			upgradeCost: configObject?.multiplier?.upgradeCost || 0.5,
 		};
 		this.type = configObject.type || "unspecified";
-		this.imgUpgrade = configObject.imgUpgrade;
+		this.imgUpgradeConfig = configObject.imgUpgradeConfig;
 
 		this.attackOffCooldown = function () {
 			return this.timestampCanAttackAfter() <= getNowAsMilliseconds();
@@ -80,8 +80,6 @@ class Tower {
 			const yDelta = Math.abs(this.position.center.y - yGloop);
 
 			const distance = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
-			// const distance =
-			// 	Math.sqrt(xDelta * xDelta + yDelta * yDelta) - gloop.radius;
 
 			if (distance <= this.calculateAttackRadius()) {
 				return true;
@@ -99,47 +97,26 @@ class Tower {
 
 		this.drawUpgradeButton = function () {
 			const canAffordUpgrade = gemStash.total >= this.calculateUpgradeCost();
-			const configButton = {
-				...ui.buttons.towerUpgrade.drawing.shape,
-				x:
-					this.position.center.x -
-					ui.buttons.towerUpgrade.drawing.shape.width / 2,
-				y:
-					this.position.center.y -
-					ui.buttons.towerUpgrade.drawing.shape.height / 2,
-			};
 
-			if (canAffordUpgrade) {
-				configButton.fillStyle = "#10970a";
-			}
+			this.imgUpgradeConfig.drawing.image.x =
+				this.position.center.x - this.imgUpgradeConfig.drawing.image.width / 2;
+			this.imgUpgradeConfig.drawing.image.y =
+				this.position.center.y - this.imgUpgradeConfig.drawing.image.height / 2;
+			const button = new CanvasImage(this.imgUpgradeConfig.drawing.image);
 
-			// const xPosition = this.position.center.x - this.imgUpgradeConfig.width / 2;
-			// const yPosition = this.position.center.y - this.imgUpgradeConfig.height / 2;
-			// ctx.beginPath();
-			// ctx.drawImage(
-			// 	this.imgUpgradeConfig.img,
-			// 	xPosition,
-			// 	yPosition,
-			// 	this.imgUpgradeConfig.width,
-			// 	this.imgUpgradeConfig.height
-			// );
-			// ctx.closePath();
-
-			const button = new RoundRect(configButton);
 			this.button.push(button);
 			button.render();
-			const configFont = {
-				...ui.buttons.towerUpgrade.drawing.text.font,
-			};
 
 			const configText = {
-				...ui.buttons.towerUpgrade.drawing.text,
+				...ui.towers.upgradeButtonText.drawing.text,
 				x: this.position.center.x,
-				y: this.position.center.y + configFont.size / 3,
-				font: `${configFont.weight} ${configFont.size}px ${configFont.family}`,
-				fillStyle: "white",
-				text: `LVL ${this.level + 1} 💎${this.calculateUpgradeCost()}`,
+				y: this.position.center.y + 16,
+				text: `${this.calculateUpgradeCost()} [${this.level + 1}]`,
 			};
+
+			if (!canAffordUpgrade) {
+				configText.fillStyle = configText.cannotAfford.fillStyle;
+			}
 
 			const text = new FillText(configText);
 			this.button.push(text);
