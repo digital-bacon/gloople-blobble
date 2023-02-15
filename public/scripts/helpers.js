@@ -59,8 +59,8 @@ const getTowerLocations = (locationSize) => {
 	const locations = [
 		{ type: "meteor", x: 278, y: 547, yTowerOffset: -18 },
 		{ type: "meteor", x: 408, y: 332, yTowerOffset: -7 },
-		{ type: "meteor", x: 566, y: 547, yTowerOffset: -18 },
-		{ type: "quake", x: 887, y: 387, yTowerOffset: 0 },
+		{ type: "quake", x: 566, y: 547, yTowerOffset: -18 },
+		{ type: "meteor", x: 887, y: 387, yTowerOffset: 0 },
 	];
 	const xOffset = locationSize.width / 2;
 	const yOffset = locationSize.height;
