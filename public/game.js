@@ -169,7 +169,8 @@ const imgFireBallCoolDown = new Image();
 const imgStones = new Image();
 const imgStonesCoolDown = new Image();
 
-// Tower build button elements
+// Tower build location elements
+const imgBuildIndicator = new Image();
 const imgButtonBuildQuakeTower = new Image();
 const imgButtonBuildMeteorTower = new Image();
 
@@ -203,10 +204,10 @@ newUIElement = generateUIImage(imageConfig, imgPlayAgainButton);
 imageConfig = ui.gameOverScreen.background.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgUIGameOverBg);
 
-imageConfig = ui.towers.buttonBuildMeteor.drawing.image;
+imageConfig = ui.towerLocations.buttonBuildMeteor.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgButtonBuildMeteorTower);
 
-imageConfig = ui.towers.buttonBuildQuake.drawing.image;
+imageConfig = ui.towerLocations.buttonBuildQuake.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgButtonBuildQuakeTower);
 
 imageConfig = ui.superPowerDock.background.drawing.image;
@@ -220,6 +221,11 @@ newUIElement = generateUIImage(imageConfig, imgFireBall);
 
 imageConfig = ui.superPowers.stones.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgStones);
+
+// UI elements that do not persist
+imageConfig = ui.towerLocations.buildIndicator.drawing.image;
+imgBuildIndicator.src = imageConfig.src;
+imageConfig.img = imgBuildIndicator;
 
 imageConfig = ui.superPowers.acidRain.drawing.image.onCooldown;
 imgAcidRainCoolDown.src = imageConfig.src;
@@ -317,7 +323,7 @@ const configTowerMeteor = {
 	img: imgTowerMeteor,
 	type: "meteor",
 	purchaseCost: 1000,
-	uiButtonBuildConfig: ui.towers.buttonBuildMeteor,
+	uiButtonBuildConfig: ui.towerLocations.buttonBuildMeteor,
 };
 
 const configTowerQuake = {
@@ -325,7 +331,7 @@ const configTowerQuake = {
 	attacksMultiple: true,
 	type: "quake",
 	purchaseCost: 3000,
-	uiButtonBuildConfig: ui.towers.buttonBuildQuake,
+	uiButtonBuildConfig: ui.towerLocations.buttonBuildQuake,
 };
 
 const towerTypes = [];
@@ -338,9 +344,9 @@ const configTowerLocation = {
 	y: 0,
 	width: TOWER_LOCATION_SIZE.width,
 	height: TOWER_LOCATION_SIZE.height,
-	fillColor: "transparent",
-	strokeColor: "transparent",
+	imageConfig: ui.towerLocations.buildIndicator.drawing.image,
 };
+console.log(configTowerLocation);
 
 const xOffset = Math.round(screenCenter.x - canvas.center.x); // because the canvas is centered
 const yOffset = 358; // because the canvas is at the top of the page
@@ -501,8 +507,8 @@ const populateUIImages = () => {
 		ui.superPowers.acidRain,
 		ui.superPowers.fireBall,
 		ui.superPowers.stones,
-		ui.towers.buttonBuildMeteor,
-		ui.towers.buttonBuildQuake,
+		ui.towerLocations.buttonBuildMeteor,
+		ui.towerLocations.buttonBuildQuake,
 	];
 
 	uiElements = [];
@@ -567,6 +573,7 @@ const populateTowerLocations = () => {
 			configTowerTypes: towerTypes,
 			towerLocations: initialLocations,
 		};
+		console.log(configGenerate);
 		generateTowerLocations(configGenerate);
 	}
 };
