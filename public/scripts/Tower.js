@@ -44,6 +44,7 @@ class Tower {
 			upgradeCost: configObject?.multiplier?.upgradeCost || 0.5,
 		};
 		this.type = configObject.type || "unspecified";
+		this.imgUpgrade = configObject.imgUpgrade;
 
 		this.attackOffCooldown = function () {
 			return this.timestampCanAttackAfter() <= getNowAsMilliseconds();
@@ -111,6 +112,19 @@ class Tower {
 			if (canAffordUpgrade) {
 				configButton.fillStyle = "#10970a";
 			}
+
+			// const xPosition = this.position.center.x - this.imgUpgradeConfig.width / 2;
+			// const yPosition = this.position.center.y - this.imgUpgradeConfig.height / 2;
+			// ctx.beginPath();
+			// ctx.drawImage(
+			// 	this.imgUpgradeConfig.img,
+			// 	xPosition,
+			// 	yPosition,
+			// 	this.imgUpgradeConfig.width,
+			// 	this.imgUpgradeConfig.height
+			// );
+			// ctx.closePath();
+
 			const button = new RoundRect(configButton);
 			this.button.push(button);
 			button.render();

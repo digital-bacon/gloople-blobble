@@ -473,6 +473,26 @@ class UserInterface {
 					},
 				},
 			},
+			towers: {
+				upgradeButton: {
+					evalAvailable: function () {
+						return game.status === "active";
+					},
+					drawing: {
+						image: {
+							parent: null,
+							active: false,
+							img: null,
+							src: "static/ui_tower_upgrade_button.png",
+							id: "ui-tower-ugrade-button-image",
+							x: canvas.center.x,
+							y: canvas.center.y,
+							width: 300,
+							height: 103,
+						},
+					},
+				},
+			},
 		};
 	}
 }

@@ -140,6 +140,7 @@ imgGloopTom.src = "static/spritesheet_tom.png";
 imgIdleFranklin.src = "static/spritesheet_franklin.png";
 
 // Tower elements
+const imgTowerUpgrade = new Image();
 const imgTowerMeteor = new Image();
 const imgTowerQuake = new Image();
 imgTowerMeteor.src = "static/tower_meteor.png";
@@ -224,6 +225,10 @@ imageConfig = ui.superPowers.stones.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgStones);
 
 // UI elements that do not persist
+imageConfig = ui.towers.upgradeButton.drawing.image;
+imgTowerUpgrade.src = imageConfig.src;
+imageConfig.img = imgTowerUpgrade;
+
 imageConfig = ui.towerLocations.buildIndicator.drawing.image;
 imgBuildIndicator.src = imageConfig.src;
 imageConfig.img = imgBuildIndicator;
@@ -318,6 +323,7 @@ const configTower = {
 	level: INITIAL_TOWER_LEVEL,
 	width: TOWER_SIZE.width,
 	height: TOWER_SIZE.height,
+	imgUpgradeConfig: ui.towers.upgradeButton,
 };
 
 const configTowerMeteor = {
