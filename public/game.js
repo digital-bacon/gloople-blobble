@@ -1,5 +1,5 @@
 const INITIAL_EARLY_WAVE_GOLD_BONUS = 100;
-const INITIAL_GAME_STATUS = "active";
+const INITIAL_GAME_STATUS = "initial";
 const INITIAL_GOLD_STASH_TOTAL = 5000;
 const INITIAL_PLAYER_HP = 10;
 const INITIAL_TOTAL_GLOOPS = 1;
@@ -124,6 +124,7 @@ const configGloop = {
 	hpMultiplier: configWave.gloops.statistics.multipliers.hp.initial,
 	speed: configWave.gloops.statistics.defaults.speed,
 	speedMultiplier: configWave.gloops.statistics.multipliers.speed.initial,
+	hitbox: 25,
 };
 
 // Gloop elements

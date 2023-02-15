@@ -16,7 +16,7 @@ class Tower {
 			src: "static/projectile_meteor_tower.png",
 			width: 32,
 			height: 32,
-			speed: 3,
+			speed: 6,
 		};
 		this.id = configObject.id || Math.random().toString(36).substr(2);
 		this.width = configObject.width;

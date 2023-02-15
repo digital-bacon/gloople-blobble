@@ -40,8 +40,7 @@ class Projectile {
 			this.render();
 
 			const reachedTarget = () => {
-				const hitbox = (this.target.height + this.target.width) / 4;
-				const reachedTarget = distance <= hitbox;
+				const reachedTarget = distance <= this.target.hitbox;
 				return reachedTarget;
 			};
 

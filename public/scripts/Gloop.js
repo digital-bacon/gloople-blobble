@@ -38,6 +38,7 @@ class Gloop {
 		this.lastAnimateTimestamp = getNowAsMilliseconds();
 		this.immobile = configObject.immobile;
 		this.targettable = configObject.targettable;
+		this.hitbox = configObject.hitbox || 25;
 
 		this.animationOffCooldown = function () {
 			return this.timestampCanAnimateAfter() <= getNowAsMilliseconds();
