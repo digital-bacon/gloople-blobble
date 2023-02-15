@@ -140,6 +140,7 @@ imgGloopTom.src = "static/spritesheet_tom.png";
 imgIdleFranklin.src = "static/spritesheet_franklin.png";
 
 // Tower elements
+const imgTowerUpgrade = new Image();
 const imgTowerMeteor = new Image();
 const imgTowerQuake = new Image();
 imgTowerMeteor.src = "static/tower_meteor.png";
@@ -224,6 +225,10 @@ imageConfig = ui.superPowers.stones.drawing.image;
 newUIElement = generateUIImage(imageConfig, imgStones);
 
 // UI elements that do not persist
+imageConfig = ui.towers.upgradeButton.drawing.image;
+imgTowerUpgrade.src = imageConfig.src;
+imageConfig.img = imgTowerUpgrade;
+
 imageConfig = ui.towerLocations.buildIndicator.drawing.image;
 imgBuildIndicator.src = imageConfig.src;
 imageConfig.img = imgBuildIndicator;
@@ -318,6 +323,7 @@ const configTower = {
 	level: INITIAL_TOWER_LEVEL,
 	width: TOWER_SIZE.width,
 	height: TOWER_SIZE.height,
+	imgUpgradeConfig: ui.towers.upgradeButton,
 };
 
 const configTowerMeteor = {
@@ -347,7 +353,6 @@ const configTowerLocation = {
 	height: TOWER_LOCATION_SIZE.height,
 	imageConfig: ui.towerLocations.buildIndicator.drawing.image,
 };
-console.log(configTowerLocation);
 
 const xOffset = Math.round(screenCenter.x - canvas.center.x); // because the canvas is centered
 const yOffset = 358; // because the canvas is at the top of the page
@@ -484,7 +489,7 @@ const clearBuildButtons = () => {
 const clearTowerButtons = () => {
 	towers.forEach((tower) => {
 		tower.button = [];
-		ui.buttons.towerUpgrade.activeId = null;
+		ui.towers.upgradeButton.drawing.image.activeId = null;
 	});
 };
 
@@ -574,7 +579,7 @@ const populateTowerLocations = () => {
 			configTowerTypes: towerTypes,
 			towerLocations: initialLocations,
 		};
-		console.log(configGenerate);
+
 		generateTowerLocations(configGenerate);
 	}
 };

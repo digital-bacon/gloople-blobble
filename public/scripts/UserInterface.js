@@ -1,96 +1,6 @@
 class UserInterface {
 	constructor() {
 		return {
-			buttons: {
-				playAgain: {
-					evalAvailable: function () {
-						return game.status === "gameover";
-					},
-					drawing: {
-						shape: {
-							id: "play-again",
-							x: canvas.center.x - 55,
-							y: canvas.center.y + 4,
-							width: 110,
-							height: 40,
-							radii: 10,
-							strokeStyle: "green",
-							fillStyle: "blue",
-						},
-						text: {
-							x: canvas.center.x,
-							y: canvas.center.y + 30,
-							fillStyle: "gem",
-							font: "bold 16px sans-serif",
-							text: "Play Again!",
-							textAlign: "center",
-							maxWidth: 106,
-						},
-					},
-				},
-				towerBuild: {
-					evalAvailable: function () {
-						return game.status === "active";
-					},
-					activeId: null,
-					drawing: {
-						shape: {
-							id: "tower-build",
-							x: 245,
-							y: 150,
-							width: 110,
-							height: 40,
-							radii: 10,
-							strokeStyle: "orange",
-							fillStyle: "black",
-						},
-						text: {
-							x: 245 + 55,
-							y: 150 + 25,
-							fillStyle: "black",
-							font: {
-								weight: "bold",
-								size: "14",
-								family: "sans-serif",
-							},
-							text: "Build⛏️Tower",
-							textAlign: "center",
-							maxWidth: 106,
-						},
-					},
-				},
-				towerUpgrade: {
-					evalAvailable: function () {
-						return game.status === "active";
-					},
-					activeId: null,
-					drawing: {
-						shape: {
-							id: "tower-upgrade",
-							x: 0,
-							y: 200,
-							width: 150,
-							height: 45,
-							radii: 10,
-							strokeStyle: "#10970a",
-							fillStyle: "black",
-						},
-						text: {
-							x: 0,
-							y: 200 + 10,
-							fillStyle: "black",
-							font: {
-								weight: "bold",
-								size: "18",
-								family: "sans-serif",
-							},
-							text: "LVL?? 💰???????",
-							textAlign: "center",
-							maxWidth: 146,
-						},
-					},
-				},
-			},
 			gameOverScreen: {
 				background: {
 					evalAvailable: function () {
@@ -469,6 +379,45 @@ class UserInterface {
 							y: canvas.center.y,
 							width: 70,
 							height: 70,
+						},
+					},
+				},
+			},
+			towers: {
+				upgradeButton: {
+					evalAvailable: function () {
+						return game.status === "active";
+					},
+					drawing: {
+						image: {
+							parent: null,
+							active: true,
+							img: null,
+							src: "static/ui_upgrade_tower_button.png",
+							id: "ui-tower-ugrade-button-image",
+							x: canvas.center.x,
+							y: canvas.center.y,
+							width: 300 * 0.7,
+							height: 103 * 0.7,
+						},
+					},
+				},
+				upgradeButtonText: {
+					evalAvailable: function () {
+						return game.status === "active";
+					},
+					drawing: {
+						text: {
+							x: 0,
+							y: 200 + 10,
+							fillStyle: "#1bea00",
+							font: "bold 18px 'Trebuchet MS', sans-serif",
+							text: "LVL?? 💰???????",
+							textAlign: "left",
+							maxWidth: 110,
+							cannotAfford: {
+								fillStyle: "#a82b3a",
+							},
 						},
 					},
 				},

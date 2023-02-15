@@ -78,7 +78,7 @@ const startEventListeners = () => {
 		}
 
 		let wasTowerClicked = false;
-		if (ui.buttons.towerUpgrade.evalAvailable()) {
+		if (ui.towers.upgradeButton.evalAvailable()) {
 			for (const tower of towers) {
 				const upgradeButton = tower.button.length > 0 ? tower.button[0] : null;
 				if (upgradeButton) {
@@ -93,7 +93,7 @@ const startEventListeners = () => {
 				}
 				if (isIntersectingRect(mousePosition, tower)) {
 					wasTowerClicked = true;
-					const activeId = ui.buttons.towerUpgrade.activeId;
+					const activeId = ui.towers.upgradeButton.drawing.image.activeId;
 					const buttonIsActive = activeId !== null;
 					if (buttonIsActive && activeId === tower.id) {
 						break;
@@ -105,7 +105,7 @@ const startEventListeners = () => {
 						});
 					}
 					tower.drawUpgradeButton();
-					ui.buttons.towerUpgrade.activeId = tower.id;
+					ui.towers.upgradeButton.drawing.image.activeId = tower.id;
 				}
 			}
 		}
