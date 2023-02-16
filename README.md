@@ -1,8 +1,13 @@
-# Getting Started with Create React App
+# Gloople Blobble Tower Twaddle
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Can you stop the endless hoarde of Gloops from eating your face?
 
-## Available Scripts
+Build powerful towers and command the elements with superpowers to stop the
+Gloops in their tracks!
+
+The Gloops are endless. How long can you survive?
+
+## Starting the game
 
 In the project directory, you can run:
 
@@ -11,60 +16,27 @@ In the project directory, you can run:
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Objective
 
-### `npm test`
+Prevent the Gloops that enter from the left of the game screen from reaching the exit on the right side. 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Mechanics
 
-### `npm run build`
+Gloops can be stopped by building defesive towers on tower build locations as in dicated by the mallet icon.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+There are two types of towers; meteor and quake.
+A meteor tower targets one gloop at a time for high damage. A quake tower targets all gloops within range for medium damage. 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Upgrading towers will improve their range and damage output. 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Player can also use super powers to target the Gloops. There are three superpowers; acid-rain, fireball and rocks, all accessible at the bottom of the screen.
 
-### `npm run eject`
+If a player is unable to stop a Gloop from reaching the other side, the player will lose 1 HP, if a player loses all of their HP, the game is over.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+When a player kills Gloops, they earn gems. Gems can be used to purchase towers and upgrade them to become more powerful.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Gloops will come in waves with a 15 second delay within each wave and become more numerous, faster and have more health with each new wave.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+A player can call the nextwave early and will be rewarded with gems for doing so.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+A player can see their gem stash and their total health in the top left. 
