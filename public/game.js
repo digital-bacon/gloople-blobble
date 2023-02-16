@@ -50,7 +50,7 @@ const configWave = {
 			defaults: {
 				gem: 10,
 				hp: 50,
-				speed: 1,
+				speed: 0.75,
 			},
 			multipliers: {
 				gem: {
@@ -258,6 +258,9 @@ const configGloopFranklin = {
 };
 
 const configGloopBob = {
+	evalAvailable: function () {
+		return configWave.currentWave > 1;
+	},
 	img: imgGloopBob,
 	width: 192,
 	height: 70,
@@ -269,6 +272,9 @@ const configGloopBob = {
 };
 
 const configGloopSam = {
+	evalAvailable: function () {
+		return true;
+	},
 	img: imgGloopSam,
 	width: 175,
 	height: 70,
@@ -276,6 +282,9 @@ const configGloopSam = {
 };
 
 const configGloopSmooch = {
+	evalAvailable: function () {
+		return true;
+	},
 	img: imgGloopSmooch,
 	width: 67,
 	height: 70,
@@ -284,6 +293,9 @@ const configGloopSmooch = {
 };
 
 const configGloopTom = {
+	evalAvailable: function () {
+		return configWave.currentWave > 1;
+	},
 	img: imgGloopTom,
 	width: 281,
 	height: 100,
@@ -615,15 +627,20 @@ const summonGloops = (configSummon) => {
 	const { totalGloops, xOffset, wave } = configSummon;
 	const newGloops = [];
 	for (let i = 0; i < totalGloops; i++) {
-		const configSubSpecies = randomFromArray(configWave.gloops.subSpecies);
-		const gloop = { ...configGloop, ...configSubSpecies };
-		gloop.wave = wave;
-		if (gloop.wave > 1) {
-			gloop.speed *= configWave.gloops.statistics.multipliers.speed.current;
-			gloop.hp *= configWave.gloops.statistics.multipliers.hp.current;
-			gloop.gem *= configWave.gloops.statistics.multipliers.gem.current;
+		const availableSubSpecies = configWave.gloops.subSpecies.filter(
+			(subSpecies) => subSpecies.evalAvailable()
+		);
+		const configSubSpecies = randomFromArray(availableSubSpecies);
+		if (configSubSpecies.evalAvailable()) {
+			const gloop = { ...configGloop, ...configSubSpecies };
+			gloop.wave = wave;
+			if (gloop.wave > 1) {
+				gloop.speed *= configWave.gloops.statistics.multipliers.speed.current;
+				gloop.hp *= configWave.gloops.statistics.multipliers.hp.current;
+				gloop.gem *= configWave.gloops.statistics.multipliers.gem.current;
+			}
+			newGloops.push(gloop);
 		}
-		newGloops.push(gloop);
 	}
 	let totalOffset = 0;
 	newGloops.forEach((gloop) => {
